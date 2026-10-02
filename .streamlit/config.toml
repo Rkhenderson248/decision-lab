@@ -1,0 +1,58 @@
+[server]
+enableStaticServing = true
+headless = true
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
+showErrorDetails = "none"
+
+[theme]
+base = "light"
+primaryColor = "#0F4640"
+backgroundColor = "#FAFAF8"
+secondaryBackgroundColor = "#F1F2EE"
+textColor = "#0E1311"
+borderColor = "#E1E4DE"
+dataframeBorderColor = "#E1E4DE"
+dataframeHeaderBackgroundColor = "#F1F2EE"
+linkColor = "#0F4640"
+linkUnderline = false
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "small"
+buttonRadius = "small"
+baseFontSize = 16
+font = "Schibsted Grotesk, sans-serif"
+headingFont = "Bodoni Moda, serif"
+headingFontWeights = [600, 600, 600, 600, 600, 600]
+metricValueFontWeight = 500
+codeFont = "monospace"
+greenColor = "#008A73"
+orangeColor = "#D9772B"
+blueColor = "#5B6CB8"
+chartCategoricalColors = ["#008A73", "#D9772B", "#5B6CB8"]
+chartSequentialColors = ["#E6F2EF", "#C3E2D9", "#9DD0C2", "#73BBA9", "#49A48F", "#1F8C76", "#0F7563", "#0F5E51", "#0F4640", "#0B332F"]
+
+[[theme.fontFaces]]
+family = "Schibsted Grotesk"
+url = "app/static/schibsted-grotesk.woff2"
+weight = "400 700"
+style = "normal"
+
+[[theme.fontFaces]]
+family = "Bodoni Moda"
+url = "app/static/bodoni-moda.woff2"
+weight = "400 900"
+style = "normal"
+
+[[theme.fontFaces]]
+family = "Bodoni Moda"
+url = "app/static/bodoni-moda-italic.woff2"
+weight = "400 900"
+style = "italic"
+
+[theme.sidebar]
+backgroundColor = "#F1F2EE"
