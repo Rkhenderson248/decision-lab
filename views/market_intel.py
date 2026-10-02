@@ -247,6 +247,7 @@ with tabs[1]:
         ["mortgage_risk_basis", "mortgage_risk_score"], ascending=[True, False])
     wcols = ["market_name", "mortgage_risk_score", "mortgage_risk_basis", "affordability_pressure_score",
              "purchase_denial_rate_pct", "high_dti_share_pct", "hpi_1y_pct", "population_latest"]
+    wcols = [c for c in wcols if c == "market_name" or watch[c].notna().any()]
     st.dataframe(
         watch[wcols].head(15).rename(columns={
             "market_name": "Market", "mortgage_risk_score": "Risk", "mortgage_risk_basis": "Basis",
