@@ -401,7 +401,8 @@ def load_hmda(markets: pd.DataFrame, divisions: pd.DataFrame, counties: pd.DataF
     for _, r in counties[counties["CBSA"].str.zfill(5).isin(micro_keys)].iterrows():
         geos.append((r["CBSA"].zfill(5), "counties", r["STCOU"].zfill(5)))
 
-    jobs = [(g, y) for g in geos for y in (first, latest)]
+    years = list(range(first, latest + 1))
+    jobs = [(g, y) for g in geos for y in years]
     activity, failures = {}, []
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=workers) as pool:
@@ -422,24 +423,56 @@ def load_hmda(markets: pd.DataFrame, divisions: pd.DataFrame, counties: pd.DataF
             if i % 250 == 0:
                 print(f"  HMDA activity {i}/{len(jobs)} in {time.time() - t0:.0f}s", flush=True)
 
-    # Lenders: latest year only.
+    # Lenders: latest year and the first year, for share and momentum.
     lender_counts: dict[str, dict[str, float]] = {}
+    lender_counts_first: dict[str, dict[str, float]] = {}
+    lender_names: dict[str, str] = {}
     filer_fail = 0
     sample_filers = None
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        futs = {pool.submit(hmda_geo_filers, g[1], g[2], latest): g for g in geos}
+        futs = {pool.submit(hmda_geo_filers, g[1], g[2], y): (g, y) for g in geos for y in (first, latest)}
         for f in as_completed(futs):
-            key = futs[f][0]
+            (key, _, _), y = futs[f]
             try:
                 inst = f.result()
                 if sample_filers is None and inst:
                     sample_filers = inst[:3]
-                agg = lender_counts.setdefault(key, {})
+                agg = (lender_counts if y == latest else lender_counts_first).setdefault(key, {})
                 for row in inst:
                     lei = str(row.get("lei", ""))
                     agg[lei] = agg.get(lei, 0.0) + float(row.get("count", 0) or 0)
+                    if row.get("name") and (y == latest or lei not in lender_names):
+                        lender_names[lei] = str(row["name"]).strip()
             except Exception:  # noqa: BLE001
                 filer_fail += 1
+
+    # Yearly market series for trend charts.
+    year_rows = []
+    for (key, y), a in activity.items():
+        apps, origs = a.get("purchase_applications", 0), a.get("purchase_originations", 0)
+        decided = a.get("purchase_decided", 0)
+        allorig = origs + a.get("refi_originations", 0)
+        year_rows.append({
+            "market_key": key, "year": y, "purchase_applications": apps, "purchase_originations": origs,
+            "purchase_denial_rate_pct": a.get("purchase_denied", 0) / decided * 100 if decided else np.nan,
+            "refinance_share_pct": a.get("refi_originations", 0) / allorig * 100 if allorig else np.nan,
+            "avg_loan_amount": a.get("purchase_volume", 0) / origs if origs else np.nan,
+        })
+    LOG["_market_years"] = pd.DataFrame(year_rows)
+
+    # Lender table: top 40 lenders per market by latest-year records, with first-year counts.
+    lrows = []
+    for key, counts in lender_counts.items():
+        total = sum(counts.values()) or 1.0
+        first_counts = lender_counts_first.get(key, {})
+        total_first = sum(first_counts.values()) or np.nan
+        top = sorted(counts.items(), key=lambda kv: -kv[1])[:40]
+        for rank, (lei, c) in enumerate(top, 1):
+            c0 = first_counts.get(lei, 0.0)
+            lrows.append({"market_key": key, "lei": lei, "lender": lender_names.get(lei, lei), "rank": rank,
+                          "records": c, "share_pct": c / total * 100, "records_first": c0,
+                          "share_first_pct": c0 / total_first * 100 if total_first == total_first else np.nan})
+    LOG["_lenders"] = pd.DataFrame(lrows)
 
     recs = []
     for key in markets["market_key"]:
@@ -533,10 +566,22 @@ def main() -> int:
                 "coverage": {c: int(final[c].notna().sum()) for c in final.columns if c not in ("market_key", "market_name")},
             }
             (out_dir / "markets_meta.json").write_text(json.dumps(meta, indent=2))
+            years_df = LOG.pop("_market_years", None)
+            if isinstance(years_df, pd.DataFrame) and not years_df.empty:
+                years_df.sort_values(["market_key", "year"]).to_csv(out_dir / "market_years.csv", index=False, float_format="%.6g")
+            lenders_df = LOG.pop("_lenders", None)
+            if isinstance(lenders_df, pd.DataFrame) and not lenders_df.empty:
+                lenders_df.to_csv(out_dir / "lenders.csv", index=False, float_format="%.5g")
+            # Monthly snapshot for "what changed" comparisons.
+            hist_dir = out_dir / "history"
+            hist_dir.mkdir(exist_ok=True)
+            final.to_csv(hist_dir / f"markets_{datetime.now(timezone.utc):%Y-%m}.csv", index=False, float_format="%.6g")
     except Exception as exc:  # noqa: BLE001
         status = "failed"
         LOG["fatal"] = traceback.format_exc()[-3000:]
         print(LOG["fatal"], file=sys.stderr)
+    LOG.pop("_market_years", None)
+    LOG.pop("_lenders", None)
     LOG["status"] = status
     LOG["finished_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     LOG["seconds"] = round(time.time() - started)
