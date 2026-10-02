@@ -75,6 +75,7 @@ with tabs[0]:
                                 text=[f"{r:,}d" for r in req], textposition="outside", textfont=dict(size=11, color=t.GRAPHITE),
                                 hovertemplate="Lift %{x}: %{y:,} days<extra></extra>", width=0.6))
         fig2.update_layout(title="Days needed by lift you want to detect", xaxis_title="Relative lift",
+                           xaxis=dict(type="category"),
                            yaxis=dict(type="log", title="Days (log scale)", tickvals=[1, 10, 100, 1000, 10000],
                                       ticktext=["1", "10", "100", "1k", "10k"], range=[0, np.log10(max(req) * 3)]), bargap=0.3)
         t.chart(fig2, height=360)
