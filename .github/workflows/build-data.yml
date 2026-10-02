@@ -1,0 +1,53 @@
+name: Build market data
+
+# Rebuilds data/markets.csv from public sources (Census, ACS, FHFA, HMDA)
+# and commits it. Streamlit Community Cloud redeploys on the new commit.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 11 6 * *"   # 6th of every month, 11:17 UTC
+  push:
+    branches: [main]
+    paths:
+      - "pipeline/build_markets.py"
+      - ".github/workflows/build-data.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-market-data
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install "pandas>=2.2" "numpy>=1.26"
+      - name: Build markets.csv
+        id: build
+        continue-on-error: true
+        run: python pipeline/build_markets.py --out data --workers 6
+      - name: Commit data and build log
+        run: |
+          git config user.name "decision-lab-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "Refresh public market data (${{ steps.build.outcome }})"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Fail the run if the build failed
+        if: steps.build.outcome != 'success'
+        run: |
+          cat data/build_log.json || true
+          exit 1
