@@ -11,21 +11,31 @@ Four run on synthetic data. Market intelligence runs on public Census, HMDA and 
 | Goodhart simulator | `/goodhart` | A team of 300 under metric pressure, showing where the reported metric and the true outcome part ways |
 | Market intelligence | `/market-intelligence` | Every U.S. metro and micro area scored on five blocks plus a two-basis risk composite, from public data. Includes tunable strategy weights, a state tile map, an opportunity-vs-risk quadrant, unsupervised archetypes, anomaly detection, divergence signals and a market brief |
 
-## Market intelligence data
+## Market intelligence data (automated)
 
-The page reads `data/markets.csv`, one row per CBSA of **public-source metrics only**, and
-recomputes every score, archetype and risk reading in `lab/market_engine.py`. The method is a
-port of the Mortgage Market Intelligence notebook, with no internal features: no footprint,
-territories, lender names or lender position.
+`data/markets.csv` is built by **`pipeline/build_markets.py`**, running in GitHub Actions
+(workflow **Build market data**):
 
-To publish real data:
+- **When:** the 6th of every month, whenever the builder changes, or on demand
+  (GitHub → Actions → Build market data → Run workflow).
+- **What it pulls (all public):** Census CBSA population estimates; FHFA House Price Index
+  (metro, divisions rolled up to their CBSA); HMDA through the FFIEC Data Browser API
+  (purchase and refinance outcomes, loan types, active lenders, for the latest year and three
+  years earlier); and ACS 5-year income and home values if a Census API key is set.
+- **What it writes:** `data/markets.csv`, `data/markets_meta.json` and `data/build_log.json`.
+  Then it commits them, and Streamlit redeploys on that commit.
+- **Safety:** if HMDA coverage comes back thin, the previous `markets.csv` is kept and the run
+  is marked failed. The log says why.
 
-1. Paste `pipeline/databricks_export.py` as the last cell of the Mortgage Market Intelligence notebook and run it.
-2. Commit the two files it writes, `markets.csv` and `markets_meta.json`, into `data/`. Or use the table's download button.
-3. Push. Streamlit redeploys, and the "Sample data" banner disappears.
+**Optional, recommended:** get a free Census API key at api.census.gov/data/key_signup.html,
+then add it as a repository secret named `CENSUS_API_KEY` (Settings → Secrets and variables →
+Actions). That switches on ACS income and home values, which feed borrower capacity,
+valuation strain and affordability pressure.
 
-Until `data/markets.csv` exists, the page runs on a synthetic table with fictional market names
-(`lab/market_sample.py`) and says so in a banner at the top.
+`lab/market_engine.py` recomputes every score, archetype and risk reading from the table.
+`lab/market_sample.py` is a labelled synthetic fallback, used only if `markets.csv` is
+missing. `pipeline/databricks_export.py` is an optional alternative that exports the same
+table from the Mortgage Market Intelligence notebook.
 
 ## Run locally
 
@@ -102,8 +112,9 @@ lab/pipeline_model.py   synthetic pipeline + logistic regression + reason codes
 lab/products.py         illustrative product catalogue and the fit engine
 lab/market_engine.py    market scoring, risk, archetypes, anomalies (public data)
 lab/market_sample.py    labelled synthetic fallback for the market table
-pipeline/               Databricks export cell for the public market table
-data/                   markets.csv + markets_meta.json once exported
+pipeline/build_markets.py   monthly public-data build (GitHub Actions)
+pipeline/databricks_export.py  optional notebook export of the same table
+data/                   markets.csv, markets_meta.json, build_log.json
 views/*.py              one file per page
 static/                 self-hosted Bodoni Moda and Schibsted Grotesk (SIL OFL), favicon
 .streamlit/config.toml  theme matching the website

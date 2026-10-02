@@ -202,10 +202,10 @@ with tabs[0]:
             showlegend=False,
         ))
         fig2.add_trace(go.Scatter(
-            x=leaders["strategic_mortgage_opportunity_score"], y=leaders["mortgage_risk_score"], mode="markers+text",
-            marker=dict(size=10, color=t.PETROL, line=dict(color="#FFFFFF", width=2)),
-            text=[n.split(",")[0].split("-")[0] for n in leaders["market_name"]], textposition="middle left",
-            textfont=dict(size=11, color=t.INK), hoverinfo="skip", showlegend=False,
+            x=leaders["strategic_mortgage_opportunity_score"], y=leaders["mortgage_risk_score"], mode="markers",
+            marker=dict(size=11, color=t.PETROL, line=dict(color="#FFFFFF", width=2)),
+            customdata=leaders["market_name"], hovertemplate="<b>%{customdata}</b><br>Top pursue candidate<extra></extra>",
+            showlegend=False,
         ))
         fig2.update_layout(
             title="Opportunity against risk · each dot a market, sized by population",
@@ -379,6 +379,8 @@ with tabs[3]:
         rows = []
         for label, col, fmt in metrics:
             v, m = row.get(col), peers[col].median()
+            if pd.isna(m):
+                continue  # input not in this build
             rows.append({"Measure": label, "This market": fmt.format(v) if pd.notna(v) else "n/a",
                          "Peer median": fmt.format(m) if pd.notna(m) else "n/a"})
         st.dataframe(pd.DataFrame(rows), hide_index=True)
@@ -457,7 +459,8 @@ with tabs[5]:
 with st.expander("Method, sources and limits"):
     st.markdown(f"""
 - **Grain.** One row per Core Based Statistical Area. Metros and micros are scored only against their own type.
-- **Sources.** U.S. Census Bureau population estimates; the HMDA loan application register (closed-end, first-lien, owner-occupied, site-built 1–4 unit purchase and refinance lending); the FHFA House Price Index. All public.
+- **Sources.** U.S. Census Bureau population estimates; HMDA through the FFIEC Data Browser API (applications, outcomes, loan types and active lenders by market); the FHFA House Price Index; and, where enabled, ACS 5-year income and home values. All public. A GitHub Actions pipeline rebuilds the table monthly.
+- **Demographic block.** Within-type percentiles of population growth, latest-year growth, domestic and international migration, and natural change.
 - **Blocks.** Each input becomes a within-type percentile. Blocks are weighted means of their inputs and need at least two observed. The opportunity score needs at least three blocks.
 - **Risk.** Seven inverted inputs. Markets with house-price coverage are scored on the full basis; others on an HMDA-only basis, and the two are never ranked against each other.
 - **Archetypes.** Rules on within-type thresholds, plus unsupervised clusters (robust scaling, PCA to 85% variance, KMeans with k chosen by silhouette among viable solutions). Anomalies come from IsolationForest in the same space.
