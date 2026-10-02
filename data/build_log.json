@@ -11,6 +11,10 @@
         2025
       ],
       "markets": 925,
+      "rate_columns": [
+        "RESIDUAL2025"
+      ],
+      "migration_coverage": 925,
       "metros": 387,
       "divisions": 37,
       "counties": 1844
@@ -54,29 +58,29 @@
         {
           "lei": "549300GKFNPRWNS0GF29",
           "name": "CMG MORTGAGE, INC.",
-          "count": 22,
+          "count": 8,
           "period": 2025
         },
         {
           "lei": "2WHM8VNJH63UN14OL754",
           "name": "The Huntington National Bank",
-          "count": 3,
+          "count": 1,
           "period": 2025
         },
         {
           "lei": "5493003GQDUH26DNNH17",
           "name": "Navy Federal Credit Union",
-          "count": 72,
+          "count": 211,
           "period": 2025
         }
       ],
-      "seconds": 129
+      "seconds": 144
     }
   },
   "warnings": [
     "CENSUS_API_KEY not set; ACS income and home-value inputs skipped."
   ],
   "status": "ok",
-  "finished_utc": "2026-10-02T18:52:48Z",
-  "seconds": 132
+  "finished_utc": "2026-10-02T18:56:38Z",
+  "seconds": 150
 }

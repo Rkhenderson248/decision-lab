@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-02T18:52:48Z",
+  "generated_utc": "2026-10-02T18:56:38Z",
   "markets": 925,
   "hmda_years": [
     2022,
@@ -17,9 +17,9 @@
   "coverage": {
     "area_type": 925,
     "population_latest": 925,
-    "natural_change_rate_pct": 0,
-    "international_migration_rate_pct": 0,
-    "domestic_migration_rate_pct": 0,
+    "natural_change_rate_pct": 925,
+    "international_migration_rate_pct": 925,
+    "domestic_migration_rate_pct": 925,
     "population_cagr_pct": 925,
     "latest_growth_pct": 925,
     "primary_state": 925,
