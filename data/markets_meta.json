@@ -1,0 +1,51 @@
+{
+  "generated_utc": "2026-10-02T18:52:48Z",
+  "markets": 925,
+  "hmda_years": [
+    2022,
+    2025
+  ],
+  "fhfa_latest_year": 2026,
+  "acs_year": null,
+  "census_vintage": 2025,
+  "sources": [
+    "U.S. Census Bureau Population Estimates",
+    "American Community Survey 5-year",
+    "HMDA via FFIEC Data Browser API",
+    "FHFA House Price Index"
+  ],
+  "coverage": {
+    "area_type": 925,
+    "population_latest": 925,
+    "natural_change_rate_pct": 0,
+    "international_migration_rate_pct": 0,
+    "domestic_migration_rate_pct": 0,
+    "population_cagr_pct": 925,
+    "latest_growth_pct": 925,
+    "primary_state": 925,
+    "demographic_opportunity_score": 925,
+    "fhfa_latest_year": 386,
+    "hpi_1y_pct": 386,
+    "hpi_3y_cagr_pct": 386,
+    "hpi_5y_cagr_pct": 386,
+    "hpi_volatility_pct": 386,
+    "hpi_drawdown_pct": 386,
+    "hpi_acceleration_pp": 386,
+    "hmda_first_year": 923,
+    "hmda_latest_year": 923,
+    "purchase_applications_latest": 923,
+    "purchase_originations_latest": 923,
+    "purchase_application_cagr_pct": 905,
+    "purchase_origination_cagr_pct": 905,
+    "purchase_origination_rate_pct": 923,
+    "purchase_approval_rate_pct": 923,
+    "purchase_denial_rate_pct": 923,
+    "refinance_share_pct": 923,
+    "cashout_share_pct": 923,
+    "government_purchase_share_pct": 923,
+    "avg_loan_amount": 923,
+    "active_lenders": 923,
+    "lender_hhi": 923,
+    "top5_lender_share_pct": 923
+  }
+}

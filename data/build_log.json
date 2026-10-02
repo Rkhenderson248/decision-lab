@@ -15,15 +15,6 @@
       "divisions": 37,
       "counties": 1844
     },
-    "acs_attempts": {
-      "2025": "non-JSON: <html style=\"font-size: 14px;\">\n\n<head>\n    <title>Missing Key</title>\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"assets/styles.css\">\n    <script type=\"text/javascript\" src=\"assets/jquery-1.4.4.min.js\"></script>\n    <script type=\"tex",
-      "2024": "non-JSON: <html style=\"font-size: 14px;\">\n\n<head>\n    <title>Missing Key</title>\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"assets/styles.css\">\n    <script type=\"text/javascript\" src=\"assets/jquery-1.4.4.min.js\"></script>\n    <script type=\"tex",
-      "2023": "non-JSON: <html style=\"font-size: 14px;\">\n\n<head>\n    <title>Missing Key</title>\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"assets/styles.css\">\n    <script type=\"text/javascript\" src=\"assets/jquery-1.4.4.min.js\"></script>\n    <script type=\"tex",
-      "2022": "non-JSON: <html style=\"font-size: 14px;\">\n\n<head>\n    <title>Missing Key</title>\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"assets/styles.css\">\n    <script type=\"text/javascript\" src=\"assets/jquery-1.4.4.min.js\"></script>\n    <script type=\"tex",
-      "2021": "non-JSON: <html style=\"font-size: 14px;\">\n\n<head>\n    <title>Missing Key</title>\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"assets/styles.css\">\n    <script type=\"text/javascript\" src=\"assets/jquery-1.4.4.min.js\"></script>\n    <script type=\"tex",
-      "2020": "non-JSON: <html style=\"font-size: 14px;\">\n\n<head>\n    <title>Missing Key</title>\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"assets/styles.css\">\n    <script type=\"text/javascript\" src=\"assets/jquery-1.4.4.min.js\"></script>\n    <script type=\"tex",
-      "2019": "non-JSON: <html style=\"font-size: 14px;\">\n\n<head>\n    <title>Missing Key</title>\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"assets/styles.css\">\n    <script type=\"text/javascript\" src=\"assets/jquery-1.4.4.min.js\"></script>\n    <script type=\"tex"
-    },
     "fhfa": {
       "series": 410,
       "direct": 410,
@@ -31,9 +22,7 @@
       "latest_year": 2026
     },
     "hmda_probe": {
-      "2025:full": "HTTP 400: \u001f\ufffd\b\u0000\u0000\u0000\u0000\u0000\u0000\u00004\ufffdM\n\ufffd0\u0010\u0005\ufffd\fY)$=\ufffd\ufffdp\ufffd^\ufffd\ufffd5\u0004\ufffdLy\t\ufffdH\ufffdnjq\ufffd~\ufffd>\u000e\ufffd\ufffd\ufffd^\ufffd.n\ufffd=\ufffd\ufffd^\u0016\ufffdaF\ufffda\ufffds\u0003Cd\ufffd\ufffdy\ufffd\ufffd[\ufffd\uebc7\ufffd\ufffd\ufffd(\ufffd\ufffd\ufffd\ufffd\ufffdWi&+8\u0019\u0017\u0454\ufffd\ufffd-[\ufffdrB\u001aD\ufffdo\u071b>P\ufffdP#\ufffd\ufffd\ufffd2\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd/\u0000\u0000\u0000\ufffd\ufffd\u0003\u000026\ufffdz\ufffd\u0000\u0000\u0000",
-      "2025:no_units": "HTTP 400: \u001f\ufffd\b\u0000\u0000\u0000\u0000\u0000\u0000\u00004\ufffdM\n\ufffd0\u0010\u0005\ufffd\fY)$=\ufffd\ufffdp\ufffd^\ufffd\ufffd5\u0004\ufffdLy\t\ufffdH\ufffdnjq\ufffd~\ufffd>\u000e\ufffd\ufffd\ufffd^\ufffd.n\ufffd=\ufffd\ufffd^\u0016\ufffdaF\ufffda\ufffds\u0003Cd\ufffd\ufffdy\ufffd\ufffd[\ufffd\uebc7\ufffd\ufffd\ufffd(\ufffd\ufffd\ufffd\ufffd\ufffdWi&+8\u0019\u0017\u0454\ufffd\ufffd-[\ufffdrB\u001aD\ufffdo\u071b>P\ufffdP#\ufffd\ufffd\ufffd2\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd/\u0000\u0000\u0000\ufffd\ufffd\u0003\u000026\ufffdz\ufffd\u0000\u0000\u0000",
-      "2025:actions_purpose": {
+      "2025:full": {
         "total": 68671,
         "sample": [
           {
@@ -43,140 +32,51 @@
             "loan_purposes": "1"
           }
         ]
-      },
-      "2025:purpose_only": {
-        "total": 132868,
-        "sample": [
-          {
-            "count": 132868,
-            "sum": 57544770000.0,
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2025:county": {
-        "total": 18906,
-        "sample": [
-          {
-            "count": 18906,
-            "sum": 9348080000.0,
-            "actions_taken": "1",
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2025:state": {
-        "total": 356285,
-        "sample": [
-          {
-            "count": 356285,
-            "sum": 129555105000.0,
-            "actions_taken": "1",
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2024:full": "HTTP 400: \u001f\ufffd\b\u0000\u0000\u0000\u0000\u0000\u0000\u00004\ufffdM\n\ufffd0\u0010\u0005\ufffd\fY)$=\ufffd\ufffdp\ufffd^\ufffd\ufffd5\u0004\ufffdLy\t\ufffdH\ufffdnjq\ufffd~\ufffd>\u000e\ufffd\ufffd\ufffd^\ufffd.n\ufffd=\ufffd\ufffd^\u0016\ufffdaF\ufffda\ufffds\u0003Cd\ufffd\ufffdy\ufffd\ufffd[\ufffd\uebc7\ufffd\ufffd\ufffd(\ufffd\ufffd\ufffd\ufffd\ufffdWi&+8\u0019\u0017\u0454\ufffd\ufffd-[\ufffdrB\u001aD\ufffdo\u071b>P\ufffdP#\ufffd\ufffd\ufffd2\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd/\u0000\u0000\u0000\ufffd\ufffd\u0003\u000026\ufffdz\ufffd\u0000\u0000\u0000",
-      "2024:no_units": "HTTP 400: \u001f\ufffd\b\u0000\u0000\u0000\u0000\u0000\u0000\u00004\ufffdM\n\ufffd0\u0010\u0005\ufffd\fY)$=\ufffd\ufffdp\ufffd^\ufffd\ufffd5\u0004\ufffdLy\t\ufffdH\ufffdnjq\ufffd~\ufffd>\u000e\ufffd\ufffd\ufffd^\ufffd.n\ufffd=\ufffd\ufffd^\u0016\ufffdaF\ufffda\ufffds\u0003Cd\ufffd\ufffdy\ufffd\ufffd[\ufffd\uebc7\ufffd\ufffd\ufffd(\ufffd\ufffd\ufffd\ufffd\ufffdWi&+8\u0019\u0017\u0454\ufffd\ufffd-[\ufffdrB\u001aD\ufffdo\u071b>P\ufffdP#\ufffd\ufffd\ufffd2\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd/\u0000\u0000\u0000\ufffd\ufffd\u0003\u000026\ufffdz\ufffd\u0000\u0000\u0000",
-      "2024:actions_purpose": {
-        "total": 72846,
-        "sample": [
-          {
-            "count": 72846,
-            "sum": 32301390000.0,
-            "actions_taken": "1",
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2024:purpose_only": {
-        "total": 140053,
-        "sample": [
-          {
-            "count": 140053,
-            "sum": 59642495000.0,
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2024:county": {
-        "total": 19778,
-        "sample": [
-          {
-            "count": 19778,
-            "sum": 9366540000.0,
-            "actions_taken": "1",
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2024:state": {
-        "total": 360296,
-        "sample": [
-          {
-            "count": 360296,
-            "sum": 129215850000.0,
-            "actions_taken": "1",
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2023:full": "HTTP 400: \u001f\ufffd\b\u0000\u0000\u0000\u0000\u0000\u0000\u00004\ufffdM\n\ufffd0\u0010\u0005\ufffd\fY)$=\ufffd\ufffdp\ufffd^\ufffd\ufffd5\u0004\ufffdLy\t\ufffdH\ufffdnjq\ufffd~\ufffd>\u000e\ufffd\ufffd\ufffd^\ufffd.n\ufffd=\ufffd\ufffd^\u0016\ufffdaF\ufffda\ufffds\u0003Cd\ufffd\ufffdy\ufffd\ufffd[\ufffd\uebc7\ufffd\ufffd\ufffd(\ufffd\ufffd\ufffd\ufffd\ufffdWi&+8\u0019\u0017\u0454\ufffd\ufffd-[\ufffdrB\u001aD\ufffdo\u071b>P\ufffdP#\ufffd\ufffd\ufffd2\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd/\u0000\u0000\u0000\ufffd\ufffd\u0003\u000026\ufffdz\ufffd\u0000\u0000\u0000",
-      "2023:no_units": "HTTP 400: \u001f\ufffd\b\u0000\u0000\u0000\u0000\u0000\u0000\u00004\ufffdM\n\ufffd0\u0010\u0005\ufffd\fY)$=\ufffd\ufffdp\ufffd^\ufffd\ufffd5\u0004\ufffdLy\t\ufffdH\ufffdnjq\ufffd~\ufffd>\u000e\ufffd\ufffd\ufffd^\ufffd.n\ufffd=\ufffd\ufffd^\u0016\ufffdaF\ufffda\ufffds\u0003Cd\ufffd\ufffdy\ufffd\ufffd[\ufffd\uebc7\ufffd\ufffd\ufffd(\ufffd\ufffd\ufffd\ufffd\ufffdWi&+8\u0019\u0017\u0454\ufffd\ufffd-[\ufffdrB\u001aD\ufffdo\u071b>P\ufffdP#\ufffd\ufffd\ufffd2\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd/\u0000\u0000\u0000\ufffd\ufffd\u0003\u000026\ufffdz\ufffd\u0000\u0000\u0000",
-      "2023:actions_purpose": {
-        "total": 71582,
-        "sample": [
-          {
-            "count": 71582,
-            "sum": 31612110000.0,
-            "actions_taken": "1",
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2023:purpose_only": {
-        "total": 139673,
-        "sample": [
-          {
-            "count": 139673,
-            "sum": 59257645000.0,
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2023:county": {
-        "total": 19920,
-        "sample": [
-          {
-            "count": 19920,
-            "sum": 9052100000.0,
-            "actions_taken": "1",
-            "loan_purposes": "1"
-          }
-        ]
-      },
-      "2023:state": {
-        "total": 355681,
-        "sample": [
-          {
-            "count": 355681,
-            "sum": 126425365000.0,
-            "actions_taken": "1",
-            "loan_purposes": "1"
-          }
-        ]
       }
     },
     "hmda": {
-      "error": "Traceback (most recent call last):\n  File \"/home/runner/work/decision-lab/decision-lab/pipeline/build_markets.py\", line 482, in main\n    parts.append(load_hmda(markets, divisions, counties, args.workers))\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/decision-lab/decision-lab/pipeline/build_markets.py\", line 369, in load_hmda\n    latest = hmda_latest_year()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/decision-lab/decision-lab/pipeline/build_markets.py\", line 328, in hmda_latest_year\n    raise RuntimeError(\"Could not find a published HMDA year through the Data Browser API.\")\nRuntimeError: Could not find a published HMDA year through the Data Browser API.\n"
+      "years": [
+        2022,
+        2025
+      ],
+      "geographies": 1069,
+      "requests": 3207,
+      "markets": 923,
+      "activity_failures": 4,
+      "filer_failures": 2,
+      "failure_examples": [
+        "counties=09150 2022: HTTP 404: The requested resource could not be found.",
+        "counties=09150 2025: HTTP 404: The requested resource could not be found.",
+        "counties=09160 2022: HTTP 404: The requested resource could not be found.",
+        "counties=09160 2025: HTTP 404: The requested resource could not be found."
+      ],
+      "sample_filers": [
+        {
+          "lei": "549300GKFNPRWNS0GF29",
+          "name": "CMG MORTGAGE, INC.",
+          "count": 22,
+          "period": 2025
+        },
+        {
+          "lei": "2WHM8VNJH63UN14OL754",
+          "name": "The Huntington National Bank",
+          "count": 3,
+          "period": 2025
+        },
+        {
+          "lei": "5493003GQDUH26DNNH17",
+          "name": "Navy Federal Credit Union",
+          "count": 72,
+          "period": 2025
+        }
+      ],
+      "seconds": 129
     }
   },
   "warnings": [
-    "ACS unavailable; income and home-value inputs left empty.",
-    "hmda failed: Could not find a published HMDA year through the Data Browser API.",
-    "HMDA coverage too thin; markets.csv not replaced."
+    "CENSUS_API_KEY not set; ACS income and home-value inputs skipped."
   ],
-  "status": "incomplete",
-  "finished_utc": "2026-10-02T18:48:44Z",
-  "seconds": 8
+  "status": "ok",
+  "finished_utc": "2026-10-02T18:52:48Z",
+  "seconds": 132
 }
