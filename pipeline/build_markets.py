@@ -143,6 +143,11 @@ def load_popest():
         "international_migration_rate_pct": num(f"RINTERNATIONALMIG{latest}") / 10,
         "domestic_migration_rate_pct": num(f"RDOMESTICMIG{latest}") / 10,
     })
+    # Rate columns are not published in every vintage; derive them from components when absent.
+    for rate, comp in (("natural_change_rate_pct", "NATURALCHG"), ("international_migration_rate_pct", "INTERNATIONALMIG"),
+                       ("domestic_migration_rate_pct", "DOMESTICMIG")):
+        if out[rate].isna().all():
+            out[rate] = num(f"{comp}{latest}") / out["population_prior"] * 100
     out["population_cagr_pct"] = [safe_cagr(a, b, latest - first) for a, b in zip(out["population_first"], out["population_latest"])]
     out["latest_growth_pct"] = (out["population_latest"] / out["population_prior"] - 1) * 100
 
@@ -155,6 +160,8 @@ def load_popest():
 
     divisions["pop"] = pd.to_numeric(divisions[f"POPESTIMATE{latest}"], errors="coerce")
     log("census_popest", url=url, vintage=vintage, years=[first, latest], markets=len(out),
+        rate_columns=[c for c in frame.columns if c.startswith("R") and c.endswith(str(latest))][:12],
+        migration_coverage=int(out["domestic_migration_rate_pct"].notna().sum()),
         metros=int((out["area_type"] == "Metropolitan").sum()), divisions=len(divisions), counties=len(counties))
     return out, divisions[["CBSA", "MDIV", "pop"]], counties[["CBSA", "MDIV", "STCOU", "pop"]]
 
