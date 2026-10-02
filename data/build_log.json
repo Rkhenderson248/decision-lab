@@ -44,15 +44,16 @@
         2025
       ],
       "geographies": 1069,
-      "requests": 3207,
+      "requests": 5345,
       "markets": 923,
-      "activity_failures": 4,
-      "filer_failures": 2,
+      "activity_failures": 8,
+      "filer_failures": 4,
       "failure_examples": [
         "counties=09150 2022: HTTP 404: The requested resource could not be found.",
         "counties=09150 2025: HTTP 404: The requested resource could not be found.",
-        "counties=09160 2022: HTTP 404: The requested resource could not be found.",
-        "counties=09160 2025: HTTP 404: The requested resource could not be found."
+        "counties=09150 2024: HTTP 404: The requested resource could not be found.",
+        "counties=09150 2023: HTTP 404: The requested resource could not be found.",
+        "counties=09160 2022: HTTP 404: The requested resource could not be found."
       ],
       "sample_filers": [
         {
@@ -74,13 +75,13 @@
           "period": 2025
         }
       ],
-      "seconds": 144
+      "seconds": 453
     }
   },
   "warnings": [
     "CENSUS_API_KEY not set; ACS income and home-value inputs skipped."
   ],
   "status": "ok",
-  "finished_utc": "2026-10-02T18:56:38Z",
-  "seconds": 150
+  "finished_utc": "2026-10-02T20:45:31Z",
+  "seconds": 459
 }
