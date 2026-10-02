@@ -1,0 +1,51 @@
+{
+  "steps": {
+    "popest_attempts": {
+      "https://www2.census.gov/programs-surveys/popest/datasets/2020-2026/metro/totals/cbsa-est2026-alldata.csv": "HTTP Error 404: Not Found"
+    },
+    "census_popest": {
+      "url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2025/metro/totals/cbsa-est2025-alldata.csv",
+      "vintage": 2025,
+      "years": [
+        2020,
+        2025
+      ],
+      "markets": 925,
+      "metros": 387,
+      "divisions": 37,
+      "counties": 1844
+    },
+    "acs_attempts": {
+      "2025": "Expecting value: line 1 column 1 (char 0)",
+      "2024": "Expecting value: line 1 column 1 (char 0)",
+      "2023": "Expecting value: line 1 column 1 (char 0)",
+      "2022": "Expecting value: line 1 column 1 (char 0)",
+      "2021": "Expecting value: line 1 column 1 (char 0)",
+      "2020": "Expecting value: line 1 column 1 (char 0)",
+      "2019": "Expecting value: line 1 column 1 (char 0)"
+    },
+    "fhfa": {
+      "series": 410,
+      "direct": 410,
+      "divisions_rolled": 13,
+      "latest_year": 2026
+    },
+    "hmda_probe": {
+      "2026": "HTTP Error 400: Bad Request",
+      "2025": "HTTP Error 400: Bad Request",
+      "2024": "HTTP Error 400: Bad Request",
+      "2023": "HTTP Error 400: Bad Request"
+    },
+    "hmda": {
+      "error": "Traceback (most recent call last):\n  File \"/home/runner/work/decision-lab/decision-lab/pipeline/build_markets.py\", line 457, in main\n    parts.append(load_hmda(markets, divisions, counties, args.workers))\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/decision-lab/decision-lab/pipeline/build_markets.py\", line 344, in load_hmda\n    latest = hmda_latest_year()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/decision-lab/decision-lab/pipeline/build_markets.py\", line 303, in hmda_latest_year\n    raise RuntimeError(\"Could not find a published HMDA year through the Data Browser API.\")\nRuntimeError: Could not find a published HMDA year through the Data Browser API.\n"
+    }
+  },
+  "warnings": [
+    "ACS unavailable; income and home-value inputs left empty.",
+    "hmda failed: Could not find a published HMDA year through the Data Browser API.",
+    "HMDA coverage too thin; markets.csv not replaced."
+  ],
+  "status": "incomplete",
+  "finished_utc": "2026-10-02T18:47:38Z",
+  "seconds": 11
+}
