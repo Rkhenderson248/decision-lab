@@ -74,8 +74,12 @@ def fetch(url: str, timeout: int = 120, retries: int = 4, binary: bool = False):
                 return data if binary else data.decode("utf-8", errors="replace")
         except HTTPError as exc:
             last = exc
-            if exc.code in (400, 404):
-                raise
+            if exc.code in (400, 401, 403, 404):
+                try:
+                    body = exc.read().decode("utf-8", errors="replace")[:400]
+                except Exception:  # noqa: BLE001
+                    body = ""
+                raise RuntimeError(f"HTTP {exc.code}: {body}") from exc
             time.sleep(2 ** attempt + 1)
         except (URLError, TimeoutError, ConnectionError) as exc:
             last = exc
@@ -171,9 +175,13 @@ def load_acs():
     got = {}
     for y in range(year - 1, year - 8, -1):
         try:
-            rows = json.loads(fetch(ACS_URL.format(y=y), timeout=60))
+            text = fetch(ACS_URL.format(y=y), timeout=60)
+            rows = json.loads(text)
+        except json.JSONDecodeError:
+            LOG["steps"].setdefault("acs_attempts", {})[str(y)] = "non-JSON: " + text[:300]
+            continue
         except Exception as exc:  # noqa: BLE001
-            LOG["steps"].setdefault("acs_attempts", {})[str(y)] = str(exc)[:120]
+            LOG["steps"].setdefault("acs_attempts", {})[str(y)] = str(exc)[:300]
             continue
         head, body = rows[0], rows[1:]
         df = pd.DataFrame(body, columns=head)
@@ -289,17 +297,34 @@ def hmda_json(endpoint: str, params: dict):
     return json.loads(fetch(url, timeout=90, retries=5))
 
 
+PROBE_VARIANTS = {
+    "full": {"actions_taken": "1", "loan_purposes": "1", **COHORT},
+    "no_units": {"actions_taken": "1", "loan_purposes": "1", "lien_statuses": "1", "construction_methods": "1"},
+    "actions_purpose": {"actions_taken": "1", "loan_purposes": "1"},
+    "purpose_only": {"loan_purposes": "1"},
+    "county": {"actions_taken": "1", "loan_purposes": "1", "_geo": ("counties", "48113")},
+    "state": {"actions_taken": "1", "loan_purposes": "1", "_geo": ("states", "TX")},
+}
+
+
 def hmda_latest_year() -> int:
     year = datetime.now().year
-    for y in range(year, year - 4, -1):
-        try:
-            data = hmda_json("aggregations", {"years": y, "msamds": "19124", "actions_taken": "1", "loan_purposes": "1", **COHORT})
-            total = sum(int(a.get("count", 0)) for a in data.get("aggregations", []))
-            LOG["steps"].setdefault("hmda_probe", {})[str(y)] = total
-            if total > 0:
-                return y
-        except Exception as exc:  # noqa: BLE001
-            LOG["steps"].setdefault("hmda_probe", {})[str(y)] = str(exc)[:160]
+    found = None
+    for y in range(year - 1, year - 4, -1):
+        for name, variant in PROBE_VARIANTS.items():
+            params = {k: v for k, v in variant.items() if k != "_geo"}
+            kind, code = variant.get("_geo", ("msamds", "19124"))
+            params.update({"years": y, kind: code})
+            try:
+                data = hmda_json("aggregations", params)
+                total = sum(int(a.get("count", 0)) for a in data.get("aggregations", []))
+                LOG["steps"].setdefault("hmda_probe", {})[f"{y}:{name}"] = {"total": total, "sample": data.get("aggregations", [])[:2]}
+                if total > 0 and name == "full" and found is None:
+                    found = y
+            except Exception as exc:  # noqa: BLE001
+                LOG["steps"].setdefault("hmda_probe", {})[f"{y}:{name}"] = str(exc)[:300]
+        if found:
+            return found
     raise RuntimeError("Could not find a published HMDA year through the Data Browser API.")
 
 
