@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lab import ask
 from lab import market_engine as me
 from lab import theme as t
 
@@ -52,6 +53,11 @@ def _base():
 @st.cache_data(show_spinner=False)
 def _clusters(prepared: pd.DataFrame):
     return me.cluster(prepared)
+
+
+@st.cache_data(show_spinner=False)
+def _extras():
+    return me.load_years(), me.load_lenders(), me.load_history()
 
 
 prepared, live, meta = _base()
@@ -127,12 +133,14 @@ t.tiles([
 if custom:
     st.caption("Scores reflect your custom strategy weights.")
 
-tabs = st.tabs(["Overview", "Rankings", "Archetypes", "Market brief", "Signals", "What could be built"])
+TAB_NAMES = ["Overview", "Rankings", "Market brief", "Lenders", "What changed", "Archetypes", "Signals", "What could be built"]
+T = dict(zip(TAB_NAMES, st.tabs(TAB_NAMES)))
+years_df, lenders_df, history = _extras()
 
 # ---------------------------------------------------------------------------
 # Overview
 # ---------------------------------------------------------------------------
-with tabs[0]:
+with T["Overview"]:
     left, right = st.columns([1, 1.1], gap="large")
     with left:
         by_state = (view.assign(w=view["population_latest"].fillna(0))
@@ -224,7 +232,7 @@ with tabs[0]:
 # ---------------------------------------------------------------------------
 # Rankings
 # ---------------------------------------------------------------------------
-with tabs[1]:
+with T["Rankings"]:
     cols = ["market_name", "strategic_mortgage_opportunity_score", "demographic_opportunity_score",
             "mortgage_demand_score", "borrower_capacity_score", "collateral_momentum_score",
             "market_openness_score", "mortgage_risk_score", "mortgage_archetype", "population_latest"]
@@ -269,7 +277,7 @@ with tabs[1]:
 # ---------------------------------------------------------------------------
 # Archetypes
 # ---------------------------------------------------------------------------
-with tabs[2]:
+with T["Archetypes"]:
     prof = clusters.profiles[clusters.profiles["area_type"].eq(area)] if not clusters.profiles.empty else pd.DataFrame()
     left, right = st.columns([1.7, 1], gap="large")
     with left:
@@ -318,7 +326,7 @@ with tabs[2]:
 # ---------------------------------------------------------------------------
 # Market brief
 # ---------------------------------------------------------------------------
-with tabs[3]:
+with T["Market brief"]:
     options = ranked["market_name"].tolist()
     choice = st.selectbox("Choose a market", options, index=0, key="mi_market")
     row = view[view["market_name"].eq(choice)].iloc[0]
@@ -386,10 +394,149 @@ with tabs[3]:
                          "Peer median": fmt.format(m) if pd.notna(m) else "n/a"})
         st.dataframe(pd.DataFrame(rows), hide_index=True)
 
+    tl, tr = st.columns([1.1, 1], gap="large")
+    with tl:
+        yr = years_df[years_df["market_key"].eq(row["market_key"])].sort_values("year") if years_df is not None else pd.DataFrame()
+        if not yr.empty:
+            figy = go.Figure(go.Bar(
+                x=yr["year"].astype(str), y=yr["purchase_originations"], marker=dict(color=t.S1, cornerradius=4),
+                text=[f"{v:,.0f}" for v in yr["purchase_originations"]], textposition="outside",
+                textfont=dict(size=11, color=t.GRAPHITE), width=0.55,
+                customdata=np.stack([yr["purchase_denial_rate_pct"], yr["refinance_share_pct"]], axis=1),
+                hovertemplate="%{x}: %{y:,.0f} purchase originations<br>denial %{customdata[0]:.1f}% · refi share %{customdata[1]:.1f}%<extra></extra>"))
+            figy.update_layout(title="Purchase originations by year (HMDA)", yaxis=dict(range=[0, yr["purchase_originations"].max() * 1.2]),
+                               bargap=0.35)
+            t.chart(figy, height=320)
+        else:
+            st.caption("Year-by-year series arrive with the next data build.")
+    with tr:
+        lt = lenders_df[lenders_df["market_key"].eq(row["market_key"])].nsmallest(8, "rank") if lenders_df is not None else pd.DataFrame()
+        if not lt.empty:
+            lt = lt.iloc[::-1]
+            figl = go.Figure(go.Bar(
+                y=[n.title()[:34] for n in lt["lender"]], x=lt["share_pct"], orientation="h",
+                marker=dict(color=t.S3, cornerradius=4), text=[f"{v:.1f}%" for v in lt["share_pct"]], textposition="outside",
+                textfont=dict(size=11, color=t.GRAPHITE), width=0.6,
+                customdata=(lt["share_pct"] - lt["share_first_pct"]).round(1),
+                hovertemplate="%{y}: %{x:.1f}% of HMDA records<br>change since first year %{customdata:+.1f} pts<extra></extra>"))
+            figl.update_layout(title=dict(text="Largest lenders here, share of HMDA records", x=0, xref="container"),
+                               xaxis=dict(visible=False, range=[0, lt["share_pct"].max() * 1.3]),
+                               yaxis=dict(gridcolor="rgba(0,0,0,0)"), margin=dict(l=8, r=8, t=60, b=8))
+            t.chart(figl, height=320)
+        else:
+            st.caption("Lender shares arrive with the next data build.")
+
+    st.markdown("**Ask about this market**")
+    ctx = ask.context(row, peers, years_df, lenders_df)
+    if ask.llm_available():
+        q = st.text_input("Your question", placeholder="e.g. Is lending here keeping pace with population growth?",
+                          key="mi_q")
+        if q:
+            with st.spinner("Reading the record…"):
+                try:
+                    st.markdown(f'<div class="lab-insight">{t.esc(ask.ask_llm(q, ctx))}</div>', unsafe_allow_html=True)
+                except Exception as exc:  # noqa: BLE001
+                    st.warning(f"The assistant is unavailable right now ({type(exc).__name__}).")
+        st.caption("Answers come only from this market's record, shown below, and cite its numbers.")
+    else:
+        q = st.selectbox("Pick a question", ask.QUESTIONS, key="mi_q_rules")
+        st.markdown(f'<div class="lab-insight">{t.esc(ask.ask_rules(q, row, ctx))}</div>', unsafe_allow_html=True)
+        st.caption("Answers are generated from this market's record alone, so every number traces back to the data.")
+    with st.expander("The record the answers are grounded in"):
+        st.json(ctx, expanded=False)
+
+# ---------------------------------------------------------------------------
+# Lenders
+# ---------------------------------------------------------------------------
+with T["Lenders"]:
+    if lenders_df is None or lenders_df.empty:
+        st.info("Lender shares arrive with the next data build.")
+    else:
+        L = lenders_df.merge(scored[["market_key", "market_name", "area_type", "primary_state", "strategic_mortgage_opportunity_score"]],
+                             on="market_key", how="inner")
+        L = L[L["area_type"].eq(area)]
+        national = L.groupby(["lei", "lender"], as_index=False)["records"].sum().sort_values("records", ascending=False)
+        choices = national.head(300)
+        label = [f"{n.title()}  ·  {int(r):,} records" for n, r in zip(choices["lender"], choices["records"])]
+        sel = st.selectbox("Choose a lender (top 300 by HMDA records in this market type)", range(len(choices)),
+                           format_func=lambda i: label[i], key="mi_lender")
+        lei = choices.iloc[sel]["lei"]
+        mine = L[L["lei"].eq(lei)].copy()
+        mine["share_change_pp"] = mine["share_pct"] - mine["share_first_pct"]
+        top_share = mine.sort_values("share_pct", ascending=False)
+        t.tiles([
+            {"label": "Markets with a top-40 position", "value": f"{len(mine):,}", "accent": True,
+             "note": f"of {L['market_key'].nunique():,} {area.lower()} markets"},
+            {"label": "Markets ranked #1", "value": f"{(mine['rank'] == 1).sum():,}"},
+            {"label": "Median share where present", "value": f"{mine['share_pct'].median():.1f}%"},
+            {"label": "Markets gaining share", "value": f"{(mine['share_change_pp'] > 0).sum():,}",
+             "note": f"{(mine['share_change_pp'] < 0).sum():,} losing, since the first HMDA year"},
+        ])
+        left, right = st.columns([1.2, 1], gap="large")
+        with left:
+            show = top_share.head(15).iloc[::-1]
+            figb = go.Figure(go.Bar(y=[n.split(",")[0] for n in show["market_name"]], x=show["share_pct"], orientation="h",
+                                    marker=dict(color=t.S1, cornerradius=4), text=[f"#{int(r)}" for r in show["rank"]],
+                                    textposition="outside", textfont=dict(size=11, color=t.GRAPHITE), width=0.6,
+                                    hovertemplate="%{y}: %{x:.1f}% share<extra></extra>"))
+            figb.update_layout(title=dict(text="Strongest markets by share (label is rank)", x=0, xref="container"),
+                               xaxis=dict(title="Share of HMDA records (%)", range=[0, show["share_pct"].max() * 1.2]),
+                               yaxis=dict(gridcolor="rgba(0,0,0,0)"), margin=dict(l=8, r=8, t=60, b=8))
+            t.chart(figb, height=480)
+        with right:
+            pts = mine.dropna(subset=["strategic_mortgage_opportunity_score"])
+            figs = go.Figure(go.Scatter(
+                x=pts["strategic_mortgage_opportunity_score"], y=pts["share_pct"], mode="markers",
+                marker=dict(size=8, color=np.where(pts["share_change_pp"] >= 0, t.S1, t.S2), opacity=0.8,
+                            symbol=np.where(pts["share_change_pp"] >= 0, "circle", "diamond"), line=dict(color="#fff", width=1)),
+                customdata=np.stack([pts["market_name"], pts["share_change_pp"].fillna(0)], axis=1),
+                hovertemplate="<b>%{customdata[0]}</b><br>opportunity %{x:.0f} · share %{y:.1f}%<br>change %{customdata[1]:+.1f} pts<extra></extra>"))
+            figs.update_layout(title="Where it is strong vs where opportunity is", xaxis_title="Market opportunity score",
+                               yaxis_title="Lender share (%)")
+            t.chart(figs, height=480)
+            st.caption("Teal circles: gaining share. Orange diamonds: losing share. High opportunity with low share is white space.")
+        gap = mine[(mine["strategic_mortgage_opportunity_score"] >= 60)].nsmallest(5, "share_pct")
+        if not gap.empty:
+            t.insight("<b>White space:</b> high-opportunity markets where this lender's share is lowest: "
+                      + t.esc(", ".join(n.split(",")[0] for n in gap["market_name"])) + ".")
+        st.caption("Shares are of all HMDA records the lender filed in the market (applications of every type), not "
+                   "originations or volume. Only each market's top 40 lenders are kept.")
+
+# ---------------------------------------------------------------------------
+# What changed
+# ---------------------------------------------------------------------------
+with T["What changed"]:
+    if len(history) < 2:
+        month = history[-1][0] if history else "n/a"
+        st.info(f"The first monthly snapshot is {month}. Each automated build adds one; from the second, this tab ranks "
+                "the markets whose scores moved most, and why.")
+        st.caption("Snapshots live in data/history/ in the repository, one file per month.")
+    else:
+        (m0, h0), (m1, h1) = history[-2], history[-1]
+        def _score(frame):
+            s_ = me.score(me.prepare(frame), {k: v / 100 for k, v in weights.items()})
+            return s_.set_index("market_key")[["market_name", "area_type", "strategic_mortgage_opportunity_score", "mortgage_risk_score"]]
+        a0, a1 = _score(h0), _score(h1)
+        d = a1.join(a0[["strategic_mortgage_opportunity_score", "mortgage_risk_score"]], rsuffix="_prev", how="inner")
+        d = d[d["area_type"].eq(area)]
+        d["Δ opportunity"] = d["strategic_mortgage_opportunity_score"] - d["strategic_mortgage_opportunity_score_prev"]
+        d["Δ risk"] = d["mortgage_risk_score"] - d["mortgage_risk_score_prev"]
+        st.markdown(f"Comparing **{m1}** with **{m0}**, using your current strategy weights.")
+        c1, c2 = st.columns(2, gap="large")
+        cfg = {c: st.column_config.NumberColumn(format="%+.1f") for c in ["Δ opportunity", "Δ risk"]}
+        with c1:
+            st.markdown("**Biggest risers**")
+            st.dataframe(d.nlargest(10, "Δ opportunity")[["market_name", "Δ opportunity", "Δ risk"]].rename(columns={"market_name": "Market"}),
+                         hide_index=True, column_config=cfg)
+        with c2:
+            st.markdown("**Biggest fallers**")
+            st.dataframe(d.nsmallest(10, "Δ opportunity")[["market_name", "Δ opportunity", "Δ risk"]].rename(columns={"market_name": "Market"}),
+                         hide_index=True, column_config=cfg)
+
 # ---------------------------------------------------------------------------
 # Signals
 # ---------------------------------------------------------------------------
-with tabs[4]:
+with T["Signals"]:
     a, b = st.columns(2, gap="large")
     with a:
         st.markdown("**Population ahead of lending**")
@@ -426,7 +573,7 @@ with tabs[4]:
 # ---------------------------------------------------------------------------
 # What could be built
 # ---------------------------------------------------------------------------
-with tabs[5]:
+with T["What could be built"]:
     st.markdown("This page is one view over a reusable market table. The same foundation supports a family of "
                 "decision tools. Each one adds a single question and, usually, one internal data source.")
     ideas = [
@@ -434,11 +581,11 @@ with tabs[5]:
          "Market scores + your footprint and production", "Contiguous territories balanced on workload, with a local ranking inside each."),
         ("Marketing budget allocator", "How should a fixed budget be split across markets?",
          "Demand, conversion and openness + cost-per-lead history", "An optimised spend plan with expected funded loans per market."),
-        ("Competitive benchmarking", "Where are we gaining or losing share, and to whom?",
+        ("Competitive benchmarking (live in the Lenders tab)", "Where are we gaining or losing share, and to whom?",
          "Public HMDA by lender, year over year", "Share, rank and momentum against named peers in every market."),
-        ("Conversational market brief", "What should I know about this market before Monday?",
+        ("Conversational market brief (live in Market brief)", "What should I know about this market before Monday?",
          "This table as a grounded contract for an LLM", "Plain-language answers that cite the numbers and refuse to guess."),
-        ("Early-warning monitor", "Which markets changed enough this month to act on?",
+        ("Early-warning monitor (started in What changed)", "Which markets changed enough this month to act on?",
          "Monthly FHFA and Census refresh, quarterly HMDA", "Alerts when risk, prices or demand cross agreed thresholds."),
         ("Access and fair-lending lens", "Where do outcomes differ across borrower groups?",
          "HMDA decisions by applicant group", "Reportable gaps with minimum-sample guards, for compliance review."),

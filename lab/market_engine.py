@@ -426,3 +426,30 @@ def load_raw() -> tuple[pd.DataFrame, bool]:
         return frame, True
     from lab.market_sample import sample_markets
     return sample_markets(), False
+
+
+YEARS_FILE = DATA_DIR / "market_years.csv"
+LENDERS_FILE = DATA_DIR / "lenders.csv"
+HISTORY_DIR = DATA_DIR / "history"
+
+
+def load_years() -> pd.DataFrame | None:
+    if not YEARS_FILE.exists():
+        return None
+    return pd.read_csv(YEARS_FILE, dtype={"market_key": str})
+
+
+def load_lenders() -> pd.DataFrame | None:
+    if not LENDERS_FILE.exists():
+        return None
+    return pd.read_csv(LENDERS_FILE, dtype={"market_key": str, "lei": str})
+
+
+def load_history() -> list[tuple[str, pd.DataFrame]]:
+    """Monthly snapshots, oldest first, as (YYYY-MM, frame)."""
+    if not HISTORY_DIR.exists():
+        return []
+    out = []
+    for f in sorted(HISTORY_DIR.glob("markets_*.csv")):
+        out.append((f.stem.split("_", 1)[1], pd.read_csv(f, dtype={"market_key": str})))
+    return out

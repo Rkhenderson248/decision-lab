@@ -3,14 +3,28 @@
 Interactive demos for [richardhenderson.io](https://richardhenderson.io), built with Streamlit.
 Four run on synthetic data. Market intelligence runs on public Census, HMDA and FHFA data. All rules and rates are illustrative.
 
-| Page | URL path | What it shows |
-| --- | --- | --- |
-| Lending decisions | `/lending` (`?view=pipeline` or `?view=product`) | Both lending patterns in one section, described in the two rows below |
-| ↳ Pipeline prioritizer | `/lending?view=pipeline` | Propensity scoring on a synthetic lending pipeline, with a gains curve against "newest first" and random, a ranked worklist and reason codes |
-| ↳ Product fit | `/lending?view=product` | Eligibility rules across seven illustrative loan products, ranked by cost over the borrower's horizon or by monthly payment, with every exclusion explained |
-| Model value | `/model-value` | AUC, capacity, cost and adoption turned into net value, plus where the next dollar comes from (model quality or adoption) |
-| Goodhart simulator | `/goodhart` | A team of 300 under metric pressure, showing where the reported metric and the true outcome part ways |
-| Market intelligence | `/market-intelligence` | Every U.S. metro and micro area scored on five blocks plus a two-basis risk composite, from public data. Includes tunable strategy weights, a state tile map, an opportunity-vs-risk quadrant, unsupervised archetypes, anomaly detection, divergence signals and a market brief |
+Organised into three shelves:
+
+| Shelf | Page | URL path | What it shows |
+| --- | --- | --- | --- |
+| Predict & prioritise | Market intelligence | `/market-intelligence` | Every CBSA scored from public data, rebuilt monthly. Includes strategy weights, a state map, an opportunity-vs-risk quadrant, rankings, a market brief with yearly HMDA trends and top lenders, lender benchmarking (share, rank, momentum, white space), month-over-month changes, archetypes, anomalies and Ask about this market |
+| | Lending decisions | `/lending?view=pipeline` · `?view=product` | A propensity model with a gains curve and reason codes; a product recommender with eligibility rules and explanations |
+| | Forecasting & pricing | `/forecasting-pricing` | A synthetic 150-room hotel. Booking-pace and seasonality forecasts are backtested against last year, then a capacity-constrained price and protection levels are recommended |
+| Decide | Model value | `/model-value` | Converts AUC, capacity, cost and adoption into net value |
+| | Experimentation lab | `/experiments` | Power and duration, a peeking simulation with sequential correction, CUPED, and a frequentist plus Bayesian read-out |
+| Measure & trust | Human–AI decision lab | `/human-ai` | A ten-round judge–advisor experiment that reports Brier scores, weight of advice, a reliance profile and the effect of explanations, plus optimal-reliance theory |
+| | Goodhart simulator | `/goodhart` | Shows where the reported metric and the true outcome part ways under pressure |
+
+### Optional secrets (Streamlit → app → Settings → Secrets)
+
+```toml
+ANTHROPIC_API_KEY = "sk-ant-..."                # free-text answers in "Ask about this market"
+ANTHROPIC_MODEL   = "claude-haiku-4-5-20251001" # optional override
+```
+
+Without a key, Ask about this market answers a fixed set of questions deterministically from
+the market's record. With a key, visitors can type their own question, and answers stay
+grounded in the same record.
 
 ## Market intelligence data (automated)
 

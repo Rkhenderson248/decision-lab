@@ -54,11 +54,11 @@ with tabs[0]:
         {"label": "Visitors needed per arm", "value": f"{n:,}", "accent": True},
         {"label": "Total visitors", "value": f"{2 * n:,}"},
         {"label": "Run time at this traffic", "value": f"{days} days", "note": f"≈ {weeks:.1f} weeks; round up to whole weeks"},
-        {"label": "Detectable lift", "value": f"{p0 * 100:.2f}% → {p0 * (1 + mde) * 100:.2f}%"},
+        {"label": "Detectable change", "value": f"+{p0 * mde * 100:.2f} pts", "note": f"{p0 * 100:.2f}% → {p0 * (1 + mde) * 100:.2f}%"},
     ])
     left, right = st.columns([1.3, 1], gap="large")
     with left:
-        ns = np.unique(np.geomspace(max(100, n / 20), n * 3, 120).astype(int))
+        ns = np.unique(np.linspace(max(100, n / 20), n * 2.5, 140).astype(int))
         pows = [power_at(k, p0, mde, alpha) for k in ns]
         fig = go.Figure(go.Scatter(x=ns, y=np.array(pows) * 100, mode="lines", line=dict(color=t.S1, width=2.5),
                                    hovertemplate="%{x:,} per arm → %{y:.0f}% power<extra></extra>", showlegend=False))
@@ -66,7 +66,7 @@ with tabs[0]:
         fig.add_vline(x=n, line=dict(color=t.PETROL, width=1))
         fig.add_annotation(x=n, y=8, text=f" {n:,} per arm", showarrow=False, xanchor="left", font=dict(size=12, color=t.PETROL))
         fig.update_layout(title="Chance of detecting the lift, by sample size", xaxis_title="Visitors per arm",
-                          yaxis_title="Power (%)", yaxis=dict(range=[0, 101]), xaxis=dict(type="log"))
+                          yaxis_title="Power (%)", yaxis=dict(range=[0, 101]), xaxis=dict(tickformat="~s"))
         t.chart(fig, height=360)
     with right:
         lifts = np.array([0.02, 0.03, 0.05, 0.08, 0.10, 0.15, 0.20, 0.30])
@@ -75,7 +75,8 @@ with tabs[0]:
                                 text=[f"{r:,}d" for r in req], textposition="outside", textfont=dict(size=11, color=t.GRAPHITE),
                                 hovertemplate="Lift %{x}: %{y:,} days<extra></extra>", width=0.6))
         fig2.update_layout(title="Days needed by lift you want to detect", xaxis_title="Relative lift",
-                           yaxis=dict(type="log", title="Days (log scale)"), bargap=0.3)
+                           yaxis=dict(type="log", title="Days (log scale)", tickvals=[1, 10, 100, 1000, 10000],
+                                      ticktext=["1", "10", "100", "1k", "10k"], range=[0, np.log10(max(req) * 3)]), bargap=0.3)
         t.chart(fig2, height=360)
     halve = int(np.ceil(2 * sample_size(p0, mde / 2, alpha, pw) / traffic))
     t.insight(f"Halving the lift you can detect does not double the test. It roughly <b>quadruples</b> it: "

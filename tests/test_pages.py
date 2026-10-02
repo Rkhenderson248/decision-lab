@@ -17,6 +17,9 @@ PAGES = [
     "views/decision_value.py",
     "views/goodhart.py",
     "views/market_intel.py",
+    "views/experiments.py",
+    "views/human_ai.py",
+    "views/demand_pricing.py",
 ]
 
 
@@ -63,3 +66,12 @@ def test_market_page_weight_change():
     assert not at.exception
     at.segmented_control(key="mi_area").set_value("Micropolitan").run()
     assert not at.exception
+
+
+def test_human_ai_full_run():
+    at = AppTest.from_file(str(ROOT / "views/human_ai.py"), default_timeout=60).run()
+    for _ in range(10):
+        for _step in range(3):
+            at.button[0].click().run()
+            assert not at.exception
+    assert any("Brier" in m.value for m in at.markdown)

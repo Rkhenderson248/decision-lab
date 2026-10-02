@@ -1,7 +1,7 @@
 """Decision Lab: interactive demos for richardhenderson.io.
 
 Run locally:   streamlit run streamlit_app.py
-Embed a page:  https://<your-app>.streamlit.app/pipeline?embed=true&solo=1
+Embed a page:  https://<your-app>.streamlit.app/<page>?embed=true&solo=1
 """
 
 import streamlit as st
@@ -17,14 +17,24 @@ st.set_page_config(
 
 theme.apply()
 
-pages = [
-    st.Page("views/home.py", title="Decision Lab", icon=":material/science:", default=True),
-    st.Page("views/market_intel.py", title="Market intelligence", icon=":material/map:", url_path="market-intelligence"),
-    st.Page("views/lending.py", title="Lending decisions", icon=":material/format_list_numbered:", url_path="lending"),
-    st.Page("views/decision_value.py", title="Model value", icon=":material/payments:", url_path="model-value"),
-    st.Page("views/goodhart.py", title="Goodhart simulator", icon=":material/trending_down:", url_path="goodhart"),
-]
+home = st.Page("views/home.py", title="Decision Lab", icon=":material/science:", default=True)
+shelves = {
+    "": [home],
+    "Predict & prioritise": [
+        st.Page("views/market_intel.py", title="Market intelligence", icon=":material/map:", url_path="market-intelligence"),
+        st.Page("views/lending.py", title="Lending decisions", icon=":material/format_list_numbered:", url_path="lending"),
+        st.Page("views/demand_pricing.py", title="Forecasting & pricing", icon=":material/show_chart:", url_path="forecasting-pricing"),
+    ],
+    "Decide": [
+        st.Page("views/decision_value.py", title="Model value", icon=":material/payments:", url_path="model-value"),
+        st.Page("views/experiments.py", title="Experimentation lab", icon=":material/science:", url_path="experiments"),
+    ],
+    "Measure & trust": [
+        st.Page("views/human_ai.py", title="Human–AI decision lab", icon=":material/handshake:", url_path="human-ai"),
+        st.Page("views/goodhart.py", title="Goodhart simulator", icon=":material/trending_down:", url_path="goodhart"),
+    ],
+}
 
 # On the website each demo is embedded on its own, so the navigation is hidden.
-nav = st.navigation(pages, position="hidden" if theme.is_solo() else "top")
+nav = st.navigation(shelves, position="hidden" if theme.is_solo() else "top")
 nav.run()
