@@ -42,6 +42,8 @@ POPEST_CANDIDATES = [
 ]
 ACS_URL = ("https://api.census.gov/data/{y}/acs/acs5?get=NAME,B19013_001E,B25077_001E"
            "&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*")
+# The Census API now requires a (free) key: https://api.census.gov/data/key_signup.html
+CENSUS_API_KEY = __import__("os").environ.get("CENSUS_API_KEY", "").strip()
 
 STATE_FIPS = {
     "01": "AL", "02": "AK", "04": "AZ", "05": "AR", "06": "CA", "08": "CO", "09": "CT", "10": "DE", "11": "DC",
@@ -171,11 +173,14 @@ def demographic_score(m: pd.DataFrame) -> pd.Series:
 # 2. ACS 5-year: income and home value, latest and three years earlier
 # ---------------------------------------------------------------------------
 def load_acs():
+    if not CENSUS_API_KEY:
+        warn("CENSUS_API_KEY not set; ACS income and home-value inputs skipped.")
+        return pd.DataFrame(columns=["market_key"])
     year = datetime.now().year
     got = {}
     for y in range(year - 1, year - 8, -1):
         try:
-            text = fetch(ACS_URL.format(y=y), timeout=60)
+            text = fetch(ACS_URL.format(y=y) + f"&key={CENSUS_API_KEY}", timeout=60)
             rows = json.loads(text)
         except json.JSONDecodeError:
             LOG["steps"].setdefault("acs_attempts", {})[str(y)] = "non-JSON: " + text[:300]
@@ -289,7 +294,10 @@ def load_fhfa(divisions: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # 4. HMDA via the Data Browser API
 # ---------------------------------------------------------------------------
-COHORT = {"lien_statuses": "1", "construction_methods": "1", "total_units": "1,2,3,4"}
+# The Data Browser accepts at most two HMDA data filters per request, so the
+# cohort cannot also be narrowed to first-lien, site-built, 1-4 unit lending.
+# Shares and rates are computed on all closed-end applications in the market.
+COHORT: dict = {}
 
 
 def hmda_json(endpoint: str, params: dict):
@@ -297,14 +305,7 @@ def hmda_json(endpoint: str, params: dict):
     return json.loads(fetch(url, timeout=90, retries=5))
 
 
-PROBE_VARIANTS = {
-    "full": {"actions_taken": "1", "loan_purposes": "1", **COHORT},
-    "no_units": {"actions_taken": "1", "loan_purposes": "1", "lien_statuses": "1", "construction_methods": "1"},
-    "actions_purpose": {"actions_taken": "1", "loan_purposes": "1"},
-    "purpose_only": {"loan_purposes": "1"},
-    "county": {"actions_taken": "1", "loan_purposes": "1", "_geo": ("counties", "48113")},
-    "state": {"actions_taken": "1", "loan_purposes": "1", "_geo": ("states", "TX")},
-}
+PROBE_VARIANTS = {"full": {"actions_taken": "1", "loan_purposes": "1"}}
 
 
 def hmda_latest_year() -> int:
@@ -329,10 +330,15 @@ def hmda_latest_year() -> int:
 
 
 def hmda_geo_activity(kind: str, code: str, year: int) -> list[dict]:
-    params = {"years": year, kind: code, "actions_taken": "1,2,3,4,5", "loan_purposes": "1,31,32",
-              "loan_types": "1,2,3,4", **COHORT}
-    data = hmda_json("aggregations", params)
-    return data.get("aggregations", [])
+    """Two requests (two-filter limit): outcomes by purpose, then purchase originations by loan type."""
+    outcomes = hmda_json("aggregations", {"years": year, kind: code, "actions_taken": "1,2,3,4,5",
+                                          "loan_purposes": "1,31,32"}).get("aggregations", [])
+    types = hmda_json("aggregations", {"years": year, kind: code, "actions_taken": "1",
+                                       "loan_types": "1,2,3,4"}).get("aggregations", [])
+    # Loan-type rows cover all purposes; tag them so they are counted only for the government share.
+    for row in types:
+        row["_types"] = True
+    return outcomes + types
 
 
 def hmda_geo_filers(kind: str, code: str, year: int) -> list[dict]:
@@ -346,9 +352,15 @@ def summarise_activity(rows: list[dict]) -> dict:
     df = pd.DataFrame(rows)
     for c in ("count", "sum"):
         df[c] = pd.to_numeric(df.get(c), errors="coerce").fillna(0)
+    is_types = df["_types"].fillna(False).astype(bool) if "_types" in df.columns else pd.Series(False, index=df.index)
     a = df.get("actions_taken", pd.Series("", index=df.index)).astype(str)
     p = df.get("loan_purposes", pd.Series("", index=df.index)).astype(str)
     t = df.get("loan_types", pd.Series("", index=df.index)).astype(str)
+    types_orig = df.loc[is_types & a.eq("1")]
+    tt = t.loc[types_orig.index]
+    gov_share = (types_orig.loc[tt.isin(["2", "3", "4"]), "count"].sum() / types_orig["count"].sum()
+                 if types_orig["count"].sum() > 0 else np.nan)
+    df, a, p = df.loc[~is_types], a.loc[~is_types], p.loc[~is_types]
     purch = p.eq("1")
     refi = p.isin(["31", "32"])
     orig = a.eq("1")
@@ -359,7 +371,8 @@ def summarise_activity(rows: list[dict]) -> dict:
         "purchase_denied": float(df.loc[purch & a.eq("3"), "count"].sum()),
         "purchase_decided": float(df.loc[purch & a.isin(["1", "2", "3"]), "count"].sum()),
         "purchase_volume": float(df.loc[purch & orig, "sum"].sum()),
-        "purchase_gov_originations": float(df.loc[purch & orig & t.isin(["2", "3", "4"]), "count"].sum()),
+        "gov_share_all_purposes": float(gov_share) if pd.notna(gov_share) else np.nan,
+        "_gov_weight": float(types_orig["count"].sum()),
         "refi_originations": float(df.loc[refi & orig, "count"].sum()),
         "cashout_originations": float(df.loc[p.eq("32") & orig, "count"].sum()),
     }
@@ -391,6 +404,10 @@ def load_hmda(markets: pd.DataFrame, divisions: pd.DataFrame, counties: pd.DataF
             try:
                 s = summarise_activity(f.result())
                 bucket = activity.setdefault((key, y), {})
+                gs, gw = s.pop("gov_share_all_purposes", np.nan), s.pop("_gov_weight", 0.0)
+                if pd.notna(gs) and gw > 0:
+                    bucket["_gov_num"] = bucket.get("_gov_num", 0.0) + gs * gw
+                    bucket["_gov_den"] = bucket.get("_gov_den", 0.0) + gw
                 for k, v in s.items():
                     bucket[k] = bucket.get(k, 0.0) + v
             except Exception as exc:  # noqa: BLE001
@@ -435,7 +452,7 @@ def load_hmda(markets: pd.DataFrame, divisions: pd.DataFrame, counties: pd.DataF
             "purchase_denial_rate_pct": a1.get("purchase_denied", 0) / decided * 100 if decided else np.nan,
             "refinance_share_pct": a1.get("refi_originations", 0) / allorig * 100 if allorig else np.nan,
             "cashout_share_pct": a1.get("cashout_originations", 0) / allorig * 100 if allorig else np.nan,
-            "government_purchase_share_pct": a1.get("purchase_gov_originations", 0) / origs * 100 if origs else np.nan,
+            "government_purchase_share_pct": a1["_gov_num"] / a1["_gov_den"] * 100 if a1.get("_gov_den") else np.nan,
             "avg_loan_amount": a1.get("purchase_volume", 0) / origs if origs else np.nan,
         }
         counts = pd.Series(lender_counts.get(key, {}), dtype=float)

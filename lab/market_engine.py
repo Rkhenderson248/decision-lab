@@ -182,7 +182,11 @@ def prepare(raw: pd.DataFrame) -> pd.DataFrame:
         m["avg_applicant_income_k"] * 1_000, m["avg_property_value"], 100)
     m["property_value_to_income_multiple"] = safe_divide(
         m["avg_property_value"], m["avg_applicant_income_k"] * 1_000)
-    m["affordability_pressure_raw"] = m["hpi_3y_cagr_pct"] * 3 - m["applicant_income_growth_pct"]
+    # Price growth against income growth. Where income growth is unobserved, the
+    # area-type median stands in, so the measure falls back to relative price pressure.
+    income_growth = m["applicant_income_growth_pct"].fillna(
+        m.groupby("area_type")["applicant_income_growth_pct"].transform("median")).fillna(0)
+    m["affordability_pressure_raw"] = m["hpi_3y_cagr_pct"] * 3 - income_growth
 
     for name, column, higher in COMPONENTS:
         m[name] = within_type_pct(m, column, higher)
@@ -293,7 +297,13 @@ def cluster(prepared: pd.DataFrame, k_min: int = 3, k_max: int = 6, min_markets:
             min_share: float = 0.05, n_init: int = 20) -> Clusters:
     assignments, profiles, selection = [], [], []
     for area in AREA_TYPES:
-        usable = prepared[prepared["area_type"].eq(area)].dropna(subset=CLUSTER_FEATURES).copy()
+        pool = prepared[prepared["area_type"].eq(area)].copy()
+        # Markets missing up to two features are clustered on area-type medians for
+        # those features (micros rarely carry a house-price index); sparser rows are left out.
+        enough = pool[CLUSTER_FEATURES].notna().sum(axis=1) >= len(CLUSTER_FEATURES) - 2
+        usable = pool[enough].copy()
+        usable[CLUSTER_FEATURES] = usable[CLUSTER_FEATURES].fillna(usable[CLUSTER_FEATURES].median())
+        usable = usable.dropna(subset=CLUSTER_FEATURES)
         if len(usable) < min_markets:
             continue
         scaled = RobustScaler().fit_transform(usable[CLUSTER_FEATURES])
