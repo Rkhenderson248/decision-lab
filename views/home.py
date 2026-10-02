@@ -5,21 +5,19 @@ from lab import theme as t
 t.header(
     "R.K. Henderson · Decision Lab",
     "Working demos of decision tools",
-    "Five small applications, each built around one decision. They run on synthetic or public data, they explain "
+    "Small applications, each built around one decision. They run on synthetic or public data, they explain "
     "themselves, and they show the idea behind the practice: intelligence is only worth what it changes.",
 )
 
 DEMOS = [
-    ("views/pipeline.py", "Pipeline intelligence", "Where should the team focus today?",
-     "Score a synthetic lending pipeline and see how much more a capacity-limited team captures with a ranked worklist."),
-    ("views/product_fit.py", "Product recommendation", "Which loan fits, and why?",
-     "Eligibility checks, then a ranking on cost over your horizon, with every exclusion explained."),
+    ("views/market_intel.py", "Market intelligence", "Where is the mortgage market opening up?",
+     "Every U.S. metro and micro area scored from public Census, HMDA and FHFA data, rebuilt monthly, with your own strategy weights."),
+    ("views/lending.py", "Lending decisions", "Who to call first, and which product to offer",
+     "A capacity-constrained prioritisation model with reason codes, and an explainable product recommender with hard eligibility rules."),
     ("views/decision_value.py", "Decision economics", "What is a model actually worth?",
      "Turn AUC, capacity, cost and adoption into net value, and find where the next dollar comes from."),
     ("views/goodhart.py", "Measurement", "When a measure becomes a target",
      "Simulate a team under metric pressure and watch the reported number part ways with the real outcome."),
-    ("views/market_intel.py", "Market intelligence", "Where is the mortgage market opening up?",
-     "Every U.S. metro and micro area scored from public Census, HMDA and FHFA data, with your own strategy weights."),
 ]
 
 cols = st.columns(2, gap="medium")

@@ -1,12 +1,13 @@
 # Decision Lab
 
-Five interactive demos for [richardhenderson.io](https://richardhenderson.io), built with Streamlit.
+Interactive demos for [richardhenderson.io](https://richardhenderson.io), built with Streamlit.
 Four run on synthetic data. Market intelligence runs on public Census, HMDA and FHFA data. All rules and rates are illustrative.
 
 | Page | URL path | What it shows |
 | --- | --- | --- |
-| Pipeline prioritizer | `/pipeline` | Propensity scoring on a synthetic lending pipeline, with a gains curve against "newest first" and random, a ranked worklist and reason codes |
-| Product fit | `/product-fit` | Eligibility rules across seven illustrative loan products, ranked by cost over the borrower's horizon or by monthly payment, with every exclusion explained |
+| Lending decisions | `/lending` (`?view=pipeline` or `?view=product`) | Both lending patterns in one section, described in the two rows below |
+| ↳ Pipeline prioritizer | `/lending?view=pipeline` | Propensity scoring on a synthetic lending pipeline, with a gains curve against "newest first" and random, a ranked worklist and reason codes |
+| ↳ Product fit | `/lending?view=product` | Eligibility rules across seven illustrative loan products, ranked by cost over the borrower's horizon or by monthly payment, with every exclusion explained |
 | Model value | `/model-value` | AUC, capacity, cost and adoption turned into net value, plus where the next dollar comes from (model quality or adoption) |
 | Goodhart simulator | `/goodhart` | A team of 300 under metric pressure, showing where the reported metric and the true outcome part ways |
 | Market intelligence | `/market-intelligence` | Every U.S. metro and micro area scored on five blocks plus a two-basis risk composite, from public data. Includes tunable strategy weights, a state tile map, an opportunity-vs-risk quadrant, unsupervised archetypes, anomaly detection, divergence signals and a market brief |
