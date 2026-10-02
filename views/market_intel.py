@@ -306,8 +306,10 @@ with tabs[2]:
             x=counts.values, y=counts.index, orientation="h", marker=dict(color=t.S1, cornerradius=4),
             text=counts.values, textposition="outside", textfont=dict(size=12, color=t.GRAPHITE),
             hovertemplate="%{y}: %{x} markets<extra></extra>", width=0.6))
-        figr.update_layout(title="Rule-based archetypes", yaxis=dict(gridcolor="rgba(0,0,0,0)"),
-                           xaxis=dict(range=[0, counts.max() * 1.18]), bargap=0.3)
+        figr.update_layout(title=dict(text="Rule-based archetypes", x=0, xref="container", xanchor="left"),
+                           yaxis=dict(gridcolor="rgba(0,0,0,0)"),
+                           xaxis=dict(range=[0, counts.max() * 1.25], visible=False), bargap=0.3,
+                           margin=dict(l=8, r=8, t=78, b=8))
         t.chart(figr, height=110 + 44 * len(counts))
         st.caption("Rules use within-type thresholds: for example, compound growth requires demographic, demand "
                    "and collateral blocks all in their top 30%.")
