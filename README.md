@@ -1,7 +1,7 @@
 # Decision Lab
 
-Four interactive demos for [richardhenderson.io](https://richardhenderson.io), built with Streamlit.
-All data is synthetic, and the rules and rates are illustrative.
+Five interactive demos for [richardhenderson.io](https://richardhenderson.io), built with Streamlit.
+Four run on synthetic data. Market intelligence runs on public Census, HMDA and FHFA data. All rules and rates are illustrative.
 
 | Page | URL path | What it shows |
 | --- | --- | --- |
@@ -9,6 +9,23 @@ All data is synthetic, and the rules and rates are illustrative.
 | Product fit | `/product-fit` | Eligibility rules across seven illustrative loan products, ranked by cost over the borrower's horizon or by monthly payment, with every exclusion explained |
 | Model value | `/model-value` | AUC, capacity, cost and adoption turned into net value, plus where the next dollar comes from (model quality or adoption) |
 | Goodhart simulator | `/goodhart` | A team of 300 under metric pressure, showing where the reported metric and the true outcome part ways |
+| Market intelligence | `/market-intelligence` | Every U.S. metro and micro area scored on five blocks plus a two-basis risk composite, from public data. Includes tunable strategy weights, a state tile map, an opportunity-vs-risk quadrant, unsupervised archetypes, anomaly detection, divergence signals and a market brief |
+
+## Market intelligence data
+
+The page reads `data/markets.csv`, one row per CBSA of **public-source metrics only**, and
+recomputes every score, archetype and risk reading in `lab/market_engine.py`. The method is a
+port of the Mortgage Market Intelligence notebook, with no internal features: no footprint,
+territories, lender names or lender position.
+
+To publish real data:
+
+1. Paste `pipeline/databricks_export.py` as the last cell of the Mortgage Market Intelligence notebook and run it.
+2. Commit the two files it writes, `markets.csv` and `markets_meta.json`, into `data/`. Or use the table's download button.
+3. Push. Streamlit redeploys, and the "Sample data" banner disappears.
+
+Until `data/markets.csv` exists, the page runs on a synthetic table with fictional market names
+(`lab/market_sample.py`) and says so in a banner at the top.
 
 ## Run locally
 
@@ -39,7 +56,7 @@ zip on a machine without that history, run `git init -b main && git add . &&
 git commit -m "Decision Lab"` first.)
 
 The **Smoke test** workflow in `.github/workflows/ci.yml` runs on every push. It
-renders all five pages and fails the run if any of them throws, so a broken
+renders every page and fails the run if any of them throws, so a broken
 commit shows a red ✕ on GitHub before you notice it on the site.
 
 ### 2. Connect Streamlit to GitHub
@@ -83,6 +100,10 @@ streamlit_app.py        navigation and page config
 lab/theme.py            palette, CSS, Plotly template, stat tiles, formatting
 lab/pipeline_model.py   synthetic pipeline + logistic regression + reason codes
 lab/products.py         illustrative product catalogue and the fit engine
+lab/market_engine.py    market scoring, risk, archetypes, anomalies (public data)
+lab/market_sample.py    labelled synthetic fallback for the market table
+pipeline/               Databricks export cell for the public market table
+data/                   markets.csv + markets_meta.json once exported
 views/*.py              one file per page
 static/                 self-hosted Bodoni Moda and Schibsted Grotesk (SIL OFL), favicon
 .streamlit/config.toml  theme matching the website

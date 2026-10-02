@@ -5,7 +5,7 @@ from lab import theme as t
 t.header(
     "R.K. Henderson · Decision Lab",
     "Working demos of decision tools",
-    "Four small applications, each built around one decision. They run on synthetic data, they explain "
+    "Five small applications, each built around one decision. They run on synthetic or public data, they explain "
     "themselves, and they show the idea behind the practice: intelligence is only worth what it changes.",
 )
 
@@ -18,6 +18,8 @@ DEMOS = [
      "Turn AUC, capacity, cost and adoption into net value, and find where the next dollar comes from."),
     ("views/goodhart.py", "Measurement", "When a measure becomes a target",
      "Simulate a team under metric pressure and watch the reported number part ways with the real outcome."),
+    ("views/market_intel.py", "Market intelligence", "Where is the mortgage market opening up?",
+     "Every U.S. metro and micro area scored from public Census, HMDA and FHFA data, with your own strategy weights."),
 ]
 
 cols = st.columns(2, gap="medium")

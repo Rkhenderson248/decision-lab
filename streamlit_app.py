@@ -23,6 +23,7 @@ pages = [
     st.Page("views/product_fit.py", title="Product fit", icon=":material/rule:", url_path="product-fit"),
     st.Page("views/decision_value.py", title="Model value", icon=":material/payments:", url_path="model-value"),
     st.Page("views/goodhart.py", title="Goodhart simulator", icon=":material/trending_down:", url_path="goodhart"),
+    st.Page("views/market_intel.py", title="Market intelligence", icon=":material/map:", url_path="market-intelligence"),
 ]
 
 # On the website each demo is embedded on its own, so the navigation is hidden.
