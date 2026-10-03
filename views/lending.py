@@ -14,8 +14,7 @@ default = BY_KEY.get(requested, "Prioritize the pipeline")
 
 st.markdown('<p class="lab-eyebrow">Lending decisions · Two production patterns, rebuilt on synthetic data</p>',
             unsafe_allow_html=True)
-choice = st.segmented_control("Decision", list(VIEWS), default=default, key="lending_view",
-                              label_visibility="collapsed") or default
+choice = t.segmented("Decision", list(VIEWS), key="lending_view", default=default, label_visibility="collapsed")
 st.query_params["view"] = VIEWS[choice][0]
 st.write("")
 VIEWS[choice][1]()

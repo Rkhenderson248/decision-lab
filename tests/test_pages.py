@@ -101,3 +101,29 @@ def test_elasticity_recovers_truth():
     assert ((iv["lo"] <= iv["truth"]) & (iv["truth"] <= iv["hi"])).all()
     raw = el[el["method"].eq("Raw correlation")]
     assert ((raw["lo"] > raw["truth"]) | (raw["hi"] < raw["truth"])).all()
+
+
+def test_backtest_cache_matches_fresh_run():
+    import numpy as np
+
+    from lab import demand as dm
+
+    cached = dm.backtest()
+    fresh = dm.compute_backtest()
+    for df in (cached, fresh):
+        df["ape"] = df["err"].abs() / df["final"]
+    a = cached.groupby("method")["ape"].mean()
+    b = fresh.groupby("method")["ape"].mean()
+    assert np.allclose(a.sort_index().values, b.sort_index().values, rtol=1e-4)
+
+
+def test_copilot_stage_survives_reselect():
+    """Clicking the selected stage again must not send the visitor back to Frame."""
+    at = AppTest.from_file(str(ROOT / "views/copilot.py"), default_timeout=90)
+    at.query_params["stage"] = "run"
+    at.run()
+    at.session_state["cp_stage"] = None  # what Streamlit sends when the active option is clicked again
+    at.run()
+    assert not at.exception
+    assert at.session_state["cp_stage__last"] == "Run"
+    assert any("Run it" in m.value for m in at.markdown)

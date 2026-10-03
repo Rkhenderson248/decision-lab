@@ -84,10 +84,11 @@ if not live:
 # ---------------------------------------------------------------------------
 with st.container(border=True):
     c1, c2, c3, c4 = st.columns([1.1, 1.1, 1.4, 0.9])
-    area = c1.segmented_control("Market type", ["Metropolitan", "Micropolitan"], default="Metropolitan",
-                                key="mi_area") or "Metropolitan"
-    evidence = c2.segmented_control("Evidence required", ["Complete", "Strong+", "Any"], default="Strong+",
-                                    key="mi_evidence", help="Complete: all five blocks observed. Strong+: four or more.") or "Strong+"
+    with c1:
+        area = t.segmented("Market type", ["Metropolitan", "Micropolitan"], key="mi_area", default="Metropolitan")
+    with c2:
+        evidence = t.segmented("Evidence required", ["Complete", "Strong+", "Any"], key="mi_evidence", default="Strong+",
+                               help="Complete: all five blocks observed. Strong+: four or more.")
     states = c3.multiselect("States", sorted(STATE_GRID), placeholder="All states", key="mi_states")
     with c4.popover("Strategy weights", width="stretch", icon=":material/tune:"):
         st.caption("How much each block counts toward the opportunity score. Weights are normalised.")

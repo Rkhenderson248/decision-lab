@@ -28,12 +28,10 @@ def render() -> None:
             step=50,
             help="How many leads the team can realistically work in one day.",
         )
-        lead_filter = c2.segmented_control(
-            "Pipeline", ["All", "Refinance", "Purchase"], default="All", key="pipe_filter"
-        ) or "All"
-        compare = c3.segmented_control(
-            "Compare against", ["Newest first", "Random"], default="Newest first", key="pipe_compare"
-        ) or "Newest first"
+        with c2:
+            lead_filter = t.segmented("Pipeline", ["All", "Refinance", "Purchase"], key="pipe_filter", default="All")
+        with c3:
+            compare = t.segmented("Compare against", ["Newest first", "Random"], key="pipe_compare", default="Newest first")
 
     pool = today if lead_filter == "All" else today[today["lead_type"] == lead_filter]
     capacity = min(capacity, len(pool))

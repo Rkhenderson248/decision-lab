@@ -35,13 +35,14 @@ t.header(
 q = str(st.query_params.get("stage", "")).capitalize()
 if "cp_stage" not in st.session_state:
     st.session_state.cp_stage = q if q in STAGES else STAGES[0]
+    st.session_state.cp_stage__last = st.session_state.cp_stage
 
 
 def _go(stage: str) -> None:
     st.session_state.cp_stage = stage
 
 
-stage = st.segmented_control("Stage", STAGES, key="cp_stage", label_visibility="collapsed") or STAGES[0]
+stage = t.segmented("Stage", STAGES, key="cp_stage", label_visibility="collapsed")
 st.query_params["stage"] = stage.lower()
 idx = STAGES.index(stage)
 

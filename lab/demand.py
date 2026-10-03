@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -109,8 +110,19 @@ def forecast(world: World, stays: pd.DataFrame, end: pd.Timestamp) -> pd.DataFra
     return f
 
 
+DEFAULT_LEADS = (3, 7, 14, 21, 30, 45)
+BACKTEST_FILE = Path(__file__).resolve().parent.parent / "data" / "copilot_backtest.csv"
+
+
 @st.cache_data(show_spinner=False)
-def backtest(seed: int = 21, leads: tuple = (3, 7, 14, 21, 30, 45)) -> pd.DataFrame:
+def backtest(seed: int = 21, leads: tuple = DEFAULT_LEADS) -> pd.DataFrame:
+    """Backtest every method. The default run is precomputed (scripts/precompute.py) so pages open fast."""
+    if seed == 21 and tuple(leads) == DEFAULT_LEADS and BACKTEST_FILE.exists():
+        return pd.read_csv(BACKTEST_FILE)
+    return compute_backtest(seed, leads)
+
+
+def compute_backtest(seed: int = 21, leads: tuple = DEFAULT_LEADS) -> pd.DataFrame:
     world = build_world(seed)
     test = world.history.tail(120)
     rows = []
