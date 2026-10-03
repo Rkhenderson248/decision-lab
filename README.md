@@ -1,18 +1,18 @@
 # Decision Lab
 
 Interactive demos for [richardhenderson.io](https://richardhenderson.io), built with Streamlit.
-Four run on synthetic data. Market intelligence runs on public Census, HMDA and FHFA data. All rules and rates are illustrative.
+Everything except Market intelligence runs on synthetic data. Market intelligence runs on public Census, HMDA and FHFA data. All rules and rates are illustrative.
 
-Organised into three shelves:
+Organised the way the website is: products, a case study and method notes.
 
 | Shelf | Page | URL path | What it shows |
 | --- | --- | --- | --- |
-| Predict & prioritise | Market intelligence | `/market-intelligence` | Every CBSA scored from public data, rebuilt monthly. Includes strategy weights, a state map, an opportunity-vs-risk quadrant, rankings, a market brief with yearly HMDA trends and top lenders, lender benchmarking (share, rank, momentum, white space), month-over-month changes, archetypes, anomalies and Ask about this market |
-| | Lending decisions | `/lending?view=pipeline` · `?view=product` | A propensity model with a gains curve and reason codes; a product recommender with eligibility rules and explanations |
-| | Forecasting & pricing | `/forecasting-pricing` | A synthetic 150-room hotel. Booking-pace and seasonality forecasts are backtested against last year, then a capacity-constrained price and protection levels are recommended |
-| Decide | Model value | `/model-value` | Converts AUC, capacity, cost and adoption into net value |
-| | Experimentation lab | `/experiments` | Power and duration, a peeking simulation with sequential correction, CUPED, and a frequentist plus Bayesian read-out |
-| Measure & trust | Human–AI decision lab | `/human-ai` | A ten-round judge–advisor experiment that reports Brier scores, weight of advice, a reliance profile and the effect of explanations, plus optimal-reliance theory |
+| Products | Pricing & demand copilot | `/pricing-copilot?stage=frame` | The flagship. One pricing decision taken end to end through seven stages: **Frame** (decision, owner, measure, guardrails), **Data** (data contract with blocking checks; why raw price data is confounded), **Model** (booking-pace forecast backtested against last year; segment elasticities estimated naively, with controls and by 2SLS on random rate tests), **Decide** (expected-revenue rate inside guardrails, EMSR-b protection, reason codes), **Prove** (switchback design, power with and without CUPED, pre-registered read-out), **Run** (weekly accuracy, lead-time PSI drift, retrain triggers, model card) and **Value** (adoption-adjusted ROI, payback, delivery plan). `?stage=` links straight to a stage |
+| | Market intelligence | `/market-intelligence` | A data product on public data. Every CBSA is scored from Census, HMDA and FHFA data and rebuilt monthly. Includes strategy weights, rankings, market briefs, lender benchmarking, month-over-month changes, archetypes, anomalies and grounded Q&A |
+| Case studies | Lending decisions | `/lending?view=pipeline` · `?view=product` | A capacity-constrained propensity model with a gains curve and reason codes, and an explainable product recommender |
+| Method notes | Experimentation | `/experiments` | Power and duration, peeking with sequential correction, CUPED, frequentist and Bayesian read-outs |
+| | Model value | `/model-value` | Converts AUC, capacity, cost and adoption into net value |
+| | Human–AI decisions | `/human-ai` | A judge–advisor experiment: Brier scores, weight of advice, reliance profile |
 | | Goodhart simulator | `/goodhart` | Shows where the reported metric and the true outcome part ways under pressure |
 
 ### Optional secrets (Streamlit → app → Settings → Secrets)

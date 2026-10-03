@@ -128,6 +128,20 @@ h1{font-size:clamp(2rem,4.2vw,3rem)!important;line-height:1.05!important}
 .lab-checks li:last-child{border-bottom:0}
 .lab-checks .ok{color:#0F7563;font-weight:600;min-width:1.1em}
 .lab-checks .no{color:#B4561B;font-weight:600;min-width:1.1em}
+.cp-rail{display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin:.2rem 0 1.1rem;border-top:1px solid var(--grid)}
+.cp-rail span{font-size:.72rem;letter-spacing:.06em;color:var(--muted);padding:8px 6px 0 0;border-top:2px solid transparent;margin-top:-1px;line-height:1.3}
+.cp-rail span.done{border-top-color:var(--lume);color:var(--graphite)}
+.cp-rail span.on{border-top-color:var(--petrol);color:var(--petrol);font-weight:600}
+.cp-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 24px;margin:.6rem 0 .2rem}
+.cp-head h2{font-family:"Bodoni Moda",Georgia,serif;font-size:clamp(1.5rem,2.8vw,2rem)!important;margin:0!important;padding:0!important}
+.cp-proves{font-size:.78rem;color:var(--petrol);border:1px solid #BFDDD3;background:#F2F8F5;padding:4px 10px;border-radius:3px;white-space:nowrap}
+.cp-why{color:var(--graphite);max-width:70ch;line-height:1.6;margin:.3rem 0 1rem}
+.cp-call{border:1px solid var(--grid);background:#fff;padding:14px 18px;margin:.6rem 0 1.2rem;font-size:.95rem;line-height:1.55;color:var(--ink)}
+.cp-call .e{display:block;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#8A4514;margin-bottom:4px}
+.cp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:.4rem 0 1.2rem}
+.cp-grid .lab-card h4{font-family:"Schibsted Grotesk",sans-serif!important;font-size:.72rem;line-height:1.4;padding:0!important;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 .4rem;font-weight:500}
+.cp-grid .lab-card p{font-size:.95rem}
+@media (max-width:640px){.cp-rail{grid-template-columns:repeat(4,1fr)}}
 div[data-testid="stExpander"] details{background:#fff}
 @media (max-width:640px){.lab-tile + .lab-tile{border-left:0;padding-left:0;border-top:1px solid var(--grid)}}
 </style>

@@ -19,7 +19,7 @@ PAGES = [
     "views/market_intel.py",
     "views/experiments.py",
     "views/human_ai.py",
-    "views/demand_pricing.py",
+    "views/copilot.py",
 ]
 
 
@@ -75,3 +75,29 @@ def test_human_ai_full_run():
             at.button[0].click().run()
             assert not at.exception
     assert any("Brier" in m.value for m in at.markdown)
+
+
+@pytest.mark.parametrize("stage", ["frame", "data", "model", "decide", "prove", "run", "value"])
+def test_copilot_stage(stage):
+    at = AppTest.from_file(str(ROOT / "views/copilot.py"), default_timeout=90)
+    at.query_params["stage"] = stage
+    at.run()
+    assert not at.exception, at.exception
+
+
+def test_copilot_next_button_advances():
+    at = AppTest.from_file(str(ROOT / "views/copilot.py"), default_timeout=90).run()
+    at.button[0].click().run()
+    assert not at.exception
+    assert at.session_state["cp_stage"] == "Data"
+
+
+def test_elasticity_recovers_truth():
+    from lab import copilot as cp
+
+    el = cp.elasticity_table()
+    iv = el[el["method"].eq("Instrumented by rate tests")]
+    # The instrumented interval covers the truth; the raw correlation does not.
+    assert ((iv["lo"] <= iv["truth"]) & (iv["truth"] <= iv["hi"])).all()
+    raw = el[el["method"].eq("Raw correlation")]
+    assert ((raw["lo"] > raw["truth"]) | (raw["hi"] < raw["truth"])).all()
