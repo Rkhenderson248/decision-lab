@@ -127,3 +127,35 @@ def test_copilot_stage_survives_reselect():
     assert not at.exception
     assert at.session_state["cp_stage__last"] == "Run"
     assert any("Run it" in m.value for m in at.markdown)
+
+
+@pytest.mark.parametrize("stage", ["know", "acquire", "underwrite", "fraud", "price", "crosssell", "retain", "collect", "govern"])
+def test_lending_lab_stage(stage):
+    at = AppTest.from_file(str(ROOT / "views/lending_lab.py"), default_timeout=180)
+    at.query_params["stage"] = stage
+    at.run()
+    assert not at.exception, at.exception
+
+
+def test_lending_lab_follows_each_featured_member():
+    at = AppTest.from_file(str(ROOT / "views/lending_lab.py"), default_timeout=180)
+    at.query_params["stage"] = "collect"
+    at.run()
+    box = at.selectbox(key="cu_member_label")
+    for option in box.options:
+        box.set_value(option).run()
+        assert not at.exception, option
+
+
+def test_lending_lab_relationships_hold():
+    """The planted structure the lab teaches must still be in the data."""
+    from lab.cu import models as M
+
+    seg = M.segment()
+    assert seg.ari > 0.5                                   # segmentation recovers the archetypes
+    uw = M.underwriting()
+    assert uw.auc["Scorecard + reject inference"] > uw.auc["Legacy policy"]
+    top = M.fraud().nlargest(250, "fraud_score")
+    assert top["is_fraud"].mean() > 0.6                    # the queue is mostly fraud
+    up = M.uplift()
+    assert up.groupby("segment")["uplift"].mean()["Retired loyalists"] < 0  # contact backfires for one segment

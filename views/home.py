@@ -5,13 +5,15 @@ from lab import theme as t
 t.header(
     "R.K. Henderson · Decision Lab",
     "Decision products, case studies and method notes",
-    "One flagship product followed end to end, a public-data product rebuilt every month, and short interactive "
-    "notes on the methods behind them. Each piece is built around one decision and explains its own reasoning.",
+    "A flagship lending lab, a pricing product followed end to end, a public-data product rebuilt every month, and short "
+    "interactive notes on the methods behind them. Each piece explains its own reasoning.",
 )
 
 SHELVES = {
     "Products": [
-        ("views/copilot.py", "Flagship · end to end", "Pricing & demand copilot",
+        ("views/lending_lab.py", "Flagship · lending lifecycle", "Lending decision lab",
+         "A fictional credit union, 50,000 members and nine connected decisions from acquisition to collections and fair lending."),
+        ("views/copilot.py", "End to end · one decision", "Pricing & demand copilot",
          "Frame, data, model, decide, prove, run and value: one pricing decision taken from question to measured ROI."),
         ("views/market_intel.py", "Data product · public data", "Market intelligence",
          "Every U.S. metro scored from Census, HMDA and FHFA data, rebuilt monthly by an automated pipeline, with grounded briefs."),

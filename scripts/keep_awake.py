@@ -13,7 +13,7 @@ from playwright.sync_api import TimeoutError as PWTimeout
 from playwright.sync_api import sync_playwright
 
 BASE = os.environ.get("APP_URL", "https://richardhenderson-lab.streamlit.app").rstrip("/")
-PAGES = ["", "pricing-copilot?stage=model", "pricing-copilot?stage=prove", "market-intelligence", "lending"]
+PAGES = ["", "lending-lab?stage=know", "lending-lab?stage=govern", "pricing-copilot?stage=model", "pricing-copilot?stage=prove", "market-intelligence", "lending"]
 WAKE_TEXT = ["Yes, get this app back up", "get this app back up"]
 
 

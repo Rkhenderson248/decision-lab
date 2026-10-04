@@ -21,6 +21,7 @@ home = st.Page("views/home.py", title="Decision Lab", icon=":material/science:",
 shelves = {
     "": [home],
     "Products": [
+        st.Page("views/lending_lab.py", title="Lending decision lab", icon=":material/account_balance:", url_path="lending-lab"),
         st.Page("views/copilot.py", title="Pricing & demand copilot", icon=":material/insights:", url_path="pricing-copilot"),
         st.Page("views/market_intel.py", title="Market intelligence", icon=":material/map:", url_path="market-intelligence"),
     ],
