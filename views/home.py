@@ -19,7 +19,7 @@ SHELVES = {
          "Every U.S. metro scored from Census, HMDA and FHFA data, rebuilt monthly by an automated pipeline, with grounded briefs."),
     ],
     "Case studies": [
-        ("views/lending.py", "Prioritisation & recommendation", "Lending decisions",
+        ("views/lending.py", "Prioritization & recommendation", "Lending decisions",
          "Who to call first under fixed capacity, and which product to offer, both with reason codes."),
     ],
     "Method notes": [

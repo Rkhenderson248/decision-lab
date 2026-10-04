@@ -20,7 +20,7 @@ from lab.cu import data as d
 # 1 · Segmentation
 # ---------------------------------------------------------------------------
 FEATURE_GROUPS = {
-    "Behaviour": ["log_deposits", "monthly_txn", "digital_share", "tenure_years"],
+    "Behavior": ["log_deposits", "monthly_txn", "digital_share", "tenure_years"],
     "Credit": ["credit_score", "dti", "utilization", "inquiries_6m"],
     "Products": ["has_card", "has_auto", "has_personal", "has_mortgage", "has_heloc", "products_held", "high_rate_mortgage"],
     "Life stage": ["age", "log_income"],
@@ -122,7 +122,7 @@ def rfm(m: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 UW_FEATURES = ["credit_score", "dti", "utilization", "log_income", "inquiries_6m", "tenure_years", "is_member"]
 UW_LABELS = {
-    "credit_score": "Credit score", "dti": "Debt-to-income ratio", "utilization": "Revolving utilisation",
+    "credit_score": "Credit score", "dti": "Debt-to-income ratio", "utilization": "Revolving utilization",
     "log_income": "Income", "inquiries_6m": "Recent credit inquiries", "tenure_years": "Length of membership",
     "is_member": "Existing membership",
 }
@@ -531,7 +531,7 @@ def treatment_effects() -> pd.DataFrame:
     g = tr.groupby(["segment", "state", "treatment"])["cured"].agg(["mean", "size"]).reset_index()
     overall = tr.groupby(["state", "treatment"])["cured"].mean().rename("overall").reset_index()
     g = g.merge(overall, on=["state", "treatment"])
-    k = 40  # shrink thin cells towards the overall rate
+    k = 40  # shrink thin cells toward the overall rate
     g["cure"] = (g["mean"] * g["size"] + g["overall"] * k) / (g["size"] + k)
     return g
 

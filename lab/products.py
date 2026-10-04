@@ -1,6 +1,6 @@
-"""An illustrative mortgage product catalogue and a transparent fit engine.
+"""An illustrative mortgage product catalog and a transparent fit engine.
 
-The rules are deliberately simplified stand-ins for real programme
+The rules are deliberately simplified stand-ins for real program
 guidelines. They exist to show the shape of a decision system: hard
 eligibility checks first, then a ranking on what the borrower actually cares
 about, with every exclusion explained. They are not underwriting guidance.

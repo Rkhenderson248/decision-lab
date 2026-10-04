@@ -40,7 +40,7 @@ def test_product_fit_no_eligible_products():
     at = AppTest.from_file(str(ROOT / "views/lending.py"), default_timeout=60)
     at.query_params["view"] = "product"
     at.run()
-    # Drop the credit score below every programme minimum.
+    # Drop the credit score below every program minimum.
     credit = next(s for s in at.slider if s.label == "Credit score")
     credit.set_value(500).run()
     assert not at.exception

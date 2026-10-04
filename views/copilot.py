@@ -15,7 +15,7 @@ STAGES = ["Frame", "Data", "Model", "Decide", "Prove", "Run", "Value"]
 PROVES = {
     "Frame": "Decision diagnostic",
     "Data": "Build · data foundations",
-    "Model": "Build · applied modelling",
+    "Model": "Build · applied modeling",
     "Decide": "Build · decision systems",
     "Prove": "Measurement & experimentation",
     "Run": "Build · MLOps & governance",
@@ -58,7 +58,7 @@ def stage_head(title: str, why: str) -> None:
 
 
 def call(text: str) -> None:
-    st.markdown(f'<div class="cp-call"><span class="e">The judgement call</span>{text}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="cp-call"><span class="e">The judgment call</span>{text}</div>', unsafe_allow_html=True)
 
 
 def cards(items: list[tuple[str, str]]) -> None:
@@ -95,7 +95,7 @@ base_adr = float((hist["rate"] * hist["sold"]).tail(90).sum() / hist["sold"].tai
 if stage == "Frame":
     stage_head(
         "Frame the decision before touching a model",
-        "Most pricing projects fail at this stage, not at the modelling. The question is narrowed to one decision "
+        "Most pricing projects fail at this stage, not at the modeling. The question is narrowed to one decision "
         "with an owner, a cadence, a measure of success, the guardrails it must respect and the baseline it has to beat.",
     )
     t.tiles([
@@ -430,7 +430,7 @@ elif stage == "Run":
                       f"pricing on a stale model for <b>{aw - tw} more week{'s' if aw - tw > 1 else ''}</b>.")
         elif tw:
             t.insight(f"With these thresholds the accuracy alert fires first, in <b>week {tw}</b>. Lower the drift "
-                      "threshold to catch the change in booking behaviour earlier, at the cost of more false alarms.")
+                      "threshold to catch the change in booking behavior earlier, at the cost of more false alarms.")
         else:
             t.insight("No threshold was crossed, so the copilot kept pricing on a model the market had moved past. "
                       "Thresholds that never fire are as costly as ones that fire constantly.")

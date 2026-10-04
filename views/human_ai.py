@@ -180,7 +180,7 @@ with tab_play:
         ex = ans.groupby("explained")["woa"].mean()
         if True in ex.index and False in ex.index and np.isfinite(ex).all():
             more = "more" if ex[True] > ex[False] else "less"
-            st.markdown(f"**Explanations changed your behaviour.** On deals where the model showed its reasons you gave it "
+            st.markdown(f"**Explanations changed your behavior.** On deals where the model showed its reasons you gave it "
                         f"**{ex[True] * 100:.0f}%** weight, against **{ex[False] * 100:.0f}%** without: {more} reliance. "
                         "Explanations raise trust, but they raise it whether or not the model is right. That is the "
                         "design problem.")

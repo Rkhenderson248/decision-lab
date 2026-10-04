@@ -1,7 +1,7 @@
 """Shared look and feel for every Decision Lab page.
 
 The palette mirrors richardhenderson.io: porcelain ground, petrol authority,
-aqua as light. The three chart hues were run through a colour-vision check
+aqua as light. The three chart hues were run through a color-vision check
 (adjacent and all-pairs) against the light surface.
 """
 
@@ -212,7 +212,7 @@ def footnote(text: str) -> None:
     st.markdown(
         f'<div class="lab-note">{esc(text)} '
         f'Built by <a href="{SITE_URL}" target="_blank" rel="noopener">R.K. Henderson</a> · '
-        "Applied decision science.</div>",
+        "Decision science for lenders.</div>",
         unsafe_allow_html=True,
     )
 

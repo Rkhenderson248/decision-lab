@@ -7,7 +7,7 @@ import streamlit as st
 from lab import theme as t
 from lab.cu import models as M
 
-# Fixed segment order and colours (adjacent pairs validated; names always shown beside the colour).
+# Fixed segment order and colors (adjacent pairs validated; names always shown beside the color).
 SEGMENT_ORDER = list(M.SEGMENT_NAMES)
 SEG_COLORS = dict(zip(SEGMENT_ORDER, ["#008A73", "#D9772B", "#5B6CB8", "#B8486E", "#8C7A1F", "#2E8FC4"]))
 
@@ -29,7 +29,7 @@ def stage_head(n: int, title: str, question: str, why: str, service: str) -> Non
 
 
 def call(text: str) -> None:
-    st.markdown(f'<div class="cp-call"><span class="e">The judgement call</span>{text}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="cp-call"><span class="e">The judgment call</span>{text}</div>', unsafe_allow_html=True)
 
 
 def member_note(html: str) -> None:

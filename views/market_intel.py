@@ -92,7 +92,7 @@ with st.container(border=True):
                                help="Complete: all five blocks observed. Strong+: four or more.")
     states = c3.multiselect("States", sorted(STATE_GRID), placeholder="All states", key="mi_states")
     with c4.popover("Strategy weights", width="stretch", icon=":material/tune:"):
-        st.caption("How much each block counts toward the opportunity score. Weights are normalised.")
+        st.caption("How much each block counts toward the opportunity score. Weights are normalized.")
         weights = {
             "demographic": st.slider("Demographic strength", 0, 50, 25, 5, key="w_demo"),
             "demand": st.slider("Mortgage demand", 0, 50, 25, 5, key="w_demand"),
@@ -176,7 +176,7 @@ with T["Overview"]:
             xs.append(gx + 0.5); ys.append(-gy - 0.5); texts.append(f"<span style='color:{txt_color}'>{st_code}</span>")
         fig.add_trace(go.Scatter(x=xs, y=ys, mode="text", text=texts, textfont=dict(size=12),
                                  hovertext=hovers, hoverinfo="text", showlegend=False))
-        # Colour key
+        # Color key
         for i, colr in enumerate(SEQ):
             fig.add_shape(type="rect", x0=0.2 + i * 0.42, x1=0.6 + i * 0.42, y0=-8.55, y1=-8.35,
                           fillcolor=colr, line=dict(width=0))
@@ -197,7 +197,7 @@ with T["Overview"]:
         size = np.clip(np.sqrt(pts["population_latest"].fillna(0)) / (60 if area == "Metropolitan" else 22), 5, 28)
         fig2 = go.Figure()
         for x0, x1, y0, y1, label, ax, ay in ((50, 100, 0, 50, "Pursue", 98, 3), (50, 100, 50, 100, "Pursue with care", 98, 97),
-                                               (0, 50, 0, 50, "Monitor", 2, 3), (0, 50, 50, 100, "Deprioritise", 2, 97)):
+                                               (0, 50, 0, 50, "Monitor", 2, 3), (0, 50, 50, 100, "Deprioritize", 2, 97)):
             fig2.add_annotation(x=ax, y=ay, text=label, showarrow=False, font=dict(size=12, color=t.MUTED),
                                 xanchor="right" if ax > 50 else "left", yanchor="bottom" if ay < 50 else "top")
         fig2.add_shape(type="rect", x0=50, x1=100, y0=0, y1=50, fillcolor="rgba(127,208,190,.12)", line_width=0, layer="below")
@@ -583,7 +583,7 @@ with T["What could be built"]:
         ("Territory and site planning", "Where should the next branch, team or hire go?",
          "Market scores + your footprint and production", "Contiguous territories balanced on workload, with a local ranking inside each."),
         ("Marketing budget allocator", "How should a fixed budget be split across markets?",
-         "Demand, conversion and openness + cost-per-lead history", "An optimised spend plan with expected funded loans per market."),
+         "Demand, conversion and openness + cost-per-lead history", "An optimized spend plan with expected funded loans per market."),
         ("Competitive benchmarking (live in the Lenders tab)", "Where are we gaining or losing share, and to whom?",
          "Public HMDA by lender, year over year", "Share, rank and momentum against named peers in every market."),
         ("Conversational market brief (live in Market brief)", "What should I know about this market before Monday?",

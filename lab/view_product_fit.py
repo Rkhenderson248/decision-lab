@@ -137,7 +137,7 @@ def render() -> None:
     with right:
         st.markdown("**Why not the others**")
         if not blocked:
-            st.caption("Every product in the catalogue is eligible for this scenario.")
+            st.caption("Every product in the catalog is eligible for this scenario.")
         for r in blocked:
             items = "".join(
                 f'<li><span class="no">✕</span><span><b>{t.esc(c.rule)}.</b> {t.esc(c.detail)}</span></li>' for c in r.failed
@@ -161,6 +161,6 @@ def render() -> None:
 
     t.footnote(
         "Illustrative rules and rates only. This is not a quote, a pre-approval or underwriting guidance; real "
-        "programme limits, pricing and overlays differ by lender, location and date."
+        "program limits, pricing and overlays differ by lender, location and date."
     )
 

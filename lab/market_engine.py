@@ -418,7 +418,7 @@ META_FILE = DATA_DIR / "markets_meta.json"
 
 
 def load_raw() -> tuple[pd.DataFrame, bool]:
-    """Return (frame, is_live). Falls back to the labelled synthetic sample."""
+    """Return (frame, is_live). Falls back to the labeled synthetic sample."""
     if LIVE_FILE.exists():
         frame = pd.read_csv(LIVE_FILE, dtype={"market_key": str})
         if "market_name" not in frame.columns and "NAME" in frame.columns:

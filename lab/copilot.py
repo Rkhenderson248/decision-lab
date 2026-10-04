@@ -2,7 +2,7 @@
 
 Everything is synthetic and seeded. The hotel and its booking curves come
 from lab.demand; this module adds the rate history (with the confounding a
-real revenue team creates), elasticity estimation, the pricing optimiser,
+real revenue team creates), elasticity estimation, the pricing optimizer,
 switchback experiment maths and post-launch monitoring.
 """
 
@@ -166,7 +166,7 @@ def quality_checks(seed: int = 21) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 def optimise_rate(to_come: float, sd: float, rooms_left: float, ref: float, elasticity: float,
                   floor: float, ceiling: float, max_move: float, seed: int = 3) -> dict:
-    """Expected-revenue-maximising rate for the rooms still to sell, inside guardrails."""
+    """Expected-revenue-maximizing rate for the rooms still to sell, inside guardrails."""
     rng = np.random.default_rng(seed)
     draws = np.clip(rng.normal(to_come, max(sd, 1.0), 4000), 0, None)
     lo = max(floor, ref * (1 - max_move))
@@ -255,7 +255,7 @@ def monitoring(shift: bool, mape_limit: float, weeks_over: int, psi_limit: float
     bins = np.array([0, 3, 7, 14, 21, 30, 45, 60, 400])
     rows, retrained_at, over = [], None, 0
     for w in range(1, 27):
-        # Booking behaviour moves first; forecast errors follow as the affected nights arrive.
+        # Booking behavior moves first; forecast errors follow as the affected nights arrive.
         ramp = min(1.0, max(0.0, (w - 11) / 3)) if shift else 0.0
         err_ramp = min(1.0, max(0.0, (w - 13) / 4)) if shift else 0.0
         shifted = ramp > 0 and retrained_at is None

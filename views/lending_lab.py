@@ -88,7 +88,7 @@ def fmt_pct(x, dp=0):
 # ===========================================================================
 if stage == "Know":
     ui.stage_head(1, "Know your members", "Who are our members, really?",
-                  "Segmentation is the spine of the lab. Members are clustered once on behaviour, credit, products and "
+                  "Segmentation is the spine of the lab. Members are clustered once on behavior, credit, products and "
                   "life stage, the clusters are named in business language, and every later stage reports by them.",
                   "diagnostic")
     with st.container(border=True):
@@ -126,7 +126,7 @@ if stage == "Know":
                             "products_held", "high_rate_mortgage", "tenure_years"]]
         labels_y = [S.names[i] for i in cz.index]
         fig = go.Figure(go.Heatmap(
-            z=cz.to_numpy().clip(-2, 2), x=["Age", "Income", "Deposits", "Credit score", "Utilisation", "Digital",
+            z=cz.to_numpy().clip(-2, 2), x=["Age", "Income", "Deposits", "Credit score", "Utilization", "Digital",
                                             "Products", "7%+ mortgage", "Tenure"],
             y=labels_y, colorscale=[[0, "#B4561B"], [0.5, "#F1F2EE"], [1, "#0F4640"]], zmid=0, zmin=-2, zmax=2,
             colorbar=dict(title="vs average", thickness=10, len=0.8),
@@ -147,7 +147,7 @@ if stage == "Know":
     ui.member_note(f"{t.esc(member_id)} sits in {ui.chip(mrow.segment)}. Every later stage reads this segment: it sets "
                    "their price sensitivity, their likely next product, their prepayment and churn risk, and the "
                    "collection approach that works for people like them.")
-    t.insight(f"Without being told, clustering recovers the six behavioural groups behind the data (agreement "
+    t.insight(f"Without being told, clustering recovers the six behavioral groups behind the data (agreement "
               f"<b>{M.segment().ari:.2f}</b>). Drop a feature group or change the count and watch segments merge or "
               "split. That is why segment definitions are agreed with the business, not left to the algorithm.")
     ui.call("Six segments, not the statistically best number. A seventh cluster adds a little separation and a lot of "
@@ -156,7 +156,7 @@ if stage == "Know":
 # ===========================================================================
 elif stage == "Acquire":
     ui.stage_head(2, "Acquire", "Which prospects, and which markets?",
-                  "Look-alike modelling finds non-members who resemble a chosen segment, then sizes the opportunity by "
+                  "Look-alike modeling finds non-members who resemble a chosen segment, then sizes the opportunity by "
                   "metro, the same question the market-intelligence product answers with public data.", "build")
     with st.container(border=True):
         a, b = st.columns([1.4, 1])
@@ -190,7 +190,7 @@ elif stage == "Acquire":
     ui.member_note(f"There are <b>{int((L['similarity'] >= thresh).sum() if target == mrow.segment else 0):,}</b> prospects who look like "
                    f"{t.esc(member_id)}'s segment" + (f", {int(hits['metro'].eq(mrow.metro).sum()):,} of them in {t.esc(mrow.metro)}." if target == mrow.segment else ". Switch the target back to their segment to see how many live near them."))
     ui.call("Look-alikes find people who resemble today's members, including today's mistakes. Score them for risk at "
-            "Underwrite before spending on them, and check that a look-alike list does not quietly exclude neighbourhoods "
+            "Underwrite before spending on them, and check that a look-alike list does not quietly exclude neighborhoods "
             "(Govern runs that test).")
     st.markdown(f"Public-data view of the same question: the **Market intelligence** product scores every U.S. metro.")
 
@@ -362,7 +362,7 @@ elif stage == "Price":
     j = int(np.argmin(np.abs(rates - rate_pick)))
     floor = cof + opex + pd_t * lgd / life * 100
     t.tiles([
-        {"label": "Profit-maximising rate", "value": f"{rates[k]:.2f}%", "accent": True, "note": f"market rate {comp:.2f}%"},
+        {"label": "Profit-maximizing rate", "value": f"{rates[k]:.2f}%", "accent": True, "note": f"market rate {comp:.2f}%"},
         {"label": "Take-up at your rate", "value": fmt_pct(tu[j]), "note": f"{fmt_pct(tu[k])} at the optimum"},
         {"label": "Profit per 100 offers", "value": t.money(profit[j] * 100), "accent": True, "note": f"{t.money(profit[k] * 100)} at the optimum"},
         {"label": "Break-even rate", "value": f"{floor:.2f}%", "note": "cost of funds + operating cost + expected loss"},
@@ -410,13 +410,13 @@ elif stage == "Price":
     ui.member_note(f"{t.esc(member_id)} is risk tier <b>{tier_m}</b> in {ui.chip(mrow.segment)}. For a $25,000 auto loan the "
                    f"copilot would quote <b>{r_m[km]:.2f}%</b> (market {comp_m:.2f}%), with a {tu_m[km]:.0%} chance they accept.")
     ui.call("Price to the segment, never to the protected class. Segment-level elasticity is a legitimate commercial input, "
-            "but the resulting rate spread is tested by group in Govern before it ships, and a rate floor stops the optimiser "
+            "but the resulting rate spread is tested by group in Govern before it ships, and a rate floor stops the optimizer "
             "from buying volume below break-even.")
 
 # ===========================================================================
 elif stage == "Cross-sell":
     ui.stage_head(6, "Cross-sell", "What should we offer next, and to whom?",
-                  "Next-best-product propensity says what a member is likely to want; uplift modelling, trained on last "
+                  "Next-best-product propensity says what a member is likely to want; uplift modeling, trained on last "
                   "quarter's randomised card campaign, says whether contacting them changes anything. They are different "
                   "questions, and only the second one is worth paying for.", "advisory")
     C = M.uplift()
@@ -658,7 +658,7 @@ elif stage == "Govern":
 - **Performance:** AUC {U.auc['Scorecard + reject inference']:.3f}; calibrated by score band (see Underwrite).
 - **Fairness:** adverse impact ratio {air_now:.2f} at cut-off {cut}; bad rates at equal scores compared by group.
 - **Drift:** score PSI {psi_score:.2f}, early versus recent applicants.
-- **Limits:** synthetic data; no bureau attributes beyond score, DTI, utilisation and inquiries; illustrative only.
+- **Limits:** synthetic data; no bureau attributes beyond score, DTI, utilization and inquiries; illustrative only.
 - **Owner and review:** credit risk; quarterly validation, annual independent review.
 """)
 

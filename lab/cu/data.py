@@ -5,9 +5,9 @@ module works on the same members. Relationships are planted on purpose and
 documented here, because a demo is only honest if the reader can see what the
 models were supposed to find:
 
-- Six latent member archetypes drive behaviour, balances and product holdings.
+- Six latent member archetypes drive behavior, balances and product holdings.
   Segmentation should recover them without being told.
-- Default risk rises with lower scores, higher debt-to-income and utilisation,
+- Default risk rises with lower scores, higher debt-to-income and utilization,
   and many recent inquiries. Applications record it for everyone, but the
   lender only observes it for the loans it approved (so reject inference has
   something to fix).

@@ -156,7 +156,7 @@ def render() -> None:
         st.markdown(
             f"""
     - **Data.** {len(today):,} leads generated for today, plus a separate synthetic history used for training. Conversion depends on recency, rate gap (refinance), credit profile, engagement, prior attempts and source, with noise.
-    - **Model.** Standardised logistic regression. Chosen for transparency: each score decomposes into per-signal contributions, and the two largest positive ones become the reason codes.
+    - **Model.** Standardized logistic regression. Chosen for transparency: each score decomposes into per-signal contributions, and the two largest positive ones become the reason codes.
     - **Evaluation.** Because the data is simulated, every lead's true conversion probability is known. The tiles compare *expected* conversions under each ordering, not a single lucky draw.
     - **Actions.** Simple, readable rules layered on the score. In production these would be agreed with the people doing the work.
     - **What changes in a real deployment.** Weekly retraining, calibration checks, monitoring for drift, and a feedback loop from the team about which recommendations they ignored and why.

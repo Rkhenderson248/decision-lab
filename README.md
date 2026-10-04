@@ -3,7 +3,7 @@
 Interactive demos for [richardhenderson.io](https://richardhenderson.io), built with Streamlit.
 Everything except Market intelligence runs on synthetic data. Market intelligence runs on public Census, HMDA and FHFA data. All rules and rates are illustrative.
 
-Organised the way the website is: products, a case study and method notes.
+Organized the way the website is: products, a case study and method notes.
 
 | Shelf | Page | URL path | What it shows |
 | --- | --- | --- | --- |
@@ -49,7 +49,7 @@ Actions). That switches on ACS income and home values, which feed borrower capac
 valuation strain and affordability pressure.
 
 `lab/market_engine.py` recomputes every score, archetype and risk reading from the table.
-`lab/market_sample.py` is a labelled synthetic fallback, used only if `markets.csv` is
+`lab/market_sample.py` is a labeled synthetic fallback, used only if `markets.csv` is
 missing. `pipeline/databricks_export.py` is an optional alternative that exports the same
 table from the Mortgage Market Intelligence notebook.
 
@@ -87,7 +87,7 @@ commit shows a red ✕ on GitHub before you notice it on the site.
 
 ### 2. Connect Streamlit to GitHub
 
-1. Go to share.streamlit.io and choose **Continue with GitHub**. Authorise Streamlit to read your repositories.
+1. Go to share.streamlit.io and choose **Continue with GitHub**. Authorize Streamlit to read your repositories.
 2. **Create app → Yup, I have an app.**
 3. Repository `<your-username>/decision-lab`, branch `main`, main file `streamlit_app.py`.
 4. **App URL**: choose a subdomain, for example `rkh-decision-lab`. That gives `https://rkh-decision-lab.streamlit.app`.
@@ -125,9 +125,9 @@ Community Cloud apps go to sleep after a period without visitors. The first visi
 streamlit_app.py        navigation and page config
 lab/theme.py            palette, CSS, Plotly template, stat tiles, formatting
 lab/pipeline_model.py   synthetic pipeline + logistic regression + reason codes
-lab/products.py         illustrative product catalogue and the fit engine
+lab/products.py         illustrative product catalog and the fit engine
 lab/market_engine.py    market scoring, risk, archetypes, anomalies (public data)
-lab/market_sample.py    labelled synthetic fallback for the market table
+lab/market_sample.py    labeled synthetic fallback for the market table
 pipeline/build_markets.py   monthly public-data build (GitHub Actions)
 pipeline/databricks_export.py  optional notebook export of the same table
 data/                   markets.csv, markets_meta.json, build_log.json
@@ -140,6 +140,6 @@ tests/                  page smoke tests (pytest + streamlit AppTest)
 
 ## Design notes
 
-- Colours follow the site: porcelain `#FAFAF8`, petrol `#0F4640`, aqua `#7FD0BE`. Charts use three series hues (teal `#008A73`, orange `#D9772B`, indigo `#5B6CB8`). All three pass colour-vision separation checks, both adjacent and all-pairs.
-- Every chart has a hover layer and a title that names it. Two-series charts are direct-labelled or carry a legend.
+- Colors follow the site: porcelain `#FAFAF8`, petrol `#0F4640`, aqua `#7FD0BE`. Charts use three series hues (teal `#008A73`, orange `#D9772B`, indigo `#5B6CB8`). All three pass color-vision separation checks, both adjacent and all-pairs.
+- Every chart has a hover layer and a title that names it. Two-series charts are direct-labeled or carry a legend.
 - Each page ends with a plain-language "how this works" panel and a data disclaimer.

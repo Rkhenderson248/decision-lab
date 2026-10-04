@@ -65,7 +65,7 @@ peak_w = ws[int(np.argmax(idx_true))]
 t.tiles(
     [
         {"label": "Reported metric vs no pressure", "value": t.pct(cur_idx_p, 0, signed=True), "note": "what the dashboard shows"},
-        {"label": "True outcome vs no pressure", "value": t.pct(cur_idx_t, 0, signed=True), "accent": True, "note": "what the organisation gets"},
+        {"label": "True outcome vs no pressure", "value": t.pct(cur_idx_t, 0, signed=True), "accent": True, "note": "what the organization gets"},
         {"label": "Metric–outcome correlation", "value": f"{cur_r:.2f}", "note": f"{(cur_g > 0.02).mean():.0%} of the team gaming at all"},
         {"label": "Top 20% by metric who are truly top 20%", "value": f"{overlap:.0%}", "note": "who gets promoted vs who should"},
     ]
@@ -129,7 +129,7 @@ with st.expander("The model behind the curves"):
 - Each person splits effort between real work and **gaming**. Gaming pays when pressure × how cheap gaming is exceeds their ability at the real work, discounted by audit strength: `gaming share = clip((pressure × cheapness − ability) / audit, 0, 1)`.
 - **True outcome** comes from real work only. The **reported metric** counts real work plus whatever gaming adds. Both carry small measurement noise.
 - The least able game first. That is what quietly breaks the metric's validity and promotes the wrong people.
-- Theory: Goodhart (1975); Campbell's law; Holmström & Milgrom on multitask incentives. The simulation is a teaching device, not an estimate of any real organisation.
+- Theory: Goodhart (1975); Campbell's law; Holmström & Milgrom on multitask incentives. The simulation is a teaching device, not an estimate of any real organization.
 """
     )
 

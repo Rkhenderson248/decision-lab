@@ -14,7 +14,7 @@ t.header(
     "Will this test actually tell you anything?",
     "Most experiments fail before they start: too small to detect the effect that matters, stopped "
     "the moment they look good, or read without accounting for noise. Design one, watch peeking "
-    "manufacture false wins, see how pre-period data shortens a test, then analyse a result.",
+    "manufacture false wins, see how pre-period data shortens a test, then analyze a result.",
 )
 
 
@@ -35,7 +35,7 @@ def power_at(n: int, p0: float, mde_rel: float, alpha: float) -> float:
     return float(1 - norm.cdf(za - abs(p1 - p0) / se) + norm.cdf(-za - abs(p1 - p0) / se))
 
 
-tabs = st.tabs(["1 · Design", "2 · The peeking problem", "3 · Variance reduction (CUPED)", "4 · Analyse a result"])
+tabs = st.tabs(["1 · Design", "2 · The peeking problem", "3 · Variance reduction (CUPED)", "4 · Analyze a result"])
 
 # ---------------------------------------------------------------------------
 with tabs[0]:
