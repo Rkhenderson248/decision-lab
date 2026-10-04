@@ -8,6 +8,7 @@ import streamlit as st
 from lab import copilot as cp
 from lab import demand as dm
 from lab import theme as t
+from lab import widgets as w
 
 PILOT_SEED = 6  # one representative draw of the pilot; the estimator is unbiased across seeds
 STAGES = ["Frame", "Data", "Model", "Decide", "Prove", "Run", "Value"]
@@ -42,7 +43,7 @@ def _go(stage: str) -> None:
     st.session_state.cp_stage = stage
 
 
-stage = t.segmented("Stage", STAGES, key="cp_stage", label_visibility="collapsed")
+stage = w.segmented("Stage", STAGES, key="cp_stage", label_visibility="collapsed")
 st.query_params["stage"] = stage.lower()
 idx = STAGES.index(stage)
 

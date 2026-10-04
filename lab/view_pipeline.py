@@ -4,6 +4,7 @@ import streamlit as st
 
 from lab import pipeline_model as pm
 from lab import theme as t
+from lab import widgets as w
 
 
 def render() -> None:
@@ -29,9 +30,9 @@ def render() -> None:
             help="How many leads the team can realistically work in one day.",
         )
         with c2:
-            lead_filter = t.segmented("Pipeline", ["All", "Refinance", "Purchase"], key="pipe_filter", default="All")
+            lead_filter = w.segmented("Pipeline", ["All", "Refinance", "Purchase"], key="pipe_filter", default="All")
         with c3:
-            compare = t.segmented("Compare against", ["Newest first", "Random"], key="pipe_compare", default="Newest first")
+            compare = w.segmented("Compare against", ["Newest first", "Random"], key="pipe_compare", default="Newest first")
 
     pool = today if lead_filter == "All" else today[today["lead_type"] == lead_filter]
     capacity = min(capacity, len(pool))
