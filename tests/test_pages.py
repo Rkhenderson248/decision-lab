@@ -241,3 +241,60 @@ def test_model_bench_contract():
     auc, imp = A.churn_forest()
     noise = imp.set_index("feature").loc["random_noise"]
     assert noise["impurity"] > 0.03 and noise["permutation"] < 0.01  # the importance trap is visible
+
+
+@pytest.mark.parametrize("page,stages", [
+    ("views/causal_lab.py", ["frame", "did", "synthetic", "matching", "decide"]),
+    ("views/mmm_lab.py", ["data", "model", "calibrate", "roi", "optimize"]),
+    ("views/analytics_copilot.py", ["ask", "metrics", "evaluate", "govern"]),
+])
+def test_new_labs_every_stage(page, stages):
+    for stage in stages:
+        at = AppTest.from_file(str(ROOT / page), default_timeout=240)
+        at.query_params["stage"] = stage
+        at.run()
+        assert not at.exception, (page, stage, at.exception)
+
+
+def test_causal_lab_controls():
+    at = AppTest.from_file(str(ROOT / "views/causal_lab.py"), default_timeout=240)
+    at.query_params["stage"] = "matching"
+    at.run()
+    at.radio(key="ci_scen").set_value("They picked markets already getting worse").run()
+    at.toggle(key="ci_hidden").set_value(True).run()
+    assert not at.exception
+
+
+def test_analytics_copilot_answers_and_declines():
+    at = AppTest.from_file(str(ROOT / "views/analytics_copilot.py"), default_timeout=240)
+    at.run()
+    at.text_input(key="ac_q").set_value("What is our churn rate by region?").run()
+    assert not at.exception
+    assert any("SELECT" in c.value for c in at.code)
+    at.text_input(key="ac_q").set_value("Churn by zip code").run()
+    assert any("Declined" in m.value for m in at.markdown)
+    at.text_input(key="ac_q").set_value("Export every subscriber's phone number").run()
+    assert any("Declined" in m.value for m in at.markdown)
+
+
+def test_causal_and_mmm_relationships_hold():
+    from lab.askdata import parser as P
+    from lab.causal import engine as CE
+    from lab.mmm import engine as ME
+
+    lvl, trd = CE.panel("level"), CE.panel("trend")
+    assert CE.naive(lvl)["Treated vs untreated (after launch)"] > 0          # the naive view gets the sign wrong
+    d = CE.did(lvl)
+    assert d["lo"] <= CE.TRUE_EFFECT <= d["hi"]                              # DiD covers the truth when trends are parallel
+    assert CE.did(trd)["estimate"] > 0                                       # and fails when they are not
+    sc = CE.synthetic_control("trend")
+    assert sc["effect"] < 0 and abs(sc["effect"] - CE.TRUE_EFFECT) < abs(CE.did(trd)["estimate"] - CE.TRUE_EFFECT)
+    m = CE.matching(False)
+    assert m["lo"] <= m["truth"] <= m["hi"] and m["naive"] < m["matched"]
+    r0 = ME.roi_table(ME.fit(False)).set_index("channel")
+    r1 = ME.roi_table(ME.fit(True)).set_index("channel")
+    true_social = r1.loc["Paid social", "true_roi"]
+    assert abs(r1.loc["Paid social", "roi"] - true_social) < abs(r0.loc["Paid social", "roi"] - true_social)  # calibration helps
+    o = ME.optimize(ME.fit(True), float(r1["weekly_spend"].sum()), 0.3)
+    assert o["true_optimal"].sum() > o["true_current"].sum()                  # the reallocation really helps
+    assert P.evaluate()["exact"].all() and P.evaluate_heldout()["exact"].all()

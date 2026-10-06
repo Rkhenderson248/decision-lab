@@ -23,6 +23,9 @@ shelves = {
     "Products": [
         st.Page("views/lending_lab.py", title="Lending decision lab", icon=":material/account_balance:", url_path="lending-lab"),
         st.Page("views/subscriber_lab.py", title="Subscriber value lab", icon=":material/groups:", url_path="subscriber-lab"),
+        st.Page("views/analytics_copilot.py", title="Analytics copilot", icon=":material/query_stats:", url_path="analytics-copilot"),
+        st.Page("views/causal_lab.py", title="Causal impact lab", icon=":material/compare_arrows:", url_path="causal-impact"),
+        st.Page("views/mmm_lab.py", title="Marketing mix optimizer", icon=":material/campaign:", url_path="marketing-mix"),
         st.Page("views/policy_assistant.py", title="Credit policy assistant", icon=":material/quick_reference_all:", url_path="policy-assistant"),
         st.Page("views/copilot.py", title="Pricing & demand copilot", icon=":material/insights:", url_path="pricing-copilot"),
         st.Page("views/market_intel.py", title="Mortgage market intelligence", icon=":material/map:", url_path="market-intelligence"),
