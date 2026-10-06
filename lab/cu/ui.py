@@ -21,7 +21,7 @@ SERVICES = {
 def stage_head(n: int, title: str, question: str, why: str, service: str) -> None:
     st.markdown(
         f'<div class="cp-head"><h2>{t.esc(title)}</h2>'
-        f'<span class="cp-proves">Proves · {t.esc(SERVICES[service])}</span></div>'
+        '</div>'
         f'<p class="cu-q"><span>{n:02d}</span>{t.esc(question)}</p>'
         f'<p class="cp-why">{t.esc(why)}</p>',
         unsafe_allow_html=True,

@@ -64,12 +64,12 @@ def _extras():
 prepared, live, meta = _base()
 
 t.header(
-    "Data product · Market intelligence",
-    "A market-sizing product that refreshes itself",
-    "A scheduled pipeline pulls public Census, HMDA and FHFA data every month, checks it, scores every U.S. "
-    "metro and micro area on demand, capacity, momentum and competitive openness, and records what changed. "
-    "The housing-finance market is the worked example; the pattern applies to any market with public signals. "
-    "Set your own strategy weights and the rankings, archetypes and briefs rebuild on the spot.",
+    "Mortgage market intelligence · Public data, refreshed monthly",
+    "Where is the mortgage market opening up?",
+    "Every U.S. metro and micro area scored on demographics, mortgage demand, borrower capacity, "
+    "house-price momentum and competitive openness, from public Census, HMDA and FHFA data that a scheduled "
+    "pipeline rebuilds every month. Set your own strategy weights and the rankings, archetypes and briefs "
+    "rebuild on the spot.",
 )
 
 if not live:

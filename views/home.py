@@ -15,7 +15,9 @@ SHELVES = {
          "A fictional credit union, 50,000 members and nine connected decisions from acquisition to collections and fair lending."),
         ("views/copilot.py", "End to end · one decision", "Pricing & demand copilot",
          "Frame, data, model, decide, prove, run and value: one pricing decision taken from question to measured ROI."),
-        ("views/market_intel.py", "Data product · public data", "Market intelligence",
+        ("views/policy_assistant.py", "AI · grounded answers", "Credit policy assistant",
+         "Answers from a lending policy manual with a citation for every claim, an honest refusal, and the evaluation suite behind it."),
+        ("views/market_intel.py", "Public mortgage data", "Mortgage market intelligence",
          "Every U.S. metro scored from Census, HMDA and FHFA data, rebuilt monthly by an automated pipeline, with grounded briefs."),
     ],
     "Case studies": [

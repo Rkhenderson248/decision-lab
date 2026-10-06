@@ -51,7 +51,7 @@ idx = STAGES.index(stage)
 def stage_head(title: str, why: str) -> None:
     st.markdown(
         f'<div class="cp-head"><h2>{t.esc(title)}</h2>'
-        f'<span class="cp-proves">Proves · {t.esc(PROVES[stage])}</span></div>'
+        '</div>'
         f'<p class="cp-why">{t.esc(why)}</p>',
         unsafe_allow_html=True,
     )

@@ -20,6 +20,7 @@ PAGES = [
     "views/experiments.py",
     "views/human_ai.py",
     "views/copilot.py",
+    "views/policy_assistant.py",
 ]
 
 
@@ -159,3 +160,22 @@ def test_lending_lab_relationships_hold():
     assert top["is_fraud"].mean() > 0.6                    # the queue is mostly fraud
     up = M.uplift()
     assert up.groupby("segment")["uplift"].mean()["Retired loyalists"] < 0  # contact backfires for one segment
+
+
+def test_policy_assistant_answers_and_declines():
+    at = AppTest.from_file(str(ROOT / "views/policy_assistant.py"), default_timeout=60)
+    at.run()
+    at.text_input(key="pa_q").set_value("Who can approve an exception on a $40,000 loan?").run()
+    assert not at.exception
+    assert any("UW-2.8" in m.value for m in at.markdown)
+    at.text_input(key="pa_q").set_value("How do I reset my online banking password?").run()
+    assert any("doesn't cover this" in m.value for m in at.markdown)
+
+
+def test_policy_retrieval_quality():
+    from lab.policy import engine as E
+
+    ev = E.evaluate()
+    ins = ev[ev["in_scope"]]
+    assert ins["rank"].notna().mean() == 1.0      # right section always in the top three
+    assert (ins["rank"] == 1).mean() >= 0.85
