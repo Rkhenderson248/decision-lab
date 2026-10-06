@@ -216,6 +216,31 @@ elif stage == "Model":
     t.insight("The raw correlation puts business elasticity <b>above zero</b>, which would tell the copilot to raise "
               "rates without limit. Calendar controls remove part of the bias; only the random rate tests recover "
               "the true response. Leisure guests are close to three times as price-sensitive as business guests.")
+    with st.expander("Inside the regression: the two linear models behind the leisure estimate", expanded=False):
+        from lab import copilot_reg as CR
+        R = CR.regression("Leisure")
+        rl, rr = st.columns([1, 1.1], gap="large")
+        with rl:
+            figr = go.Figure()
+            figr.add_trace(go.Scatter(x=R["rx"], y=R["ry"], mode="markers", marker=dict(size=5, color=t.S1, opacity=0.5),
+                                      name="Nights", hovertemplate="rate %{x:+.3f} · rooms %{y:+.3f}<extra></extra>"))
+            xs = np.linspace(R["rx"].min(), R["rx"].max(), 2)
+            figr.add_trace(go.Scatter(x=xs, y=R["slope"] * xs, mode="lines", line=dict(color=t.INK, width=2), name=f"Slope {R['slope']:.2f}"))
+            figr.update_layout(title="Demand vs the randomized part of price, calendar removed", xaxis_title="log rate driven by tests (residual)",
+                               yaxis_title="log leisure rooms (residual)", legend=dict(orientation="h", y=1.02), margin=dict(t=100))
+            t.chart(figr, height=340)
+        with rr:
+            st.dataframe(R["coefs"].rename(columns={"term": "Stage 2 term", "estimate": "Estimate", "se": "Std. error", "t": "t"}),
+                         hide_index=True, width="stretch", height=340,
+                         column_config={"Estimate": st.column_config.NumberColumn(format="%.3f"),
+                                        "Std. error": st.column_config.NumberColumn(format="%.3f"), "t": st.column_config.NumberColumn(format="%.1f")})
+        st.markdown(f"Two ordinary least-squares regressions on **{R['n']}** nights. **Stage 1** regresses log rate on the random test "
+                    f"offset and the calendar: a 10% test offset moves the rate by about {R['first_stage'] * 10:.0f}% (F = {R['f_stat']:.0f}, far above "
+                    f"the usual weak-instrument line of 10). **Stage 2** regresses log rooms on the stage-1 fitted rate and the same calendar terms. "
+                    f"Its slope is the elasticity, **{R['slope']:.2f}** against a true {R['truth']:.1f}; R² {R['r2']:.2f}. "
+                    "On a log–log scale a linear model is the right shape, every coefficient means something to a revenue manager, and "
+                    "the guardrails in Decide are built on it. A tree model might forecast a little better and could not hand the pricing "
+                    "team one number to argue with.")
     call("The instrumented estimate is used even though its interval is wider. A precise estimate of the wrong "
          "number is worse than a noisy estimate of the right one. The wide business interval goes into the "
          "decision as uncertainty, and it is the reason for more rate tests on weekday nights.")

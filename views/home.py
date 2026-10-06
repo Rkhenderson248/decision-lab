@@ -5,14 +5,16 @@ from lab import theme as t
 t.header(
     "R.K. Henderson · Decision Lab",
     "Decision products, case studies and method notes",
-    "A flagship lending lab, a pricing product followed end to end, a public-data product rebuilt every month, and short "
-    "interactive notes on the methods behind them. Each piece explains its own reasoning.",
+    "Two connected labs, one for a lender and one for a subscription business, a pricing product followed end to end, a "
+    "public-data product rebuilt every month, and short interactive notes on the methods behind them.",
 )
 
 SHELVES = {
     "Products": [
         ("views/lending_lab.py", "Flagship · lending lifecycle", "Lending decision lab",
          "A fictional credit union, 50,000 members and nine connected decisions from acquisition to collections and fair lending."),
+        ("views/subscriber_lab.py", "Featured · customer value & retention", "Subscriber value lab",
+         "A fictional internet and mobile provider: lifetime value, churn, uplift-targeted offers, price increases with guardrails, tests and an executive brief."),
         ("views/copilot.py", "End to end · one decision", "Pricing & demand copilot",
          "Frame, data, model, decide, prove, run and value: one pricing decision taken from question to measured ROI."),
         ("views/policy_assistant.py", "AI · grounded answers", "Credit policy assistant",
@@ -38,7 +40,7 @@ SHELVES = {
 
 for shelf, demos in SHELVES.items():
     st.subheader(shelf, anchor=False)
-    cols = st.columns(4 if len(demos) == 4 else 3, gap="medium")
+    cols = st.columns(min(len(demos), 3) if len(demos) != 4 else 4, gap="medium")
     for i, (path, eyebrow, title, blurb) in enumerate(demos):
         with cols[i % len(cols)]:
             st.markdown(

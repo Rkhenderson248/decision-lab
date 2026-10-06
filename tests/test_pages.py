@@ -179,3 +179,65 @@ def test_policy_retrieval_quality():
     ins = ev[ev["in_scope"]]
     assert ins["rank"].notna().mean() == 1.0      # right section always in the top three
     assert (ins["rank"] == 1).mean() >= 0.85
+
+
+@pytest.mark.parametrize("stage", ["trends", "value", "segment", "churn", "treat", "price", "test", "care", "govern"])
+def test_subscriber_lab_stage(stage):
+    at = AppTest.from_file(str(ROOT / "views/subscriber_lab.py"), default_timeout=240)
+    at.query_params["stage"] = stage
+    at.run()
+    assert not at.exception, at.exception
+
+
+def test_subscriber_lab_controls():
+    at = AppTest.from_file(str(ROOT / "views/subscriber_lab.py"), default_timeout=240)
+    at.query_params["stage"] = "price"
+    at.run()
+    at.radio(key="sv_pmode").set_value("Best by segment").run()
+    at.toggle(key="sv_ex_win").set_value(False).run()
+    assert not at.exception
+    at.query_params["stage"] = "treat"
+    at = AppTest.from_file(str(ROOT / "views/subscriber_lab.py"), default_timeout=240)
+    at.query_params["stage"] = "treat"
+    at.run()
+    at.radio(key="sv_rank").set_value("Churn risk").run()
+    box = at.selectbox(key="sv_sub_label")
+    for option in box.options:
+        box.set_value(option).run()
+        assert not at.exception, option
+
+
+def test_subscriber_lab_relationships_hold():
+    """What the subscriber lab teaches must stay true in the data."""
+    from lab.sub import data as D
+    from lab.sub import models as M
+
+    c = D.company()
+    assert 0.007 < c.monthly["churn_rate"].mean() < 0.016          # realistic monthly churn
+    hz = M.hazard_by_tenure()
+    twelve = hz[hz["contract"] == "12-month contract"].set_index("tenure")["hazard"]
+    assert twelve.loc[12:13].mean() > 3 * twelve.loc[5:10].mean()    # contract-end spike
+    assert M.segments().ari > 0.5
+    up = M.uplift()
+    assert up.qini_area["Uplift (logistic, interactions)"] > up.qini_area["Churn risk"]
+    g = up.test.groupby("segment")["uplift"].mean()
+    assert g["Promo switchers"] > 0.02 and g["Light users"] < 0     # who an offer saves, and who it pushes out
+    best = M.best_increase_by_segment().pivot(index="increase", columns="segment", values="net")
+    assert best.loc[5, "Bundled households"] > 0 > best.loc[5, "Promo switchers"]
+
+
+def test_model_bench_contract():
+    from lab import bench as B
+    from lab.cu import algos as A
+
+    b = A.uw_bench()
+    assert list(b.table["algorithm"]) == B.ALGOS
+    assert b.table["auc"].between(0.7, 0.95).all()
+    champ, _ = B.recommend(b.table, regulated=True)
+    assert champ in ("Logistic regression", "Linear regression")    # regulated decisions need exact reasons
+    fd = A.fraud_detectors()
+    q = fd[fd["queue"] == 250].set_index("detector")["caught"]
+    assert q["Isolation forest"] > q["One-class SVM"]
+    auc, imp = A.churn_forest()
+    noise = imp.set_index("feature").loc["random_noise"]
+    assert noise["impurity"] > 0.03 and noise["permutation"] < 0.01  # the importance trap is visible

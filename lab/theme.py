@@ -212,7 +212,7 @@ def footnote(text: str) -> None:
     st.markdown(
         f'<div class="lab-note">{esc(text)} '
         f'Built by <a href="{SITE_URL}" target="_blank" rel="noopener">R.K. Henderson</a> · '
-        "Decision science for lenders.</div>",
+        "Decision science for pricing, risk and customer value.</div>",
         unsafe_allow_html=True,
     )
 

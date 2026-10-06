@@ -10,6 +10,8 @@ from lab import widgets as w
 from lab.cu import data as d
 from lab.cu import models as M
 from lab.cu import ui
+from lab.cu import algos as A
+from lab import bench_ui as BU
 
 ui.css()
 STAGES = ["Know", "Acquire", "Underwrite", "Fraud", "Price", "Cross-sell", "Retain", "Collect", "Govern"]
@@ -144,6 +146,38 @@ if stage == "Know":
         fig2.update_layout(title="RFM by segment (quintile 1–5)", barmode="group", xaxis=dict(range=[0, 5.2]),
                            yaxis=dict(autorange="reversed"), bargap=0.25, margin=dict(l=8, t=70))
         t.chart(fig2, height=380)
+    BU.subhead("Principal component analysis", "PCA squeezes the clustering features into a few independent axes. Plotting members on the "
+               "first two is the honest check on the segments: if they are real, they occupy different ground.")
+    pts, evr, load = A.pca_view(groups, k)
+    pl, pr = st.columns([1.35, 1], gap="large")
+    with pl:
+        figp = go.Figure()
+        for s_ in [n for n in ui.SEGMENT_ORDER if n in set(pts["segment"])] + sorted(set(pts["segment"]) - set(ui.SEGMENT_ORDER)):
+            d_ = pts[pts["segment"] == s_]
+            figp.add_trace(go.Scattergl(x=d_["pc1"], y=d_["pc2"], mode="markers", name=s_,
+                                        marker=dict(size=4, opacity=0.55, color=ui.SEG_COLORS.get(s_, t.BASE)),
+                                        hovertemplate=s_ + "<extra></extra>"))
+        figp.update_layout(title="Members on the first two principal components (3,500 sampled)",
+                           xaxis_title=f"PC1 · {A._axis_name(load['pc1'])} ({evr[0]:.0%} of variance)",
+                           yaxis_title=f"PC2 · {A._axis_name(load['pc2'])} ({evr[1]:.0%})",
+                           legend=dict(orientation="h", y=1.02, yanchor="bottom", itemsizing="constant", font=dict(size=11)), margin=dict(t=130))
+        t.chart(figp, height=430)
+    with pr:
+        cum = np.cumsum(evr)
+        n90 = int(np.searchsorted(cum, 0.9) + 1)
+        figv = go.Figure()
+        figv.add_trace(go.Bar(x=list(range(1, len(evr) + 1)), y=evr * 100, marker=dict(color=t.S1, cornerradius=3), name="Each component",
+                              hovertemplate="PC%{x}: %{y:.1f}%<extra></extra>"))
+        figv.add_trace(go.Scatter(x=list(range(1, len(evr) + 1)), y=cum * 100, mode="lines+markers", line=dict(color=t.S2, width=2),
+                                  name="Cumulative", hovertemplate="First %{x}: %{y:.0f}%<extra></extra>"))
+        figv.add_hline(y=90, line=dict(color=t.GRID, width=1, dash="dot"))
+        figv.update_layout(title="Variance explained", xaxis_title="Component", yaxis_title="%", yaxis=dict(range=[0, 105]),
+                           legend=dict(orientation="h", y=1.02), margin=dict(t=100))
+        t.chart(figv, height=430)
+    t.insight(f"Two axes carry <b>{cum[1]:.0%}</b> of the information and {n90} carry 90% of it, out of {len(evr)} features. "
+              "The segments sit in distinct regions of the map, so the clusters reflect real structure rather than noise. "
+              "PCA is for seeing and compressing; the segments themselves are still built on the original features, which "
+              "the business can read.")
     ui.member_note(f"{t.esc(member_id)} sits in {ui.chip(mrow.segment)}. Every later stage reads this segment: it sets "
                    "their price sensitivity, their likely next product, their prepayment and churn risk, and the "
                    "collection approach that works for people like them.")
@@ -275,6 +309,13 @@ elif stage == "Underwrite":
 - **In production:** monotonic constraints on the boosted model, SHAP-based reasons for the challenger, and a policy layer for hard rules (bankruptcy, fraud flags) above the score.
 """)
 
+    BU.subhead("Model bench · five algorithms, one decision",
+               "The same applications, the same out-of-time test, five algorithms: linear regression, logistic regression, "
+               "random forest, XGBoost and a support vector machine. Flip the switch to see how the champion changes when "
+               "the decision is not regulated.")
+    BU.render(A.uw_bench(), key="cu_bench", regulated_default=True, value_label="Profit at a 65% approval rate",
+              decision="defaults", regulated_help="Lending decisions need specific adverse-action reasons for every decline.")
+
 # ===========================================================================
 elif stage == "Fraud":
     ui.stage_head(4, "Detect fraud", "Is this application real?",
@@ -327,6 +368,31 @@ elif stage == "Fraud":
                                           "link_size": "Linked apps", "score": "Risk", "reasons": "Why it is here", "is_fraud": "Outcome (known here)"}),
                      hide_index=True, width="stretch", height=320,
                      column_config={"Amount": st.column_config.NumberColumn(format="$%d"), "Risk": st.column_config.ProgressColumn(min_value=0, max_value=1, format="%.2f")})
+    BU.subhead("Isolation forest vs one-class SVM", "Two unsupervised detectors, neither shown a single fraud label: an isolation "
+               "forest (how few random splits isolate an application) and a one-class SVM (how far an application sits outside "
+               "the boundary drawn around normal ones), against the rules on their own.")
+    fd = A.fraud_detectors()
+    fl, fr_ = st.columns([1.3, 1], gap="large")
+    with fl:
+        figd = go.Figure()
+        for name_, color in (("Isolation forest", t.S1), ("One-class SVM", t.S3), ("Rules only", t.S2)):
+            d_ = fd[fd["detector"] == name_]
+            figd.add_trace(go.Scatter(x=d_["queue"], y=d_["caught"] * 100, name=name_, mode="lines", line=dict(color=color, width=2.5),
+                                      hovertemplate="%{x} reviewed: %{y:.0f}% of fraud caught<extra>" + name_ + "</extra>"))
+        figd.add_vline(x=queue, line=dict(color=t.INK, width=1))
+        figd.update_layout(title="Fraud caught by queue size, each detector alone", xaxis_title="Applications reviewed",
+                           yaxis_title="Fraud caught (%)", legend=dict(orientation="h", y=1.02), margin=dict(t=100))
+        t.chart(figd, height=340)
+    with fr_:
+        at_q = fd[fd["queue"] == int(min(max(round(queue / 50) * 50, 50), 1000))].set_index("detector")
+        st.markdown(f"**At a queue of {int(at_q['queue'].iloc[0])}**")
+        st.dataframe(pd.DataFrame({"Detector": at_q.index, "Fraud caught": at_q["caught"].map(lambda v: f"{v:.0%}"),
+                                   "Precision": at_q["precision"].map(lambda v: f"{v:.0%}"), "Rings touched": at_q["rings"]}),
+                     hide_index=True, width="stretch")
+        st.caption("The one-class SVM trains on 6,000 applications (kernel methods scale poorly) with an RBF kernel and nu = 0.03.")
+    t.insight("The isolation forest wins here, and that is the usual result on mixed tabular data: it copes with skewed and binary "
+              "features without tuning, while the one-class SVM depends on scaling and a kernel width and flags rare-but-legitimate "
+              "profiles. The SVM stays in the toolkit for dense, continuous signals such as device or behavioral telemetry.")
     ui.member_note(f"Long-standing members almost never reach the queue: <b>{top['member_id'].isna().mean():.0%}</b> of flagged applications come from "
                    f"people with no existing relationship. {t.esc(member_id)}'s history is itself a strong signal of a genuine identity.")
     ui.call("Rings are reviewed as rings. When one application in a linked cluster is confirmed as fraud, every linked "
@@ -515,6 +581,37 @@ elif stage == "Retain":
         fig2.update_layout(title=f"Balance expected to prepay at {mkt:.2f}%", xaxis=dict(tickprefix="$", tickformat="~s"),
                            yaxis=dict(autorange="reversed"), margin=dict(l=8, t=70))
         t.chart(fig2, height=380)
+    BU.subhead("Random forest challenger, and the feature-importance trap",
+               "A random forest is trained as a challenger to the churn model. A column of pure random noise is added on purpose, "
+               "to test how far each importance measure can be trusted.")
+    rauc, imp = A.churn_forest()
+    rl, rr = st.columns([1, 1.35], gap="large")
+    with rl:
+        t.tiles([
+            {"label": "Random forest AUC", "value": f"{rauc['Random forest']:.3f}", "note": "held-out members"},
+            {"label": "Gradient boosting AUC", "value": f"{rauc['Gradient boosting (in use)']:.3f}", "accent": True, "note": "the model in use"},
+        ])
+        noise = imp.set_index("feature").loc["random_noise"]
+        rank = int(imp["impurity"].rank(ascending=False)["random_noise" == imp["feature"]].iloc[0])
+        st.markdown(f"Pure noise ranks **#{rank} of {len(imp)}** by impurity importance ({noise['impurity']:.1%} of the total) and "
+                    f"**{noise['permutation']:.1%}** by permutation importance.")
+    with rr:
+        top_ = imp.sort_values("impurity", ascending=False).head(12).iloc[::-1]
+        nice = {"tenure_years": "Tenure", "log_deposits": "Deposits", "log_income": "Income", "utilization": "Utilization", "dti": "Debt-to-income",
+                "credit_score": "Credit score", "random_noise": "RANDOM NOISE", "digital_share": "Digital share", "age": "Age",
+                "monthly_txn": "Transactions", "months_since_last_product": "Months since last product", "products_held": "Products held",
+                "complaints_12m": "Complaints", "inquiries_6m": "Inquiries", "has_card": "Has card", "has_auto": "Has auto loan"}
+        labels_ = [nice.get(f, f) for f in top_["feature"]]
+        figi = go.Figure()
+        figi.add_trace(go.Bar(y=labels_, x=top_["impurity"] * 100, name="Impurity (default)", orientation="h", marker=dict(color=t.S2)))
+        figi.add_trace(go.Bar(y=labels_, x=top_["permutation"] * 100, name="Permutation (held out)", orientation="h", marker=dict(color=t.S1)))
+        figi.update_layout(title="Which features matter? Two answers", barmode="group", xaxis_title="Share of total importance (%)",
+                           legend=dict(orientation="h", y=1.02), margin=dict(l=8, t=100), bargap=0.25)
+        t.chart(figi, height=420)
+    t.insight("The forest ranks a little below boosting, so boosting stays in production. The bigger lesson is the chart: "
+              "impurity importance rewards features with many distinct values, so <b>random noise outranks real drivers</b>. "
+              "Permutation importance on held-out members drops it to zero. Any \"top drivers of churn\" slide built on "
+              "default importances should be checked this way before it reaches an executive.")
     churn_m = float(cm.set_index("member_id").loc[member_id, "churn_score"])
     pre = proj.set_index("member_id")["p_12m"].get(member_id)
     ui.member_note(f"{t.esc(member_id)} has a <b>{churn_m:.0%}</b> chance of leaving in the next year."

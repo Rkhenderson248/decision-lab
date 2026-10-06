@@ -22,6 +22,7 @@ shelves = {
     "": [home],
     "Products": [
         st.Page("views/lending_lab.py", title="Lending decision lab", icon=":material/account_balance:", url_path="lending-lab"),
+        st.Page("views/subscriber_lab.py", title="Subscriber value lab", icon=":material/groups:", url_path="subscriber-lab"),
         st.Page("views/policy_assistant.py", title="Credit policy assistant", icon=":material/quick_reference_all:", url_path="policy-assistant"),
         st.Page("views/copilot.py", title="Pricing & demand copilot", icon=":material/insights:", url_path="pricing-copilot"),
         st.Page("views/market_intel.py", title="Mortgage market intelligence", icon=":material/map:", url_path="market-intelligence"),
