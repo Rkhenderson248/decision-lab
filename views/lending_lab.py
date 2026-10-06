@@ -5,6 +5,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lab import progress as PG
+
 from lab import theme as t
 from lab import widgets as w
 from lab.cu import data as d
@@ -80,6 +82,7 @@ with top_r:
 stage = w.segmented("Stage", STAGES, key="cu_stage", label_visibility="collapsed")
 st.query_params["stage"] = stage.lower().replace("-", "")
 idx = STAGES.index(stage)
+PG.bar(idx, len(STAGES), stage)
 st.write("")
 
 
@@ -266,6 +269,8 @@ elif stage == "Underwrite":
                                      fillcolor="rgba(15,70,64,.08)", hovertemplate="Cut-off %{x}: %{y:$,.0f}<extra></extra>"))
         fig_p.add_vline(x=cut, line=dict(color=t.INK, width=1))
         fig_p.add_hline(y=0, line=dict(color=t.GRID, width=1))
+        fig_p.add_annotation(x=best.cutoff, y=best.profit, text=f"Best cut-off {int(best.cutoff)}: {t.money(best.profit)}",
+                             showarrow=True, ax=0, ay=-34, font=dict(size=12, color="#0E1311"), bgcolor="rgba(255,255,255,.9)", bordercolor="#E1E4DE", borderwidth=1, borderpad=4, arrowcolor="#4A534D", arrowwidth=1, arrowhead=0)
         fig_p.update_layout(title="Profit by cut-off", xaxis_title="Score cut-off", yaxis=dict(tickprefix="$", tickformat="~s"))
         t.chart(fig_p, height=280)
     with right:
@@ -357,6 +362,8 @@ elif stage == "Fraud":
         g = bylink.groupby("linked", observed=True)["is_fraud"].mean() * 100
         fig_l = go.Figure(go.Bar(x=g.index.astype(str), y=g.values, marker=dict(color=t.S2, cornerradius=3),
                                  hovertemplate="%{x}: %{y:.1f}% fraud<extra></extra>"))
+        fig_l.add_annotation(x=str(g.index[-1]), y=float(g.iloc[-1]), text=f"{g.iloc[-1]:.0f}% are fraud", showarrow=True, ax=-70, ay=10,
+                             xanchor="right", font=dict(size=12, color="#0E1311"), bgcolor="rgba(255,255,255,.9)", bordercolor="#E1E4DE", borderwidth=1, borderpad=4, arrowcolor="#4A534D", arrowwidth=1, arrowhead=0)
         fig_l.update_layout(title="Fraud rate by size of the linked cluster", xaxis_title="Applications sharing a phone or address", yaxis_title="Fraud (%)")
         t.chart(fig_l, height=360)
     if True:

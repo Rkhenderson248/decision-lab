@@ -5,6 +5,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lab import progress as PG
+
 from lab import theme as t
 from lab import widgets as w
 from lab.cu import ui as cui
@@ -30,6 +32,7 @@ if "mm_stage" not in st.session_state:
 stage = w.segmented("Stage", STAGES, key="mm_stage", label_visibility="collapsed")
 st.query_params["stage"] = stage.lower()
 idx = STAGES.index(stage)
+PG.bar(idx, len(STAGES), stage)
 st.write("")
 D = E.data()
 df = D.df
@@ -178,6 +181,9 @@ elif stage == "ROI":
             fig2.add_trace(go.Scatter(x=xs, y=E.steady_response(f, c, xs), name=c, line=dict(color=COL[c], width=2)))
             fig2.add_trace(go.Scatter(x=[cur], y=E.steady_response(f, c, [cur]), mode="markers", marker=dict(size=9, color=COL[c], line=dict(color="#fff", width=1.5)),
                                       showlegend=False, hovertemplate=c + " today: $%{x:.0f}K → %{y:.0f} a week<extra></extra>"))
+        cur_w = df[worst_m].tail(52).mean()
+        fig2.add_annotation(x=cur_w * 2.2, y=float(E.steady_response(f, worst_m, [cur_w * 2.2])[0]), text=f"{worst_m}: nearly flat past today's spend",
+                            showarrow=True, ax=-10, ay=-40, xanchor="right", font=dict(size=12, color="#0E1311"), bgcolor="rgba(255,255,255,.9)", bordercolor="#E1E4DE", borderwidth=1, borderpad=4, arrowcolor="#4A534D", arrowwidth=1, arrowhead=0)
         fig2.update_layout(title="Response curves: weekly sign-ups by weekly spend (● = today)", xaxis_title="Weekly spend ($K)", yaxis_title="New subscribers a week",
                            legend=dict(orientation="h", y=1.02), margin=dict(t=110))
         t.chart(fig2, height=400)

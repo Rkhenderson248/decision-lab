@@ -5,6 +5,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lab import progress as PG
+
 from lab import copilot as cp
 from lab import demand as dm
 from lab import theme as t
@@ -46,6 +48,7 @@ def _go(stage: str) -> None:
 stage = w.segmented("Stage", STAGES, key="cp_stage", label_visibility="collapsed")
 st.query_params["stage"] = stage.lower()
 idx = STAGES.index(stage)
+PG.bar(idx, len(STAGES), stage)
 
 
 def stage_head(title: str, why: str) -> None:

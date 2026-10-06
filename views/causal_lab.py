@@ -5,6 +5,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lab import progress as PG
+
 from lab import bench_ui as BU
 from lab import theme as t
 from lab import widgets as w
@@ -36,6 +38,7 @@ P = E.panel(scen)
 stage = w.segmented("Stage", STAGES, key="ci_stage", label_visibility="collapsed")
 st.query_params["stage"] = {v: k for k, v in KEYS.items()}[stage]
 idx = STAGES.index(stage)
+PG.bar(idx, len(STAGES), stage)
 st.write("")
 TRUTH = E.TRUE_EFFECT
 fmt = lambda v: f"{v:+.2f}".replace("-", "−")

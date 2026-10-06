@@ -7,6 +7,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lab import progress as PG
+
 from lab import theme as t
 from lab import widgets as w
 from lab.askdata import parser as P
@@ -32,6 +34,7 @@ if "ac_stage" not in st.session_state:
 stage = w.segmented("Stage", STAGES, key="ac_stage", label_visibility="collapsed")
 st.query_params["stage"] = stage.lower()
 idx = STAGES.index(stage)
+PG.bar(idx, len(STAGES), stage)
 st.write("")
 
 FMT = {"int": lambda v: f"{v:,.0f}", "pct": lambda v: f"{v:.2%}", "money": lambda v: f"${v:,.0f}" if abs(v) >= 1000 else f"${v:,.2f}",

@@ -5,6 +5,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lab import progress as PG
+
 from lab import bench_ui as BU
 from lab import theme as t
 from lab import widgets as w
@@ -70,6 +72,7 @@ with top_r:
 stage = w.segmented("Stage", STAGES, key="sv_stage", label_visibility="collapsed")
 st.query_params["stage"] = stage.lower()
 idx = STAGES.index(stage)
+PG.bar(idx, len(STAGES), stage)
 st.write("")
 ORDER = M.SEGMENT_ORDER
 COL = M.SEG_COLORS
@@ -127,6 +130,10 @@ if stage == "Trends":
         g = hz[hz["contract"] == lab_]
         fig3.add_trace(go.Scatter(x=g["tenure"], y=g["hazard"] * 100, name=lab_, mode="lines+markers", marker=dict(size=4),
                                   line=dict(color=color, width=2), hovertemplate="Month %{x}: %{y:.2f}% left<extra>" + lab_ + "</extra>"))
+    g12 = hz[hz["contract"] == "12-month contract"]
+    pk = g12.loc[g12["hazard"].idxmax()]
+    fig3.add_annotation(x=pk["tenure"], y=pk["hazard"] * 100, text=f"Contract end: {pk['hazard']:.0%}",
+                        showarrow=True, ax=90, ay=-6, xanchor="left", font=dict(size=12, color="#0E1311"), bgcolor="rgba(255,255,255,.9)", bordercolor="#E1E4DE", borderwidth=1, borderpad=4, arrowcolor="#4A534D", arrowwidth=1, arrowhead=0)
     fig3.update_layout(title="Monthly churn rate by month of tenure: the contract-end spikes", xaxis_title="Month of tenure",
                        yaxis_title="Left that month (%)", legend=dict(orientation="h", y=1.02), margin=dict(t=100))
     t.chart(fig3, height=330)
