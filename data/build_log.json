@@ -50,38 +50,38 @@
       "filer_failures": 4,
       "failure_examples": [
         "counties=09150 2022: HTTP 404: The requested resource could not be found.",
+        "counties=09150 2023: HTTP 404: The requested resource could not be found.",
         "counties=09150 2025: HTTP 404: The requested resource could not be found.",
         "counties=09150 2024: HTTP 404: The requested resource could not be found.",
-        "counties=09150 2023: HTTP 404: The requested resource could not be found.",
         "counties=09160 2022: HTTP 404: The requested resource could not be found."
       ],
       "sample_filers": [
         {
           "lei": "549300GKFNPRWNS0GF29",
           "name": "CMG MORTGAGE, INC.",
-          "count": 8,
+          "count": 22,
           "period": 2025
         },
         {
           "lei": "2WHM8VNJH63UN14OL754",
           "name": "The Huntington National Bank",
-          "count": 1,
+          "count": 3,
           "period": 2025
         },
         {
           "lei": "5493003GQDUH26DNNH17",
           "name": "Navy Federal Credit Union",
-          "count": 211,
+          "count": 72,
           "period": 2025
         }
       ],
-      "seconds": 453
+      "seconds": 391
     }
   },
   "warnings": [
     "CENSUS_API_KEY not set; ACS income and home-value inputs skipped."
   ],
   "status": "ok",
-  "finished_utc": "2026-10-02T20:45:31Z",
-  "seconds": 459
+  "finished_utc": "2026-10-06T17:18:07Z",
+  "seconds": 396
 }
