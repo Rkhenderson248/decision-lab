@@ -10,42 +10,44 @@ toolbarMode = "minimal"
 showErrorDetails = "none"
 
 [theme]
-base = "light"
-primaryColor = "#0F4640"
-backgroundColor = "#FAFAF8"
-secondaryBackgroundColor = "#F1F2EE"
-textColor = "#0E1311"
-borderColor = "#E1E4DE"
-dataframeBorderColor = "#E1E4DE"
-dataframeHeaderBackgroundColor = "#F1F2EE"
-linkColor = "#0F4640"
+base = "dark"
+primaryColor = "#CBFA7C"
+backgroundColor = "#101B1B"
+secondaryBackgroundColor = "#1B2A26"
+textColor = "#F0F7ED"
+borderColor = "#263E36"
+dataframeBorderColor = "#263E36"
+dataframeHeaderBackgroundColor = "#1B2A26"
+linkColor = "#CBFA7C"
 linkUnderline = false
 showWidgetBorder = true
 showSidebarBorder = true
-baseRadius = "small"
-buttonRadius = "small"
+baseRadius = "none"
+buttonRadius = "none"
 baseFontSize = 16
-font = "Schibsted Grotesk, sans-serif"
-headingFont = "Bodoni Moda, serif"
-headingFontWeights = [600, 600, 600, 600, 600, 600]
-metricValueFontWeight = 500
+font = "Inter, sans-serif"
+headingFont = "Space Grotesk, sans-serif"
+headingFontWeights = [700, 700, 700, 600, 600, 600]
+metricValueFontWeight = 700
 codeFont = "monospace"
-greenColor = "#008A73"
-orangeColor = "#D9772B"
-blueColor = "#5B6CB8"
-chartCategoricalColors = ["#008A73", "#D9772B", "#5B6CB8"]
-chartSequentialColors = ["#E6F2EF", "#C3E2D9", "#9DD0C2", "#73BBA9", "#49A48F", "#1F8C76", "#0F7563", "#0F5E51", "#0F4640", "#0B332F"]
+greenColor = "#CBFA7C"
+orangeColor = "#EF936F"
+blueColor = "#8FA2F0"
+redColor = "#EF936F"
+yellowColor = "#D9C24A"
+chartCategoricalColors = ["#CBFA7C", "#EF936F", "#8FA2F0"]
+chartSequentialColors = ["#16241F", "#1F3A2C", "#2B5135", "#3A693C", "#4D8243", "#649B4B", "#7FB554", "#9BCF5E", "#B5E66B", "#CBFA7C"]
 
 [[theme.fontFaces]]
-family = "Schibsted Grotesk"
-url = "app/static/schibsted-grotesk.woff2"
-weight = "400 700"
+family = "Inter"
+url = "app/static/inter.woff2"
+weight = "300 800"
 style = "normal"
 
 [[theme.fontFaces]]
-family = "Bodoni Moda"
-url = "app/static/bodoni-moda.woff2"
-weight = "400 900"
+family = "Space Grotesk"
+url = "app/static/space-grotesk.woff2"
+weight = "300 700"
 style = "normal"
 
 [[theme.fontFaces]]
@@ -55,4 +57,4 @@ weight = "400 900"
 style = "italic"
 
 [theme.sidebar]
-backgroundColor = "#F1F2EE"
+backgroundColor = "#142322"

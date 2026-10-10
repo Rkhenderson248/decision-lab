@@ -117,7 +117,7 @@ if stage == "Trends":
         cc = M.cohort_curves()
         fig2 = go.Figure()
         names_ = {"Q1": "Joined months 0–2", "Q3": "Joined months 6–8", "Q5": "Joined months 12–14", "Q7": "Joined months 18–20"}
-        for c_, color in zip(names_, ["#0F4640", "#2E8F80", "#6FBBAA", "#A9D9CD"]):
+        for c_, color in zip(names_, ["#CBFA7C", "#9FD46A", "#6E9E54", "#4A6B3F"]):
             g = cc[cc["cohort"] == c_]
             fig2.add_trace(go.Scatter(x=g["month"], y=g["retained"] * 100, name=names_[c_],
                                       line=dict(color=color, width=2.2), hovertemplate="Month %{x}: %{y:.1f}% retained<extra></extra>"))
@@ -133,7 +133,7 @@ if stage == "Trends":
     g12 = hz[hz["contract"] == "12-month contract"]
     pk = g12.loc[g12["hazard"].idxmax()]
     fig3.add_annotation(x=pk["tenure"], y=pk["hazard"] * 100, text=f"Contract end: {pk['hazard']:.0%}",
-                        showarrow=True, ax=90, ay=-6, xanchor="left", font=dict(size=12, color="#0E1311"), bgcolor="rgba(255,255,255,.9)", bordercolor="#E1E4DE", borderwidth=1, borderpad=4, arrowcolor="#4A534D", arrowwidth=1, arrowhead=0)
+                        showarrow=True, ax=90, ay=-6, xanchor="left", font=dict(size=12, color="#F0F7ED"), bgcolor="rgba(16,27,27,.92)", bordercolor="#263E36", borderwidth=1, borderpad=4, arrowcolor="#C9D6CE", arrowwidth=1, arrowhead=0)
     fig3.update_layout(title="Monthly churn rate by month of tenure: the contract-end spikes", xaxis_title="Month of tenure",
                        yaxis_title="Left that month (%)", legend=dict(orientation="h", y=1.02), margin=dict(t=100))
     t.chart(fig3, height=330)
@@ -259,13 +259,13 @@ elif stage == "Segment":
                  "Maintain": ("Lower value · low risk", "Standard journeys. Leave well alone.")}
         html = ""
         for k_ in ["Protect", "Grow", "Serve efficiently", "Maintain"]:
-            html += (f'<div class="lab-card"><h4>{k_}</h4><p style="margin:.1rem 0 .4rem;color:#6B756E;font-size:.85rem">{boxes[k_][0]}</p>'
+            html += (f'<div class="lab-card"><h4>{k_}</h4><p style="margin:.1rem 0 .4rem;color:#A6B8AE;font-size:.85rem">{boxes[k_][0]}</p>'
                      f'<dl><dt>Subscribers</dt><dd>{int(qd.loc[k_, "n"]):,}</dd><dt>Lifetime value</dt><dd>{t.money(qd.loc[k_, "clv"])}</dd>'
                      f'<dt>Average risk</dt><dd>{qd.loc[k_, "risk"]:.1%}</dd></dl><p style="font-size:.86rem;margin:.5rem 0 0">{boxes[k_][1]}</p></div>')
         st.markdown(f'<div class="cu-seg" style="grid-template-columns:repeat(2,minmax(0,1fr))">{html}</div>', unsafe_allow_html=True)
     with right:
         mix = pd.crosstab(b2["segment"], b2["quadrant"], normalize="index").reindex(ORDER)[["Protect", "Grow", "Serve efficiently", "Maintain"]]
-        fig = go.Figure(go.Heatmap(z=mix.to_numpy() * 100, x=mix.columns, y=mix.index, colorscale=[[0, "#F1F2EE"], [1, "#0F4640"]],
+        fig = go.Figure(go.Heatmap(z=mix.to_numpy() * 100, x=mix.columns, y=mix.index, colorscale=[[0, "#1B2A26"], [1, "#CBFA7C"]],
                                    text=[[f"{v * 100:.0f}%" for v in r] for r in mix.to_numpy()], texttemplate="%{text}", showscale=False,
                                    hovertemplate="%{y} · %{x}: %{z:.0f}%<extra></extra>", xgap=2, ygap=2))
         fig.update_layout(title="Where each segment sits in the value–risk matrix", yaxis=dict(autorange="reversed"), margin=dict(l=8, t=70))
@@ -512,7 +512,7 @@ elif stage == "Test":
         lo, hi = diff - 1.96 * se, diff + 1.96 * se
         ok = lo > 0
         st.markdown(
-            f'<div class="lab-reco" style="background:{"#0F4640" if ok else "#4A534D"}"><div class="e">Readout · retained at 90 days</div>'
+            f'<div class="lab-reco" style="background:{"#263E36" if ok else "#2A3631"}"><div class="e">Readout · retained at 90 days</div>'
             f'<div class="t">{"Ship the new flow" if ok else "Keep testing"}</div>'
             f'<div class="d">{t_r:.1%} vs {c_r:.1%}: <b>{diff * 100:+.1f} pts</b> (95% interval {lo * 100:+.1f} to {hi * 100:+.1f}). '
             f'Every 10,000 cancel calls, that is about <b>{diff * 10000:,.0f}</b> more customers kept, '
@@ -552,7 +552,7 @@ elif stage == "Care":
         if txt.strip():
             pr = clf.predict_proba(vec.transform([txt]))[0]
             o = np.argsort(-pr)[:3]
-            st.markdown("".join(f'<div style="display:flex;justify-content:space-between;border-bottom:1px solid #EDEFEA;padding:6px 0">'
+            st.markdown("".join(f'<div style="display:flex;justify-content:space-between;border-bottom:1px solid #1E302B;padding:6px 0">'
                                 f'<span>{t.esc(clf.classes_[i])}</span><b>{pr[i]:.0%}</b></div>' for i in o), unsafe_allow_html=True)
         fig = go.Figure(go.Bar(y=drv.index, x=drv["churn"] * 100, orientation="h", marker=dict(color=t.S2, cornerradius=3),
                                customdata=drv["n"], hovertemplate="%{y}: %{x:.0f}% left (%{customdata:,} customers)<extra></extra>"))
@@ -570,7 +570,7 @@ elif stage == "Care":
                            yaxis=dict(title="Late payments in the last year", autorange="reversed"), margin=dict(t=70))
         t.chart(fig2, height=320)
         fig3 = go.Figure(go.Heatmap(z=(conf.to_numpy() / conf.to_numpy().sum(1, keepdims=True)) * 100, x=[c.split(" ")[0] for c in conf.columns],
-                                    y=conf.index, colorscale=[[0, "#F1F2EE"], [1, "#0F4640"]], showscale=False, xgap=1, ygap=1,
+                                    y=conf.index, colorscale=[[0, "#1B2A26"], [1, "#CBFA7C"]], showscale=False, xgap=1, ygap=1,
                                     hovertemplate="Actual %{y} · predicted %{x}: %{z:.0f}%<extra></extra>"))
         fig3.update_layout(title="Classifier confusion (row %)", yaxis=dict(autorange="reversed"), margin=dict(l=8, t=60))
         t.chart(fig3, height=300)
@@ -656,8 +656,8 @@ elif stage == "Govern":
     BU.subhead("Executive brief", "One page, three decisions, the numbers behind them, the risks and who needs to act. Built from the "
                "same models as the stages above at their default settings, and downloadable.")
     recs = "".join(f"<li style='margin:.45rem 0'><b>{t.esc(h)}</b> {b}</li>" for h, b in items["recommendations"])
-    st.markdown(f'<div class="lab-card" style="padding:22px 26px"><div style="font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#6B756E">{t.esc(items["eyebrow"])}</div>'
-                f'<h3 style="font-family:Bodoni Moda,Georgia,serif;font-weight:400;color:#0F4640;font-size:1.7rem;margin:.3rem 0 .4rem">{t.esc(items["title"])}</h3>'
+    st.markdown(f'<div class="lab-card" style="padding:22px 26px"><div style="font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#A6B8AE">{t.esc(items["eyebrow"])}</div>'
+                f'<h3 style="font-family:Space Grotesk,Inter,sans-serif;font-weight:700;letter-spacing:-.04em;color:#F0F7ED;font-size:1.7rem;margin:.3rem 0 .4rem">{t.esc(items["title"])}</h3>'
                 f'<p style="font-size:1.02rem">{items["lede"]}</p><ol style="padding-left:1.2rem">{recs}</ol></div>', unsafe_allow_html=True)
     bl, br = st.columns([1.2, 1], gap="large")
     with bl:

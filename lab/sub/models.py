@@ -138,7 +138,7 @@ def segments() -> Segments:
 
 
 SEGMENT_ORDER = list(D.PERSONAS)
-SEG_COLORS = dict(zip(SEGMENT_ORDER, ["#008A73", "#D9772B", "#5B6CB8", "#B8486E", "#8C7A1F", "#2E8FC4"]))
+SEG_COLORS = dict(zip(SEGMENT_ORDER, ["#CBFA7C", "#EF936F", "#8FA2F0", "#E07AA0", "#D9C24A", "#5CC3EE"]))
 
 
 # ---------------------------------------------------------------------------

@@ -83,7 +83,7 @@ def answer_sentence(it: S.Intent, df: pd.DataFrame) -> str:
 def chart(it: S.Intent, df: pd.DataFrame):
     m = S.METRICS[it.metric]
     yfmt = {"pct": ".1%", "money": "$,.0f", "int": ",.0f", "dec": ",.1f"}[m.fmt]
-    palette = ["#008A73", "#D9772B", "#5B6CB8", "#B8486E", "#8C7A1F", "#2E8FC4", "#4A534D"]
+    palette = ["#CBFA7C", "#EF936F", "#8FA2F0", "#E07AA0", "#D9C24A", "#5CC3EE", "#A6B8AE"]
     fig = go.Figure()
     if it.grain:
         if it.dims:
@@ -128,7 +128,7 @@ if stage == "Ask":
         left, right = st.columns([1.25, 1], gap="large")
         if it.refusal:
             with left:
-                st.markdown('<div class="lab-reco" style="background:#4A534D"><div class="e">Declined</div>'
+                st.markdown('<div class="lab-reco" style="background:#2A3631;border-left-color:#EF936F"><div class="e">Declined</div>'
                             f'<div class="t">Not answerable from the governed data.</div><div class="d">{html.escape(it.refusal)}</div></div>',
                             unsafe_allow_html=True)
             with right:
@@ -139,7 +139,7 @@ if stage == "Ask":
             sql = S.compile_sql(it)
             with left:
                 st.markdown(f'<div class="lab-reco"><div class="e">Answer · governed metric</div>'
-                            f'<div class="d" style="color:#FAFAF8;font-size:1.05rem">{answer_sentence(it, df)}</div></div>', unsafe_allow_html=True)
+                            f'<div class="d" style="color:#F0F7ED;font-size:1.05rem">{answer_sentence(it, df)}</div></div>', unsafe_allow_html=True)
                 fig = chart(it, df)
                 if fig is not None:
                     t.chart(fig, height=380)

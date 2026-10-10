@@ -98,10 +98,10 @@ with right:
     gamer = cur_g > 0.02
     fig2 = go.Figure()
     fig2.add_trace(go.Scatter(x=cur_proxy[~gamer], y=cur_true[~gamer], mode="markers", name="Doing the work",
-                              marker=dict(size=8, color=t.S1, opacity=0.8, line=dict(color="#FFFFFF", width=1)),
+                              marker=dict(size=8, color=t.S1, opacity=0.8, line=dict(color="#101B1B", width=1)),
                               hovertemplate="metric %{x:.2f} · true %{y:.2f}<extra>Doing the work</extra>"))
     fig2.add_trace(go.Scatter(x=cur_proxy[gamer], y=cur_true[gamer], mode="markers", name="Gaming the metric",
-                              marker=dict(size=8, color=t.S2, opacity=0.85, symbol="diamond", line=dict(color="#FFFFFF", width=1)),
+                              marker=dict(size=8, color=t.S2, opacity=0.85, symbol="diamond", line=dict(color="#101B1B", width=1)),
                               hovertemplate="metric %{x:.2f} · true %{y:.2f}<extra>Gaming</extra>"))
     fig2.update_layout(
         title="Each person at the current pressure",

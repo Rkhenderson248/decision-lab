@@ -97,7 +97,7 @@ def render() -> None:
             names = [r.name for r in eligible][::-1]
             monthly_goal = goal == "Lowest monthly payment"
             costs = [(r.housing if monthly_goal else r.horizon_cost) for r in eligible][::-1]
-            colors = [t.S1 if r is eligible[0] else "#B9C5BF" for r in eligible][::-1]
+            colors = [t.S1 if r is eligible[0] else "#3A4F47" for r in eligible][::-1]
             fig = go.Figure(
                 go.Bar(
                     y=names,

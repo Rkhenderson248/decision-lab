@@ -9,7 +9,7 @@ import streamlit as st
 from lab import bench as B
 from lab import theme as t
 
-ALGO_COLORS = dict(zip(B.ALGOS, ["#2E8FC4", "#008A73", "#8C7A1F", "#D9772B", "#5B6CB8"]))
+ALGO_COLORS = dict(zip(B.ALGOS, ["#5CC3EE", "#CBFA7C", "#D9C24A", "#EF936F", "#8FA2F0"]))
 
 
 def render(bench: B.Bench, *, key: str, regulated_default: bool, value_label: str, decision: str,
@@ -31,7 +31,7 @@ def render(bench: B.Bench, *, key: str, regulated_default: bool, value_label: st
     left, right = st.columns([1.05, 1], gap="large")
     with left:
         order = tb.sort_values("value")
-        colors = [ALGO_COLORS[a] if (a == champ or not regulated or e) else "#D9DCD6" for a, e in zip(order["algorithm"], order["exact"])]
+        colors = [ALGO_COLORS[a] if (a == champ or not regulated or e) else "#3A4F47" for a, e in zip(order["algorithm"], order["exact"])]
         fig = go.Figure(go.Bar(y=order["algorithm"], x=order["value"], orientation="h", marker=dict(color=colors, cornerradius=3),
                                text=[("★ " if a == champ else "") + t.money(v) for a, v in zip(order["algorithm"], order["value"])],
                                textposition="outside", cliponaxis=False,
@@ -82,6 +82,6 @@ def render(bench: B.Bench, *, key: str, regulated_default: bool, value_label: st
 
 
 def subhead(title: str, text: str) -> None:
-    st.markdown(f'<div style="margin:2.2rem 0 .6rem;border-top:1px solid #E1E4DE;padding-top:1.4rem">'
-                f'<div style="font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#0F4640">{t.esc(title)}</div>'
-                f'<p style="margin:.35rem 0 0;color:#4A534D;max-width:62rem">{text}</p></div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="margin:2.2rem 0 .6rem;border-top:1px solid #263E36;padding-top:1.4rem">'
+                f'<div style="font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#CBFA7C">{t.esc(title)}</div>'
+                f'<p style="margin:.35rem 0 0;color:#C9D6CE;max-width:62rem">{text}</p></div>', unsafe_allow_html=True)

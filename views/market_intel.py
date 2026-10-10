@@ -25,7 +25,7 @@ STATE_GRID = {
     "OK": ("Oklahoma", 3, 6), "LA": ("Louisiana", 4, 6), "MS": ("Mississippi", 5, 6), "AL": ("Alabama", 6, 6),
     "GA": ("Georgia", 7, 6), "HI": ("Hawaii", 0, 7), "TX": ("Texas", 3, 7), "FL": ("Florida", 8, 7),
 }
-SEQ = ["#E6F2EF", "#C3E2D9", "#9DD0C2", "#73BBA9", "#49A48F", "#1F8C76", "#0F7563", "#0F5E51", "#0F4640"]
+SEQ = ["#16241F", "#1F3A2C", "#2B5135", "#3A693C", "#4D8243", "#649B4B", "#7FB554", "#A3D663", "#CBFA7C"]
 BLOCK_SHORT = {
     "demographic_opportunity_score": "Demographic",
     "mortgage_demand_score": "Demand",
@@ -166,13 +166,13 @@ with T["Overview"]:
                 fill = SEQ[int(frac * len(SEQ))]
                 hovers.append(f"<b>{name}</b><br>Population-weighted opportunity {row['score']:.0f}"
                               f"<br>{int(row['markets'])} markets · lead: {row['lead']}")
-                txt_color = "#FFFFFF" if frac > 0.55 else t.INK
+                txt_color = "#101B1B" if frac > 0.55 else t.INK
             else:
-                fill = "#F1F2EE"
+                fill = "#1B2A26"
                 hovers.append(f"<b>{name}</b><br>No markets in view")
                 txt_color = t.MUTED
             fig.add_shape(type="rect", x0=gx + 0.04, x1=gx + 0.96, y0=-gy - 0.96, y1=-gy - 0.04,
-                          line=dict(color="#FFFFFF", width=2), fillcolor=fill, layer="below")
+                          line=dict(color="#101B1B", width=2), fillcolor=fill, layer="below")
             xs.append(gx + 0.5); ys.append(-gy - 0.5); texts.append(f"<span style='color:{txt_color}'>{st_code}</span>")
         fig.add_trace(go.Scatter(x=xs, y=ys, mode="text", text=texts, textfont=dict(size=12),
                                  hovertext=hovers, hoverinfo="text", showlegend=False))
@@ -200,12 +200,12 @@ with T["Overview"]:
                                                (0, 50, 0, 50, "Monitor", 2, 3), (0, 50, 50, 100, "Deprioritize", 2, 97)):
             fig2.add_annotation(x=ax, y=ay, text=label, showarrow=False, font=dict(size=12, color=t.MUTED),
                                 xanchor="right" if ax > 50 else "left", yanchor="bottom" if ay < 50 else "top")
-        fig2.add_shape(type="rect", x0=50, x1=100, y0=0, y1=50, fillcolor="rgba(127,208,190,.12)", line_width=0, layer="below")
+        fig2.add_shape(type="rect", x0=50, x1=100, y0=0, y1=50, fillcolor="rgba(203,250,124,.08)", line_width=0, layer="below")
         fig2.add_hline(y=50, line=dict(color=t.GRID, width=1))
         fig2.add_vline(x=50, line=dict(color=t.GRID, width=1))
         fig2.add_trace(go.Scatter(
             x=pts["strategic_mortgage_opportunity_score"], y=pts["mortgage_risk_score"], mode="markers",
-            marker=dict(size=size, color=t.S1, opacity=0.55, line=dict(color="#FFFFFF", width=1)),
+            marker=dict(size=size, color=t.S1, opacity=0.55, line=dict(color="#101B1B", width=1)),
             customdata=np.stack([pts["market_name"], pts["population_latest"], pts["mortgage_archetype"],
                                  pts["mortgage_risk_basis"]], axis=1),
             hovertemplate="<b>%{customdata[0]}</b><br>Opportunity %{x:.0f} · Risk %{y:.0f} (%{customdata[3]})"
@@ -214,7 +214,7 @@ with T["Overview"]:
         ))
         fig2.add_trace(go.Scatter(
             x=leaders["strategic_mortgage_opportunity_score"], y=leaders["mortgage_risk_score"], mode="markers",
-            marker=dict(size=11, color=t.PETROL, line=dict(color="#FFFFFF", width=2)),
+            marker=dict(size=11, color=t.PETROL, line=dict(color="#101B1B", width=2)),
             customdata=leaders["market_name"], hovertemplate="<b>%{customdata}</b><br>Top pursue candidate<extra></extra>",
             showlegend=False,
         ))
@@ -291,7 +291,7 @@ with T["Archetypes"]:
             ylab = [f"{r.cluster_id} · {r.markets} markets" for r in prof.itertuples()]
             figc = go.Figure(go.Heatmap(
                 z=z, x=[BLOCK_TICK[c] for c in me.CLUSTER_FEATURES], y=ylab, zmid=0, zmin=-1.2, zmax=1.2,
-                colorscale=[[0, t.S2], [0.5, "#F0EFEC"], [1, t.S1]], xgap=2, ygap=2,
+                colorscale=[[0, t.S2], [0.5, "#1B2A26"], [1, t.S1]], xgap=2, ygap=2,
                 text=[[f"{v:+.1f}" for v in r] for r in z], texttemplate="%{text}", textfont=dict(size=12),
                 colorbar=dict(title=dict(text="vs typical", font=dict(size=11, color=t.MUTED)), thickness=10,
                               outlinewidth=0, tickfont=dict(size=11, color=t.MUTED)),
@@ -364,7 +364,7 @@ with T["Market brief"]:
         figp.add_trace(go.Scatterpolar(r=med + med[:1], theta=theta, name="Peer median", line=dict(color=t.BASE, width=1.5),
                                        hovertemplate="%{theta}: %{r:.0f}<extra>Peer median</extra>"))
         figp.add_trace(go.Scatterpolar(r=val + val[:1], theta=theta, name=choice.split(",")[0], fill="toself",
-                                       fillcolor="rgba(0,138,115,.16)", line=dict(color=t.S1, width=2.5),
+                                       fillcolor="rgba(203,250,124,.16)", line=dict(color=t.S1, width=2.5),
                                        hovertemplate="%{theta}: %{r:.0f}<extra></extra>"))
         figp.update_layout(title="Market fingerprint against its peers", margin=dict(l=70, r=70, t=90, b=40),
                            polar=dict(bgcolor="rgba(0,0,0,0)", radialaxis=dict(range=[0, 100], gridcolor=t.GRID_2, linecolor=t.GRID,

@@ -106,7 +106,7 @@ elif stage == "Diff-in-diff":
          "note": "first to last pre-launch bin; near 0 = parallel"},
     ])
     fig = go.Figure()
-    fig.add_vrect(x0=-60, x1=0, fillcolor="rgba(225,228,222,.35)", line_width=0)
+    fig.add_vrect(x0=-60, x1=0, fillcolor="rgba(166,184,174,.10)", line_width=0)
     fig.add_trace(go.Scatter(x=es["week"], y=es["estimate"], mode="markers+lines", line=dict(color=t.S1, width=2), marker=dict(size=8),
                              error_y=dict(type="data", array=1.96 * es["se"], color=t.S1, thickness=1.2, width=0), name="Effect vs week −4 to −1"))
     fig.add_hline(y=0, line=dict(color=t.INK, width=1))
@@ -157,7 +157,7 @@ elif stage == "Synthetic control":
         t.chart(fig, height=330)
         fig3 = go.Figure()
         for pl in sc["placebo"]:
-            fig3.add_trace(go.Scatter(x=weeks, y=pl["gap"], mode="lines", line=dict(color="rgba(163,171,165,.35)", width=1), hoverinfo="skip", showlegend=False))
+            fig3.add_trace(go.Scatter(x=weeks, y=pl["gap"], mode="lines", line=dict(color="rgba(110,130,122,.45)", width=1), hoverinfo="skip", showlegend=False))
         fig3.add_trace(go.Scatter(x=weeks, y=sc["gap"], mode="lines", line=dict(color=t.S1, width=2.8), name="Price-lock markets"))
         fig3.add_vline(x=E.LAUNCH, line=dict(color=t.INK, width=1, dash="dot"))
         fig3.add_hline(y=0, line=dict(color=t.INK, width=1))
@@ -200,7 +200,7 @@ elif stage == "Matching":
         sb, sa = mt["smd_before"], mt["smd_after"]
         labels = [E.COV_LABELS[c] for c in sb.index]
         fig = go.Figure()
-        fig.add_vrect(x0=-0.1, x1=0.1, fillcolor="rgba(127,208,190,.18)", line_width=0)
+        fig.add_vrect(x0=-0.1, x1=0.1, fillcolor="rgba(203,250,124,.12)", line_width=0)
         fig.add_trace(go.Scatter(x=sb.values, y=labels, mode="markers", name="Before matching", marker=dict(size=11, color=t.S2)))
         fig.add_trace(go.Scatter(x=sa.values, y=labels, mode="markers", name="After matching", marker=dict(size=11, color=t.S1, symbol="diamond")))
         fig.add_vline(x=0, line=dict(color=t.INK, width=1))

@@ -9,7 +9,7 @@ from lab.cu import models as M
 
 # Fixed segment order and colors (adjacent pairs validated; names always shown beside the color).
 SEGMENT_ORDER = list(M.SEGMENT_NAMES)
-SEG_COLORS = dict(zip(SEGMENT_ORDER, ["#008A73", "#D9772B", "#5B6CB8", "#B8486E", "#8C7A1F", "#2E8FC4"]))
+SEG_COLORS = dict(zip(SEGMENT_ORDER, ["#CBFA7C", "#EF936F", "#8FA2F0", "#E07AA0", "#D9C24A", "#5CC3EE"]))
 
 SERVICES = {
     "diagnostic": "Decision diagnostic",
@@ -48,28 +48,28 @@ def chip(segment: str) -> str:
 
 _CSS = """
 <style>
-.cu-q{display:flex;gap:12px;align-items:baseline;font-family:"Bodoni Moda",Georgia,serif;font-size:1.25rem;color:#0F4640;margin:.2rem 0 .1rem}
-.cu-q span{font-family:"Schibsted Grotesk",sans-serif;font-size:.72rem;letter-spacing:.12em;color:#6B756E}
-.cu-member-note{border-left:2px solid #7FD0BE;background:#F2F8F5;padding:12px 16px;margin:.4rem 0 1.2rem;font-size:.95rem;line-height:1.55;color:#0E1311}
-.cu-member-note .e{display:block;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#0F4640;margin-bottom:4px}
-.cu-chip{display:inline-flex;align-items:center;gap:7px;font-size:.85rem;font-weight:500;color:#0E1311;white-space:nowrap}
+.cu-q{display:flex;gap:12px;align-items:baseline;font-family:"Space Grotesk",Inter,sans-serif;font-weight:700;letter-spacing:-.03em;font-size:1.25rem;color:#CBFA7C;margin:.2rem 0 .1rem}
+.cu-q span{font-family:Inter,sans-serif;font-size:.72rem;letter-spacing:.12em;color:#A6B8AE}
+.cu-member-note{border-left:2px solid #EF936F;background:#1B2A26;padding:12px 16px;margin:.4rem 0 1.2rem;font-size:.95rem;line-height:1.55;color:#F0F7ED}
+.cu-member-note .e{display:block;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#CBFA7C;margin-bottom:4px}
+.cu-chip{display:inline-flex;align-items:center;gap:7px;font-size:.85rem;font-weight:500;color:#F0F7ED;white-space:nowrap}
 .cu-chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
-.cu-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid #E1E4DE;background:#fff;margin:.2rem 0 1rem}
-.cu-strip > div{padding:10px 14px;border-right:1px solid #EDEFEA}
+.cu-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid #263E36;background:#142322;margin:.2rem 0 1rem}
+.cu-strip > div{padding:10px 14px;border-right:1px solid #1E302B}
 .cu-strip > div:last-child{border-right:0}
-.cu-strip .k{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#6B756E}
-.cu-strip .v{font-size:.98rem;font-weight:600;color:#0E1311;margin-top:3px;line-height:1.3}
-.cu-strip .v.bad{color:#9A4A12}
+.cu-strip .k{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#A6B8AE}
+.cu-strip .v{font-size:.98rem;font-weight:600;color:#F0F7ED;margin-top:3px;line-height:1.3}
+.cu-strip .v.bad{color:#F2A887}
 .cu-seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:.4rem 0 1.2rem}
 .cu-seg .lab-card{padding:16px 18px}
-.cu-seg .lab-card h4{font-family:"Bodoni Moda",Georgia,serif;font-size:1.15rem;margin:.1rem 0 .5rem;display:flex;gap:8px;align-items:center}
+.cu-seg .lab-card h4{font-family:"Space Grotesk",Inter,sans-serif;font-weight:700;letter-spacing:-.03em;font-size:1.15rem;margin:.1rem 0 .5rem;display:flex;gap:8px;align-items:center}
 .cu-seg .lab-card h4 i{width:10px;height:10px;border-radius:50%;flex:none}
 .cu-seg dl{display:grid;grid-template-columns:1fr auto;gap:3px 12px;margin:0;font-size:.86rem}
-.cu-seg dt{color:#6B756E}.cu-seg dd{margin:0;text-align:right;color:#0E1311;font-variant-numeric:tabular-nums}
-.cu-seg .lab-card.is-member{box-shadow:0 0 0 2px #7FD0BE inset}
+.cu-seg dt{color:#A6B8AE}.cu-seg dd{margin:0;text-align:right;color:#F0F7ED;font-variant-numeric:tabular-nums}
+.cu-seg .lab-card.is-member{box-shadow:0 0 0 2px #EF936F inset}
 .cu-reasons{list-style:none;margin:.4rem 0 0;padding:0;font-size:.9rem}
-.cu-reasons li{padding:6px 0;border-bottom:1px solid #EDEFEA;display:flex;justify-content:space-between;gap:12px}
-.cu-reasons li span:last-child{color:#6B756E;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cu-reasons li{padding:6px 0;border-bottom:1px solid #1E302B;display:flex;justify-content:space-between;gap:12px}
+.cu-reasons li span:last-child{color:#A6B8AE;font-variant-numeric:tabular-nums;white-space:nowrap}
 </style>
 """
 

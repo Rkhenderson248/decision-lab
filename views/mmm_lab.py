@@ -15,7 +15,7 @@ from lab.mmm import engine as E
 cui.css()
 STAGES = ["Data", "Model", "Calibrate", "ROI", "Optimize"]
 KEYS = {s.lower(): s for s in STAGES}
-COL = dict(zip(E.CHANNELS, ["#008A73", "#D9772B", "#5B6CB8", "#B8486E", "#8C7A1F"]))
+COL = dict(zip(E.CHANNELS, ["#CBFA7C", "#EF936F", "#8FA2F0", "#E07AA0", "#D9C24A"]))
 
 t.header(
     "Project · marketing mix · Corvane Connect (fictional)",
@@ -95,11 +95,11 @@ elif stage == "Model":
         {"label": "Channels", "value": f"{len(E.CHANNELS)}", "note": "search, social, TV, mail, partners"},
     ])
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=dec["date"], y=dec["base"], name="Base demand", stackgroup="one", line=dict(width=0), fillcolor="rgba(163,171,165,.55)"))
+    fig.add_trace(go.Scatter(x=dec["date"], y=dec["base"], name="Base demand", stackgroup="one", line=dict(width=0), fillcolor="rgba(110,130,122,.55)"))
     for c in E.CHANNELS:
         fig.add_trace(go.Scatter(x=dec["date"], y=dec[c], name=c, stackgroup="one", line=dict(width=0, color=COL[c])))
     fig.add_trace(go.Scatter(x=dec["date"], y=dec["actual"], name="Actual", line=dict(color=t.INK, width=1.6)))
-    fig.add_vrect(x0=dec["date"].iloc[-26], x1=dec["date"].iloc[-1], fillcolor="rgba(127,208,190,.12)", line_width=0)
+    fig.add_vrect(x0=dec["date"].iloc[-26], x1=dec["date"].iloc[-1], fillcolor="rgba(203,250,124,.08)", line_width=0)
     fig.update_layout(title="New subscribers each week, decomposed (shaded = holdout period)", yaxis_title="New subscribers",
                       legend=dict(orientation="h", y=1.02), margin=dict(t=110))
     t.chart(fig, height=420)
@@ -183,7 +183,7 @@ elif stage == "ROI":
                                       showlegend=False, hovertemplate=c + " today: $%{x:.0f}K → %{y:.0f} a week<extra></extra>"))
         cur_w = df[worst_m].tail(52).mean()
         fig2.add_annotation(x=cur_w * 2.2, y=float(E.steady_response(f, worst_m, [cur_w * 2.2])[0]), text=f"{worst_m}: nearly flat past today's spend",
-                            showarrow=True, ax=-10, ay=-40, xanchor="right", font=dict(size=12, color="#0E1311"), bgcolor="rgba(255,255,255,.9)", bordercolor="#E1E4DE", borderwidth=1, borderpad=4, arrowcolor="#4A534D", arrowwidth=1, arrowhead=0)
+                            showarrow=True, ax=-10, ay=-40, xanchor="right", font=dict(size=12, color="#F0F7ED"), bgcolor="rgba(16,27,27,.92)", bordercolor="#263E36", borderwidth=1, borderpad=4, arrowcolor="#C9D6CE", arrowwidth=1, arrowhead=0)
         fig2.update_layout(title="Response curves: weekly sign-ups by weekly spend (● = today)", xaxis_title="Weekly spend ($K)", yaxis_title="New subscribers a week",
                            legend=dict(orientation="h", y=1.02), margin=dict(t=110))
         t.chart(fig2, height=400)

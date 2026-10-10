@@ -133,7 +133,7 @@ if stage == "Know":
         fig = go.Figure(go.Heatmap(
             z=cz.to_numpy().clip(-2, 2), x=["Age", "Income", "Deposits", "Credit score", "Utilization", "Digital",
                                             "Products", "7%+ mortgage", "Tenure"],
-            y=labels_y, colorscale=[[0, "#B4561B"], [0.5, "#F1F2EE"], [1, "#0F4640"]], zmid=0, zmin=-2, zmax=2,
+            y=labels_y, colorscale=[[0, "#EF936F"], [0.5, "#1B2A26"], [1, "#CBFA7C"]], zmid=0, zmin=-2, zmax=2,
             colorbar=dict(title="vs average", thickness=10, len=0.8),
             hovertemplate="%{y} · %{x}: %{z:.1f} sd<extra></extra>", xgap=2, ygap=2))
         fig.update_layout(title="What makes each segment different (standard deviations from average)", margin=dict(l=8, t=70))
@@ -266,11 +266,11 @@ elif stage == "Underwrite":
                           yaxis_title="%", legend=dict(orientation="h", y=1.02), margin=dict(t=100))
         t.chart(fig, height=360)
         fig_p = go.Figure(go.Scatter(x=ct["cutoff"], y=ct["profit"], line=dict(color=t.PETROL, width=2.5), fill="tozeroy",
-                                     fillcolor="rgba(15,70,64,.08)", hovertemplate="Cut-off %{x}: %{y:$,.0f}<extra></extra>"))
+                                     fillcolor="rgba(203,250,124,.08)", hovertemplate="Cut-off %{x}: %{y:$,.0f}<extra></extra>"))
         fig_p.add_vline(x=cut, line=dict(color=t.INK, width=1))
         fig_p.add_hline(y=0, line=dict(color=t.GRID, width=1))
         fig_p.add_annotation(x=best.cutoff, y=best.profit, text=f"Best cut-off {int(best.cutoff)}: {t.money(best.profit)}",
-                             showarrow=True, ax=0, ay=-34, font=dict(size=12, color="#0E1311"), bgcolor="rgba(255,255,255,.9)", bordercolor="#E1E4DE", borderwidth=1, borderpad=4, arrowcolor="#4A534D", arrowwidth=1, arrowhead=0)
+                             showarrow=True, ax=0, ay=-34, font=dict(size=12, color="#F0F7ED"), bgcolor="rgba(16,27,27,.92)", bordercolor="#263E36", borderwidth=1, borderpad=4, arrowcolor="#C9D6CE", arrowwidth=1, arrowhead=0)
         fig_p.update_layout(title="Profit by cut-off", xaxis_title="Score cut-off", yaxis=dict(tickprefix="$", tickformat="~s"))
         t.chart(fig_p, height=280)
     with right:
@@ -363,7 +363,7 @@ elif stage == "Fraud":
         fig_l = go.Figure(go.Bar(x=g.index.astype(str), y=g.values, marker=dict(color=t.S2, cornerradius=3),
                                  hovertemplate="%{x}: %{y:.1f}% fraud<extra></extra>"))
         fig_l.add_annotation(x=str(g.index[-1]), y=float(g.iloc[-1]), text=f"{g.iloc[-1]:.0f}% are fraud", showarrow=True, ax=-70, ay=10,
-                             xanchor="right", font=dict(size=12, color="#0E1311"), bgcolor="rgba(255,255,255,.9)", bordercolor="#E1E4DE", borderwidth=1, borderpad=4, arrowcolor="#4A534D", arrowwidth=1, arrowhead=0)
+                             xanchor="right", font=dict(size=12, color="#F0F7ED"), bgcolor="rgba(16,27,27,.92)", bordercolor="#263E36", borderwidth=1, borderpad=4, arrowcolor="#C9D6CE", arrowwidth=1, arrowhead=0)
         fig_l.update_layout(title="Fraud rate by size of the linked cluster", xaxis_title="Applications sharing a phone or address", yaxis_title="Fraud (%)")
         t.chart(fig_l, height=360)
     if True:
@@ -657,7 +657,7 @@ elif stage == "Collect":
     ])
     left, right = st.columns([1, 1.1], gap="large")
     with left:
-        fig = go.Figure(go.Heatmap(z=P.to_numpy() * 100, x=P.columns, y=P.index, colorscale=[[0, "#F1F2EE"], [1, "#0F4640"]],
+        fig = go.Figure(go.Heatmap(z=P.to_numpy() * 100, x=P.columns, y=P.index, colorscale=[[0, "#1B2A26"], [1, "#CBFA7C"]],
                                    text=[[f"{v * 100:.0f}%" if v >= 0.005 else "" for v in r] for r in P.to_numpy()], texttemplate="%{text}",
                                    hovertemplate="%{y} → %{x}: %{z:.1f}%<extra></extra>", showscale=False, xgap=2, ygap=2))
         fig.update_layout(title="Monthly roll rates (from → to)", yaxis=dict(autorange="reversed"), margin=dict(l=8, t=70))
@@ -733,7 +733,7 @@ elif stage == "Govern":
     left, right = st.columns([1.1, 1], gap="large")
     with left:
         fig = go.Figure(go.Scatter(x=ct["cutoff"], y=ct["air"], line=dict(color=t.S1, width=2.5), hovertemplate="Cut-off %{x}: AIR %{y:.2f}<extra></extra>"))
-        fig.add_hrect(y0=0, y1=0.8, fillcolor="rgba(217,119,43,.08)", line_width=0)
+        fig.add_hrect(y0=0, y1=0.8, fillcolor="rgba(239,147,111,.10)", line_width=0)
         fig.add_hline(y=0.8, line=dict(color=t.S2, width=1.2, dash="dot"))
         fig.add_vline(x=cut, line=dict(color=t.INK, width=1))
         fig.update_layout(title="Adverse impact ratio across cut-offs", xaxis_title="Score cut-off", yaxis_title="Group B ÷ group A approval rate",

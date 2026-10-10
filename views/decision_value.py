@@ -72,7 +72,7 @@ with left:
     fig.add_annotation(x=min(99, cap_share * 100 + 1), y=1, yref="paper", text="beyond capacity", showarrow=False,
                        xanchor="left", yanchor="top", font=dict(size=12, color=t.MUTED))
     fig.add_trace(go.Scatter(x=[q_star * 100], y=[net_star], mode="markers", name="Best operating point",
-                             marker=dict(size=11, color=t.PETROL, line=dict(color="#FFFFFF", width=2)),
+                             marker=dict(size=11, color=t.PETROL, line=dict(color="#101B1B", width=2)),
                              hovertemplate="Best: act on %{x:.1f}% → %{y:$,.0f}<extra></extra>"))
     fig.add_hline(y=0, line=dict(color=t.GRID, width=1))
     fig.update_layout(
@@ -94,7 +94,7 @@ with right:
             z=grid,
             x=[f"{ad:.0%}" for ad in adopts],
             y=[f"{au:.2f}" for au in aucs],
-            colorscale=[[0, "#E6F2EF"], [0.35, "#9DD0C2"], [0.7, "#1F8C76"], [1, "#0F4640"]],
+            colorscale=[[0, "#16241F"], [0.35, "#3A693C"], [0.7, "#7FB554"], [1, "#CBFA7C"]],
             xgap=2,
             ygap=2,
             colorbar=dict(title=dict(text="$/mo", font=dict(size=11, color=t.MUTED)), tickformat="~s", tickprefix="$",

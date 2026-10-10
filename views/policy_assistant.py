@@ -52,7 +52,7 @@ with ask:
         with left:
             if not ok:
                 st.markdown(
-                    '<div class="lab-reco" style="background:#4A534D"><div class="e">Declined</div>'
+                    '<div class="lab-reco" style="background:#2A3631;border-left-color:#EF936F"><div class="e">Declined</div>'
                     '<div class="t">The policy manual doesn\'t cover this.</div>'
                     f'<div class="d">The closest section matched with a score of {top:.2f} and shares too little with the '
                     'question to answer it safely (see Evaluation). A guess here would sound confident and could be wrong, '
@@ -61,13 +61,13 @@ with ask:
                 body = html.escape(answer)
                 for sid in set(E.cited_ids(answer)):
                     body = body.replace(f"[{sid}]", f'<span class="lab-pill">{sid}</span>')
-                st.markdown(f'<div class="lab-reco"><div class="e">Answer · cited</div><div class="d" style="color:#FAFAF8;font-size:1.02rem">{body}</div></div>',
+                st.markdown(f'<div class="lab-reco"><div class="e">Answer · cited</div><div class="d" style="color:#F0F7ED;font-size:1.02rem">{body}</div></div>',
                             unsafe_allow_html=True)
             else:
                 parts = E.extractive_answer(q, hits)
                 body = " ".join(f'{html.escape(s)} <span class="lab-pill">{sid}</span>' for s, sid in parts)
                 st.markdown(f'<div class="lab-reco"><div class="e">Answer · quoted from the policy</div>'
-                            f'<div class="d" style="color:#FAFAF8;font-size:1.02rem">{body}</div></div>', unsafe_allow_html=True)
+                            f'<div class="d" style="color:#F0F7ED;font-size:1.02rem">{body}</div></div>', unsafe_allow_html=True)
             st.caption("Model mode: Claude writes the answer from the retrieved sections and must cite them." if mode == "model"
                        else "Quoted mode: the answer is the policy's own sentences, so it cannot drift from the source. "
                             "Add an API key to switch on written answers.")

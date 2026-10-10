@@ -297,7 +297,7 @@ elif stage == "Decide":
     left, right = st.columns([1.35, 1], gap="large")
     with left:
         fig = go.Figure()
-        fig.add_vrect(x0=res["lo"], x1=res["hi"], fillcolor="rgba(127,208,190,.16)", line_width=0)
+        fig.add_vrect(x0=res["lo"], x1=res["hi"], fillcolor="rgba(203,250,124,.10)", line_width=0)
         fig.add_annotation(x=(res["lo"] + res["hi"]) / 2, y=1, yref="paper", text="allowed by guardrails",
                            showarrow=False, yanchor="top", font=dict(size=12, color=t.PETROL))
         fig.add_trace(go.Scatter(x=res["grid"], y=res["rev"], mode="lines", line=dict(color=t.S1, width=2.5),
