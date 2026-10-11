@@ -91,7 +91,9 @@ if not live:
     st.markdown('<div class="lab-insight"><b>Sample data.</b> This preview runs on a synthetic market table with fictional '
                 "market names. The published version uses the public Census, HMDA and FHFA build.</div>", unsafe_allow_html=True)
 
-step = w.segmented("Step", STEPS, key="ps_step", default=STEPS[0], label_visibility="collapsed")
+_requested = str(st.query_params.get("step", "frame")).lower()
+_by_name = {"frame": 0, "explore": 1, "decide": 2, "economics": 3, "brief": 4}
+step = w.segmented("Step", STEPS, key="ps_step", default=STEPS[_by_name.get(_requested, 0)], label_visibility="collapsed")
 st.write("")
 
 
