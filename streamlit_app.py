@@ -31,6 +31,7 @@ shelves = {
         st.Page("views/market_intel.py", title="Mortgage market intelligence", icon=":material/map:", url_path="market-intelligence"),
     ],
     "Case studies": [
+        st.Page("views/product_strategy.py", title="Mortgage product strategy", icon=":material/target:", url_path="product-strategy"),
         st.Page("views/lending.py", title="Lending decisions", icon=":material/format_list_numbered:", url_path="lending"),
     ],
     "Method notes": [

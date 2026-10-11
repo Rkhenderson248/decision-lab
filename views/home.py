@@ -29,6 +29,8 @@ SHELVES = {
          "Every U.S. metro scored from Census, HMDA and FHFA data, rebuilt monthly by an automated pipeline, with grounded briefs."),
     ],
     "Case studies": [
+        ("views/product_strategy.py", "Case study · Product strategy", "Mortgage product strategy",
+         "Where should a lender expand? Public market data, adjustable weights, a stress-tested ranking, illustrative economics and a generated executive brief."),
         ("views/lending.py", "Prioritization & recommendation", "Lending decisions",
          "Who to call first under fixed capacity, and which product to offer, both with reason codes."),
     ],

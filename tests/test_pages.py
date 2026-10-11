@@ -17,6 +17,7 @@ PAGES = [
     "views/decision_value.py",
     "views/goodhart.py",
     "views/market_intel.py",
+    "views/product_strategy.py",
     "views/experiments.py",
     "views/human_ai.py",
     "views/copilot.py",
@@ -298,3 +299,57 @@ def test_causal_and_mmm_relationships_hold():
     o = ME.optimize(ME.fit(True), float(r1["weekly_spend"].sum()), 0.3)
     assert o["true_optimal"].sum() > o["true_current"].sum()                  # the reallocation really helps
     assert P.evaluate()["exact"].all() and P.evaluate_heldout()["exact"].all()
+
+
+def test_strategy_engine_contract():
+    import numpy as np
+    from lab import market_engine as me
+    from lab import strategy_engine as se
+    from lab.market_sample import sample_markets
+
+    prepared = me.prepare(sample_markets())
+    for product in se.PRODUCTS:
+        scores = se.dimension_scores(prepared, product)
+        assert list(scores.columns) == se.DIM_KEYS
+        assert scores.stack().between(0, 100).all()
+        comp = se.composite(scores, se.DEFAULT_WEIGHTS).dropna()
+        assert comp.between(0, 100).all()
+        ok = scores.loc[comp.index]
+        stress = se.stress_test(ok, se.DEFAULT_WEIGHTS, draws=100)
+        assert stress.top3.between(0, 1).all() and (stress.top3.sum() > 2.5)
+    # Weights are proportions: scaling them changes nothing.
+    a = se.composite(scores, {k: 1 for k in se.DIM_KEYS})
+    b = se.composite(scores, {k: 7 for k in se.DIM_KEYS})
+    assert np.allclose(a.dropna(), b.dropna())
+
+
+def test_strategy_economics_identities():
+    from lab import strategy_engine as se
+
+    base = dict(market_loans=5000, avg_loan=300_000, capture_pct=2.0, revenue_bps=340, cost_per_loan=7000,
+                reserve_bps=10, launch_cost=300_000, horizon=3)
+    r = se.economics(**base)
+    assert abs(r["margin"] - (300_000 * (340 - 10) / 10_000 - 7000)) < 1e-6
+    assert abs(r["net"] - (sum(r["yearly"]) - 300_000)) < 1e-6
+    # At the break-even share the net result is zero.
+    at_break = se.economics(**{**base, "capture_pct": r["breakeven_share"]})
+    assert abs(at_break["net"]) < 1.0
+    assert se.economics(**base, scenario="Downside")["net"] < r["net"] < se.economics(**base, scenario="Upside")["net"]
+
+
+def test_flip_point_flips():
+    import pandas as pd
+    from lab import strategy_engine as se
+
+    scores = pd.DataFrame({"demand": [80, 60], "access": [50, 70], "risk": [60, 60], "economics": [60, 60],
+                           "competition": [50, 50]}, index=["a", "b"])
+    w = {"demand": 30, "access": 20, "risk": 20, "economics": 20, "competition": 10}
+    assert se.composite(scores, w)["a"] > se.composite(scores, w)["b"]
+    fp = se.flip_point(scores, w, "a", "b")
+    assert fp is not None
+    d = fp["dimension"]
+    scale = (1 - fp["to"]) / (1 - fp["from"])
+    over = {k: (fp["to"] * 100 if k == d else w[k] / sum(w.values()) * 100 * scale) for k in w}
+    past = dict(over)
+    past[d] = over[d] + (2 if fp["to"] > fp["from"] else -2)
+    assert se.composite(scores, past)["b"] > se.composite(scores, past)["a"]
