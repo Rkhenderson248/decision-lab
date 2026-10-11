@@ -438,6 +438,8 @@ with T["Market brief"]:
             with st.spinner("Reading the record…"):
                 try:
                     st.markdown(f'<div class="lab-insight">{t.esc(ask.ask_llm(q, ctx))}</div>', unsafe_allow_html=True)
+                except ask.RateLimited as exc:
+                    st.info(str(exc))
                 except Exception as exc:  # noqa: BLE001
                     st.warning(f"The assistant is unavailable right now ({type(exc).__name__}).")
         st.caption("Answers come only from this market's record, shown below, and cite its numbers.")

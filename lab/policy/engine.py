@@ -111,6 +111,10 @@ def model_answer(question: str, hits: pd.DataFrame) -> str | None:
         key, model = None, None
     if not key:
         return None
+    from lab.ratelimit import allow_llm
+
+    if not allow_llm():
+        return None
     try:
         import anthropic
 

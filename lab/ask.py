@@ -69,7 +69,14 @@ def context(row: pd.Series, peers: pd.DataFrame, years: pd.DataFrame | None, len
     return ctx
 
 
+from lab.ratelimit import RateLimited  # noqa: E402,F401  (re-exported for callers)
+
+
 def ask_llm(question: str, ctx: dict) -> str:
+    from lab.ratelimit import RateLimited, allow_llm
+
+    if not allow_llm():
+        raise RateLimited("Too many assistant requests right now. Pick a question from the list instead, or try again in a few minutes.")
     import anthropic  # imported lazily so the app runs without the package configured
 
     client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
