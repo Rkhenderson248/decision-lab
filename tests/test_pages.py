@@ -22,6 +22,7 @@ PAGES = [
     "views/human_ai.py",
     "views/copilot.py",
     "views/policy_assistant.py",
+    "views/decision_platform.py",
 ]
 
 
@@ -353,3 +354,27 @@ def test_flip_point_flips():
     past = dict(over)
     past[d] = over[d] + (2 if fp["to"] > fp["from"] else -2)
     assert se.composite(scores, past)["b"] > se.composite(scores, past)["a"]
+
+
+@pytest.mark.parametrize("stage", ["ingest", "model", "metrics", "train", "serve", "monitor", "architecture"])
+def test_platform_stages(stage):
+    at = AppTest.from_file(str(ROOT / "views/decision_platform.py"), default_timeout=120)
+    at.query_params["stage"] = stage
+    at.run()
+    assert not at.exception, at.exception
+
+
+def test_platform_contract():
+    from lab.platform import ml
+    from lab.platform import models as M
+
+    run = M.build()
+    assert (run.tests["status"] != "fail").all(), run.tests
+    versions, info = ml.train(run.con)
+    champ = info["champion"]
+    assert champ.stage == "Production"
+    row = info["score"].iloc[0]
+    ok = ml.score(champ, {k: row[k] for k in ml.FEATURES}, info["train"])
+    assert ok["status"] == 200 and "next_year_origination_growth" in ok["prediction"]
+    bad = ml.score(champ, {"growth": 9}, info["train"])
+    assert bad["status"] == 422 and bad["errors"]

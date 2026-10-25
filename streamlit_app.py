@@ -29,6 +29,7 @@ shelves = {
         st.Page("views/policy_assistant.py", title="Credit policy assistant", icon=":material/quick_reference_all:", url_path="policy-assistant"),
         st.Page("views/copilot.py", title="Pricing & demand copilot", icon=":material/insights:", url_path="pricing-copilot"),
         st.Page("views/market_intel.py", title="Mortgage market intelligence", icon=":material/map:", url_path="market-intelligence"),
+        st.Page("views/decision_platform.py", title="Decision platform", icon=":material/account_tree:", url_path="decision-platform"),
     ],
     "Case studies": [
         st.Page("views/product_strategy.py", title="Mortgage product strategy", icon=":material/target:", url_path="product-strategy"),
