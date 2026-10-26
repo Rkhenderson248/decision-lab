@@ -3,3 +3,6 @@ __pycache__/
 .venv/
 .streamlit/secrets.toml
 .pytest_cache/
+
+# Generated website export (copied into the WordPress theme)
+site/
