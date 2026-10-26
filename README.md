@@ -54,6 +54,21 @@ valuation strain and affordability pressure.
 missing. `pipeline/databricks_export.py` is an optional alternative that exports the same
 table from the Mortgage Market Intelligence notebook.
 
+## Website assistant export
+
+The "Ask me" assistant on richardhenderson.io runs the Decision platform's production model in the visitor's
+browser: no server and no language model. `pipeline/export_site_pack.py` trains exactly what the app trains, splits
+the promoted ridge pipeline into its scaler and coefficients, checks that those weights reproduce the model's
+predictions, and writes them with the training medians (for reason codes), every scored market and the governed HMDA
+metrics:
+
+```bash
+python pipeline/export_site_pack.py            # writes site/decision-pack.json
+```
+
+After a retrain, copy the file into the WordPress theme at `assets/data/decision-pack.json`.
+`tests/test_site_pack.py` runs in CI and fails if the exported arithmetic drifts from the model.
+
 ## Run locally
 
 ```bash
