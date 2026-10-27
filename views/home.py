@@ -3,7 +3,7 @@ import streamlit as st
 from lab import theme as t
 
 t.header(
-    "R.K. Henderson · Decision Lab",
+    "Richard Henderson · Decision Lab",
     "Decision products, case studies and method notes",
     "Two connected labs, one for a lender and one for a subscription business, a pricing product followed end to end, a "
     "public-data product rebuilt every month, and short interactive notes on the methods behind them.",
