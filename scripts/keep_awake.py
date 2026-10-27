@@ -13,7 +13,8 @@ from playwright.sync_api import TimeoutError as PWTimeout
 from playwright.sync_api import sync_playwright
 
 BASE = os.environ.get("APP_URL", "https://richardhenderson-lab.streamlit.app").rstrip("/")
-PAGES = ["", "lending-lab?stage=know", "lending-lab?stage=govern", "pricing-copilot?stage=model", "pricing-copilot?stage=prove", "market-intelligence", "product-strategy", "subscriber-lab", "lending"]
+PAGES = ["", "lending-lab?stage=know", "lending-lab?stage=govern", "pricing-copilot?stage=model", "pricing-copilot?stage=prove", "market-intelligence", "product-strategy", "subscriber-lab", "lending",
+         "credit-risk?stage=portfolio", "credit-risk?stage=audit-defense", "causal-impact", "decision-platform", "policy-assistant"]
 WAKE_TEXT = ["Yes, get this app back up", "get this app back up"]
 
 
@@ -33,6 +34,13 @@ def visit(page, url: str) -> bool:
                 if frame.locator('[data-testid="stAppViewContainer"]').count() and \
                         not frame.locator('[data-testid="stStatusWidget"]').count():
                     page.wait_for_timeout(2_000)
+                    # A rendered page can still be wrong: an exception box or an unknown page path.
+                    if frame.locator('[data-testid="stException"]').count():
+                        print("  page raised an exception")
+                        return False
+                    if frame.get_by_text("Page not found").count():
+                        print("  page not found")
+                        return False
                     return True
             except Exception:
                 pass
