@@ -3,6 +3,6 @@ https://richardhenderson.io/projects/causal-impact/
 https://richardhenderson.io/projects/decision-platform/
 https://richardhenderson.io/projects/policy-assistant/
 https://richardhenderson.io/projects/credit-risk/
-https://lab.richardhenderson.io/credit-risk?stage=audit-defense
 https://richardhenderson-lab.streamlit.app/credit-risk
 https://github.com/Rkhenderson248/decision-lab
+https://richardhenderson-lab.streamlit.app/credit-risk?stage=audit-defense
