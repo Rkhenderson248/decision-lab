@@ -9,7 +9,7 @@ import streamlit as st
 from lab import theme
 
 st.set_page_config(
-    page_title="Decision Lab · R.K. Henderson",
+    page_title="Decision Lab · Richard Henderson",
     page_icon="static/favicon.png",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -21,6 +21,7 @@ home = st.Page("views/home.py", title="Decision Lab", icon=":material/science:",
 shelves = {
     "": [home],
     "Products": [
+        st.Page("views/credit_lab.py", title="Credit risk & loss lab", icon=":material/shield:", url_path="credit-risk"),
         st.Page("views/lending_lab.py", title="Lending decision lab", icon=":material/account_balance:", url_path="lending-lab"),
         st.Page("views/subscriber_lab.py", title="Subscriber value lab", icon=":material/groups:", url_path="subscriber-lab"),
         st.Page("views/analytics_copilot.py", title="Analytics copilot", icon=":material/query_stats:", url_path="analytics-copilot"),

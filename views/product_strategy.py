@@ -497,7 +497,7 @@ else:
 <ol>{li(roadmap)}</ol>
 <h2>Success metrics</h2>
 <ul>{li(kpis)}</ul>
-<p class="foot">Data vintage: {_html.escape(vintage)}. Built from public Census, HMDA and FHFA data by R.K. Henderson as a portfolio project.</p>
+<p class="foot">Data vintage: {_html.escape(vintage)}. Built from public Census, HMDA and FHFA data by Richard Henderson as a portfolio project.</p>
 """
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Market expansion brief</title>
 <style>body{{font:15px/1.6 Georgia,serif;max-width:760px;margin:40px auto;padding:0 20px;color:#142322}}h1{{font:700 30px Helvetica,Arial,sans-serif;margin:0 0 4px}}
