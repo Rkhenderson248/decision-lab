@@ -20,7 +20,7 @@ jobs:
           while read -r url; do
             [ -z "$url" ] && continue
             code=$(curl -s -L -o /dev/null -w "%{http_code}" --max-time 60 "$url")
-            echo "$code $url"
+            if [ "$code" = "200" ]; then echo "::notice::$code $url"; else echo "::error::$code $url"; fi
             [ "$code" = "200" ] || fail=1
           done < scripts/links.txt
           exit $fail

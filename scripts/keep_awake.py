@@ -60,6 +60,7 @@ def main() -> int:
             except PWTimeout:
                 rendered = False
             print(f"{'ok  ' if rendered else 'FAIL'} {url}")
+            print(f"::{'notice' if rendered else 'error'}::{'ok' if rendered else 'FAIL'} {url}")
             ok &= rendered
         browser.close()
     return 0 if ok else 1
