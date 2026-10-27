@@ -70,6 +70,20 @@ python pipeline/export_site_pack.py            # writes site/decision-pack.json
 After a retrain, copy the file into the WordPress theme at `assets/data/decision-pack.json`.
 `tests/test_site_pack.py` runs in CI and fails if the exported arithmetic drifts from the model.
 
+## AI engineering pages: record once, replay forever
+
+The analyst agent, LLM eval harness and document intelligence pages replay real model runs stored in
+`recordings/`. Nothing calls a model when a page is viewed. To record (owner only, own API key):
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+python -m recorder.record
+git add recordings && git commit -m "Record model runs" && git push
+```
+
+Until recordings exist the pages show the warehouse, test set, graders, rules baseline and controls, and say what
+is pending. See `recordings/README.md` for options.
+
 ## Run locally
 
 ```bash
