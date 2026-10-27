@@ -22,6 +22,8 @@ shelves = {
     "": [home],
     "Products": [
         st.Page("views/credit_lab.py", title="Credit risk & loss lab", icon=":material/shield:", url_path="credit-risk"),
+        st.Page("views/forecast_lab.py", title="Forecasting at scale", icon=":material/stacked_line_chart:", url_path="forecasting"),
+        st.Page("views/nba_lab.py", title="Next best action", icon=":material/alt_route:", url_path="next-best-action"),
         st.Page("views/lending_lab.py", title="Lending decision lab", icon=":material/account_balance:", url_path="lending-lab"),
         st.Page("views/subscriber_lab.py", title="Subscriber value lab", icon=":material/groups:", url_path="subscriber-lab"),
         st.Page("views/analytics_copilot.py", title="Analytics copilot", icon=":material/query_stats:", url_path="analytics-copilot"),
