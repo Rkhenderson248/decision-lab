@@ -10,3 +10,6 @@ https://richardhenderson-lab.streamlit.app/forecasting
 https://richardhenderson-lab.streamlit.app/next-best-action
 https://richardhenderson.io/projects/forecasting/
 https://richardhenderson.io/projects/next-best-action/
+https://richardhenderson-lab.streamlit.app/analyst-agent
+https://richardhenderson-lab.streamlit.app/llm-evals
+https://richardhenderson-lab.streamlit.app/document-intelligence
