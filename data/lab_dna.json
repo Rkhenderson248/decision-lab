@@ -1,0 +1,1164 @@
+{
+ "method": "Every lab's own code (its page plus the lab modules it imports, transitively; shared site chrome such as theme,\nwidgets and layout helpers is left out) is cut into blocks: each function, and each statement inside a page's\ntop-level stage blocks. Each block is scored against a fixed keyword list per discipline and all of its lines go\nto the best-scoring discipline. Shares are line-weighted. Comments, docstrings and blank lines do not count.\nDeterministic: the same code always gives the same DNA.",
+ "groups": [
+  "Data engineering",
+  "Math & statistics",
+  "Machine learning",
+  "AI & language",
+  "Decision science",
+  "Visualization & design",
+  "Storytelling",
+  "BI engineering",
+  "Product engineering",
+  "MLOps & governance"
+ ],
+ "labs": {
+  "lending-lab": {
+   "slug": "lending-lab",
+   "lines": 1802,
+   "files": [
+    "views/lending_lab.py",
+    "lab/cu/models.py",
+    "lab/cu/data.py",
+    "lab/cu/algos.py",
+    "lab/bench.py",
+    "lab/bench_ui.py"
+   ],
+   "share": {
+    "Data engineering": 21.1,
+    "Math & statistics": 20.0,
+    "Machine learning": 19.0,
+    "AI & language": 0.0,
+    "Decision science": 5.7,
+    "Visualization & design": 16.6,
+    "Storytelling": 3.8,
+    "BI engineering": 0.0,
+    "Product engineering": 11.1,
+    "MLOps & governance": 2.7
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "groupby",
+     "fillna",
+     "concat",
+     "default_rng",
+     "dropna",
+     "pipeline",
+     "etl"
+    ],
+    "Math & statistics": [
+     "np.log",
+     "regress",
+     "elasticit",
+     "hazard",
+     "np.quantile",
+     "np.cumsum",
+     "np.exp",
+     "quantile"
+    ],
+    "Machine learning": [
+     "auc",
+     "sklearn",
+     "classifier",
+     ".fit(",
+     "cluster",
+     "roc_auc",
+     "uplift",
+     "predict_proba"
+    ],
+    "Decision science": [
+     "profit",
+     "cutoff",
+     "budget",
+     "capacity",
+     "allocat",
+     "sensitivity",
+     "policy",
+     "argmax"
+    ],
+    "Visualization & design": [
+     "go.",
+     "line=dict",
+     "t.chart",
+     "update_layout",
+     "add_trace",
+     "marker=",
+     "add_vline",
+     "<div"
+    ],
+    "Storytelling": [
+     "member_note",
+     "t.insight",
+     "stage_head",
+     "st.caption",
+     "ui.call",
+     "t.header"
+    ],
+    "Product engineering": [
+     "columns",
+     "",
+     "selectbox",
+     "dataframe"
+    ],
+    "MLOps & governance": [
+     "challenger",
+     "monitor",
+     "champion",
+     "drift",
+     "psi",
+     "audit",
+     "inventory",
+     "model card"
+    ]
+   }
+  },
+  "subscriber-lab": {
+   "slug": "subscriber-lab",
+   "lines": 1409,
+   "files": [
+    "views/subscriber_lab.py",
+    "lab/sub/models.py",
+    "lab/sub/data.py",
+    "lab/bench.py",
+    "lab/bench_ui.py"
+   ],
+   "share": {
+    "Data engineering": 20.8,
+    "Math & statistics": 18.3,
+    "Machine learning": 21.7,
+    "AI & language": 0.1,
+    "Decision science": 1.3,
+    "Visualization & design": 19.0,
+    "Storytelling": 3.4,
+    "BI engineering": 0.1,
+    "Product engineering": 12.6,
+    "MLOps & governance": 2.6
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "groupby",
+     "default_rng",
+     "pivot",
+     "download",
+     "concat",
+     "pipeline",
+     "dropna"
+    ],
+    "Math & statistics": [
+     "hazard",
+     "regress",
+     "surviv",
+     "np.quantile",
+     "variance",
+     "np.cumsum",
+     "quantile",
+     "np.log"
+    ],
+    "Machine learning": [
+     "uplift",
+     "classifier",
+     "sklearn",
+     "xgb",
+     "auc",
+     "predict_proba",
+     ".fit(",
+     "xgboost"
+    ],
+    "AI & language": [
+     "intent"
+    ],
+    "Decision science": [
+     "budget",
+     "profit",
+     "propensity",
+     "optimiz"
+    ],
+    "Visualization & design": [
+     "go.",
+     "t.chart",
+     "line=dict",
+     "update_layout",
+     "add_trace",
+     "style=",
+     "<div",
+     "marker="
+    ],
+    "Storytelling": [
+     "t.insight",
+     "cui.call",
+     "stage_head",
+     "t.header",
+     "st.caption",
+     "t.footnote"
+    ],
+    "BI engineering": [
+     "measure"
+    ],
+    "Product engineering": [
+     "columns",
+     "",
+     "dataframe",
+     "selectbox",
+     "expander",
+     "slider"
+    ],
+    "MLOps & governance": [
+     "drift",
+     "monitor",
+     "guardrail",
+     "inventory",
+     "validat",
+     "psi",
+     "audit",
+     "champion"
+    ]
+   }
+  },
+  "credit-risk": {
+   "slug": "credit-risk",
+   "lines": 912,
+   "files": [
+    "views/credit_lab.py",
+    "lab/credit/models.py",
+    "lab/credit/data.py",
+    "lab/credit/loss.py"
+   ],
+   "share": {
+    "Data engineering": 29.9,
+    "Math & statistics": 19.2,
+    "Machine learning": 11.0,
+    "AI & language": 0.0,
+    "Decision science": 4.5,
+    "Visualization & design": 10.7,
+    "Storytelling": 1.9,
+    "BI engineering": 0.1,
+    "Product engineering": 13.0,
+    "MLOps & governance": 9.6
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "select",
+     "from",
+     "groupby",
+     "where",
+     "join",
+     "warehouse",
+     "group by"
+    ],
+    "Math & statistics": [
+     "np.exp",
+     "hosmer",
+     "binom",
+     "np.mean",
+     "pvalue",
+     "np.cumsum",
+     "stats.",
+     "np.quantile"
+    ],
+    "Machine learning": [
+     "calibrat",
+     "xgb",
+     "monotone",
+     "predict_proba",
+     "xgboost",
+     "sklearn",
+     "logisticregression",
+     "auc"
+    ],
+    "Decision science": [
+     "scenario",
+     "cutoff",
+     "sensitivity",
+     "marginal"
+    ],
+    "Visualization & design": [
+     "go.",
+     "t.chart",
+     "update_layout",
+     "add_scatter",
+     "line=dict",
+     "style=",
+     "add_bar",
+     "css"
+    ],
+    "Storytelling": [
+     "st.markdown(\"#",
+     "t.insight",
+     "ui.call",
+     "ui.cards",
+     "t.footnote"
+    ],
+    "BI engineering": [
+     "dashboard"
+    ],
+    "Product engineering": [
+     "",
+     "columns",
+     "dataframe",
+     "selectbox"
+    ],
+    "MLOps & governance": [
+     "overlay",
+     "validat",
+     "backtest",
+     "audit",
+     "psi",
+     "test plan",
+     "challenger",
+     "inventory"
+    ]
+   }
+  },
+  "forecasting": {
+   "slug": "forecasting",
+   "lines": 493,
+   "files": [
+    "views/forecast_lab.py",
+    "lab/forecast/models.py",
+    "lab/forecast/data.py"
+   ],
+   "share": {
+    "Data engineering": 17.6,
+    "Math & statistics": 39.4,
+    "Machine learning": 4.5,
+    "AI & language": 0.0,
+    "Decision science": 1.6,
+    "Visualization & design": 14.4,
+    "Storytelling": 3.4,
+    "BI engineering": 0.0,
+    "Product engineering": 12.8,
+    "MLOps & governance": 6.3
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "pivot",
+     "dropna",
+     "simulate",
+     "default_rng",
+     "concat"
+    ],
+    "Math & statistics": [
+     "wape",
+     "seasonal",
+     "reconcil",
+     "mase",
+     "holt",
+     "interval",
+     "np.quantile",
+     "quantile"
+    ],
+    "Machine learning": [
+     "shap",
+     "histgradientboosting",
+     "regressor",
+     "sklearn",
+     "learning_rate",
+     ".fit(",
+     ".predict("
+    ],
+    "Decision science": [
+     "critical ratio",
+     "threshold"
+    ],
+    "Visualization & design": [
+     "go.",
+     "add_scatter",
+     "line=dict",
+     "t.chart",
+     "update_layout",
+     "marker=",
+     "css",
+     "add_vline"
+    ],
+    "Storytelling": [
+     "st.markdown(\"#",
+     "t.header",
+     "stage_head",
+     "ui.call",
+     "t.footnote"
+    ],
+    "Product engineering": [
+     "",
+     "columns",
+     "selectbox"
+    ],
+    "MLOps & governance": [
+     "alert",
+     "backtest",
+     "inventory",
+     "monitor",
+     "drift",
+     "retrain"
+    ]
+   }
+  },
+  "next-best-action": {
+   "slug": "next-best-action",
+   "lines": 502,
+   "files": [
+    "views/nba_lab.py",
+    "lab/nba/models.py",
+    "lab/nba/data.py"
+   ],
+   "share": {
+    "Data engineering": 13.3,
+    "Math & statistics": 9.0,
+    "Machine learning": 4.8,
+    "AI & language": 0.0,
+    "Decision science": 42.8,
+    "Visualization & design": 14.3,
+    "Storytelling": 2.6,
+    "BI engineering": 0.0,
+    "Product engineering": 12.7,
+    "MLOps & governance": 0.4
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "groupby",
+     "simulate",
+     "resample",
+     "default_rng",
+     "concat"
+    ],
+    "Math & statistics": [
+     "interval",
+     "sd"
+    ],
+    "Machine learning": [
+     "auc",
+     "sklearn",
+     "histgradientboosting",
+     "classifier",
+     "roc_auc",
+     "calibrat",
+     "uplift",
+     "learning_rate"
+    ],
+    "Decision science": [
+     "policy",
+     "profit",
+     "doubly",
+     "shadow",
+     "capacity",
+     "propensity",
+     "ips",
+     "argmax"
+    ],
+    "Visualization & design": [
+     "go.",
+     "add_scatter",
+     "line=dict",
+     "t.chart",
+     "update_layout",
+     "marker=",
+     "add_bar",
+     "heatmap"
+    ],
+    "Storytelling": [
+     "ui.call",
+     "stage_head"
+    ],
+    "Product engineering": [
+     "",
+     "columns",
+     "slider"
+    ],
+    "MLOps & governance": [
+     "guardrail"
+    ]
+   }
+  },
+  "analytics-copilot": {
+   "slug": "analytics-copilot",
+   "lines": 640,
+   "files": [
+    "views/analytics_copilot.py",
+    "lab/askdata/semantic.py",
+    "lab/askdata/parser.py"
+   ],
+   "share": {
+    "Data engineering": 23.9,
+    "Math & statistics": 6.7,
+    "Machine learning": 0.0,
+    "AI & language": 47.8,
+    "Decision science": 0.8,
+    "Visualization & design": 7.3,
+    "Storytelling": 2.8,
+    "BI engineering": 0.0,
+    "Product engineering": 10.6,
+    "MLOps & governance": 0.0
+   },
+   "signals": {
+    "Data engineering": [
+     "warehouse",
+     "con.execute",
+     "select",
+     "concat",
+     "rng.",
+     "join",
+     "groupby",
+     "from"
+    ],
+    "Math & statistics": [
+     "sd"
+    ],
+    "AI & language": [
+     "refus",
+     "synonym",
+     "intent",
+     "semantic layer",
+     "anthropic",
+     "claude"
+    ],
+    "Decision science": [
+     "profit"
+    ],
+    "Visualization & design": [
+     "<div",
+     "go.",
+     "update_layout",
+     "add_trace",
+     "line=dict",
+     "marker=",
+     "style=",
+     "css"
+    ],
+    "Storytelling": [
+     "stage_head",
+     "st.caption",
+     "t.insight",
+     "cui.call"
+    ],
+    "Product engineering": [
+     "",
+     "columns",
+     "dataframe",
+     "text_input"
+    ]
+   }
+  },
+  "policy-assistant": {
+   "slug": "policy-assistant",
+   "lines": 374,
+   "files": [
+    "views/policy_assistant.py",
+    "lab/policy/manual.py",
+    "lab/policy/engine.py"
+   ],
+   "share": {
+    "Data engineering": 0.0,
+    "Math & statistics": 8.8,
+    "Machine learning": 0.3,
+    "AI & language": 61.8,
+    "Decision science": 8.3,
+    "Visualization & design": 10.4,
+    "Storytelling": 0.0,
+    "BI engineering": 0.0,
+    "Product engineering": 8.6,
+    "MLOps & governance": 1.9
+   },
+   "signals": {
+    "Math & statistics": [],
+    "Machine learning": [
+     "sklearn"
+    ],
+    "AI & language": [
+     "retriev",
+     "anthropic",
+     "refus",
+     "claude",
+     "synonym",
+     "tfidf",
+     "grounded",
+     "citation"
+    ],
+    "Decision science": [
+     "threshold",
+     "policy"
+    ],
+    "Visualization & design": [
+     "<div",
+     "go.",
+     "line=dict",
+     "style=",
+     "add_trace",
+     "<span",
+     "add_vline",
+     "update_layout"
+    ],
+    "Product engineering": [
+     "columns",
+     "",
+     "text_input"
+    ],
+    "MLOps & governance": [
+     "adverse action"
+    ]
+   }
+  },
+  "decision-platform": {
+   "slug": "decision-platform",
+   "lines": 728,
+   "files": [
+    "views/decision_platform.py",
+    "lab/platform/models.py",
+    "lab/platform/ml.py",
+    "lab/platform/metrics.py"
+   ],
+   "share": {
+    "Data engineering": 25.0,
+    "Math & statistics": 16.3,
+    "Machine learning": 9.6,
+    "AI & language": 0.0,
+    "Decision science": 0.5,
+    "Visualization & design": 12.9,
+    "Storytelling": 2.5,
+    "BI engineering": 0.0,
+    "Product engineering": 21.6,
+    "MLOps & governance": 11.5
+   },
+   "signals": {
+    "Data engineering": [
+     "select",
+     "from",
+     "where",
+     "group by",
+     "read_sql",
+     "join",
+     "dropna",
+     "ingest"
+    ],
+    "Math & statistics": [
+     "np.mean",
+     "correlat",
+     "np.quantile"
+    ],
+    "Machine learning": [
+     ".predict(",
+     "sklearn",
+     ".fit(",
+     "histgradientboosting",
+     "regressor",
+     "max_depth",
+     "learning_rate"
+    ],
+    "Decision science": [
+     "threshold"
+    ],
+    "Visualization & design": [
+     "go.",
+     "<div",
+     "style=",
+     "marker=",
+     "t.chart",
+     "update_layout",
+     "add_trace",
+     "line=dict"
+    ],
+    "Storytelling": [
+     "stage_head",
+     "cui.call",
+     "st.caption"
+    ],
+    "Product engineering": [
+     "",
+     "dataframe",
+     "columns",
+     "selectbox",
+     "toggle"
+    ],
+    "MLOps & governance": [
+     "monitor",
+     "retrain",
+     "psi",
+     "registry",
+     "drift",
+     "validat",
+     "freshness",
+     "champion"
+    ]
+   }
+  },
+  "pricing-copilot": {
+   "slug": "pricing-copilot",
+   "lines": 831,
+   "files": [
+    "views/copilot.py",
+    "lab/demand.py",
+    "lab/copilot_reg.py",
+    "lab/copilot.py"
+   ],
+   "share": {
+    "Data engineering": 17.8,
+    "Math & statistics": 29.0,
+    "Machine learning": 1.1,
+    "AI & language": 0.0,
+    "Decision science": 2.4,
+    "Visualization & design": 17.8,
+    "Storytelling": 3.4,
+    "BI engineering": 2.3,
+    "Product engineering": 15.3,
+    "MLOps & governance": 11.0
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "groupby",
+     ".merge(",
+     "fillna",
+     "default_rng",
+     "concat",
+     "pipeline"
+    ],
+    "Math & statistics": [
+     "elasticit",
+     "sd",
+     "interval",
+     "mape",
+     "lstsq",
+     "regress",
+     "np.log",
+     "np.sqrt"
+    ],
+    "Machine learning": [
+     "uplift"
+    ],
+    "Decision science": [
+     "capacity",
+     "payback",
+     "roi"
+    ],
+    "Visualization & design": [
+     "go.",
+     "line=dict",
+     "marker=",
+     "add_trace",
+     "t.chart",
+     "update_layout",
+     "<div",
+     "add_vline"
+    ],
+    "Storytelling": [
+     "stage_head",
+     "t.header",
+     "t.insight",
+     "t.footnote"
+    ],
+    "BI engineering": [
+     "measure"
+    ],
+    "Product engineering": [
+     "columns",
+     "",
+     "dataframe"
+    ],
+    "MLOps & governance": [
+     "retrain",
+     "drift",
+     "guardrail",
+     "backtest",
+     "override",
+     "psi",
+     "monitor",
+     "alert"
+    ]
+   }
+  },
+  "causal-impact": {
+   "slug": "causal-impact",
+   "lines": 649,
+   "files": [
+    "views/causal_lab.py",
+    "lab/causal/engine.py",
+    "lab/bench_ui.py",
+    "lab/bench.py"
+   ],
+   "share": {
+    "Data engineering": 10.2,
+    "Math & statistics": 28.4,
+    "Machine learning": 12.9,
+    "AI & language": 0.0,
+    "Decision science": 9.6,
+    "Visualization & design": 23.6,
+    "Storytelling": 3.2,
+    "BI engineering": 0.5,
+    "Product engineering": 8.6,
+    "MLOps & governance": 3.1
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "default_rng",
+     "pivot",
+     "pipeline",
+     "groupby"
+    ],
+    "Math & statistics": [
+     "interval",
+     "np.sqrt",
+     "p_value",
+     "regress",
+     "seasonal",
+     "np.percentile",
+     "correlat",
+     "lstsq"
+    ],
+    "Machine learning": [
+     "xgb",
+     "sklearn",
+     "classifier",
+     "xgboost",
+     "shap",
+     "calibrat",
+     "logisticregression",
+     ".fit("
+    ],
+    "Decision science": [
+     "matching",
+     "synthetic control",
+     "causal",
+     "diff-in-diff",
+     "scenario",
+     "counterfactual",
+     "propensity",
+     "sensitivity"
+    ],
+    "Visualization & design": [
+     "go.",
+     "line=dict",
+     "add_trace",
+     "update_layout",
+     "t.chart",
+     "marker=",
+     "add_vline",
+     "add_hline"
+    ],
+    "Storytelling": [
+     "stage_head",
+     "t.insight",
+     "cui.call",
+     "t.footnote"
+    ],
+    "BI engineering": [
+     "dashboard"
+    ],
+    "Product engineering": [
+     "",
+     "columns",
+     "radio",
+     "slider",
+     "dataframe"
+    ],
+    "MLOps & governance": [
+     "audit",
+     "champion",
+     "challenger",
+     "monitor"
+    ]
+   }
+  },
+  "marketing-mix": {
+   "slug": "marketing-mix",
+   "lines": 440,
+   "files": [
+    "views/mmm_lab.py",
+    "lab/mmm/engine.py"
+   ],
+   "share": {
+    "Data engineering": 6.8,
+    "Math & statistics": 14.5,
+    "Machine learning": 24.5,
+    "AI & language": 0.0,
+    "Decision science": 22.3,
+    "Visualization & design": 15.9,
+    "Storytelling": 1.1,
+    "BI engineering": 0.7,
+    "Product engineering": 14.1,
+    "MLOps & governance": 0.0
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "default_rng"
+    ],
+    "Math & statistics": [
+     "decompos",
+     "correlat",
+     "bootstrap",
+     "quantile",
+     "regress",
+     "seasonal",
+     "mape",
+     "interval"
+    ],
+    "Machine learning": [
+     "shap",
+     "calibrat",
+     ".fit("
+    ],
+    "Decision science": [
+     "budget",
+     "roi",
+     "optimiz",
+     "frontier",
+     "minimize",
+     "marginal",
+     "allocat"
+    ],
+    "Visualization & design": [
+     "go.",
+     "add_trace",
+     "marker=",
+     "line=dict",
+     "t.chart",
+     "update_layout",
+     "add_vline",
+     "css"
+    ],
+    "Storytelling": [
+     "t.insight",
+     "cui.call",
+     "t.footnote"
+    ],
+    "BI engineering": [
+     "measure"
+    ],
+    "Product engineering": [
+     "",
+     "columns",
+     "dataframe"
+    ]
+   }
+  },
+  "market-intelligence": {
+   "slug": "market-intelligence",
+   "lines": 1628,
+   "files": [
+    "pipeline/databricks_export.py",
+    "pipeline/build_markets.py",
+    "views/market_intel.py",
+    "lab/market_engine.py",
+    "lab/market_sample.py",
+    "lab/ask.py"
+   ],
+   "share": {
+    "Data engineering": 45.9,
+    "Math & statistics": 18.2,
+    "Machine learning": 8.2,
+    "AI & language": 1.2,
+    "Decision science": 4.1,
+    "Visualization & design": 8.2,
+    "Storytelling": 1.2,
+    "BI engineering": 0.4,
+    "Product engineering": 12.4,
+    "MLOps & governance": 0.3
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "fillna",
+     "groupby",
+     "download",
+     "read_csv",
+     ".merge(",
+     "dropna",
+     "json.load"
+    ],
+    "Math & statistics": [
+     "percentile",
+     "quantile",
+     "sd",
+     "variance"
+    ],
+    "Machine learning": [
+     "cluster",
+     "sklearn",
+     "shap",
+     "pca",
+     "kmeans",
+     ".fit(",
+     "n_estimators"
+    ],
+    "AI & language": [
+     "anthropic",
+     "grounded",
+     "claude"
+    ],
+    "Decision science": [
+     "capacity",
+     "budget",
+     "allocat",
+     "optimiz",
+     "threshold"
+    ],
+    "Visualization & design": [
+     "go.",
+     "t.chart",
+     "style=",
+     "update_layout",
+     "line=dict",
+     "marker=",
+     "<span",
+     "add_trace"
+    ],
+    "Storytelling": [
+     "st.caption",
+     "t.insight",
+     "t.footnote"
+    ],
+    "BI engineering": [
+     "measure"
+    ],
+    "Product engineering": [
+     "columns",
+     "slider",
+     "dataframe",
+     "selectbox",
+     "",
+     "tabs",
+     "text_input"
+    ],
+    "MLOps & governance": [
+     "ratelimit",
+     "monitor"
+    ]
+   }
+  },
+  "product-strategy": {
+   "slug": "product-strategy",
+   "lines": 716,
+   "files": [
+    "views/product_strategy.py",
+    "lab/strategy_engine.py"
+   ],
+   "share": {
+    "Data engineering": 10.8,
+    "Math & statistics": 23.5,
+    "Machine learning": 0.0,
+    "AI & language": 0.0,
+    "Decision science": 18.7,
+    "Visualization & design": 8.0,
+    "Storytelling": 5.0,
+    "BI engineering": 0.1,
+    "Product engineering": 33.9,
+    "MLOps & governance": 0.0
+   },
+   "signals": {
+    "Data engineering": [
+     "download",
+     "dropna",
+     "fillna",
+     "json.load",
+     "concat",
+     "default_rng",
+     "rng."
+    ],
+    "Math & statistics": [
+     "percentile"
+    ],
+    "Decision science": [
+     "scenario",
+     "capacity",
+     "tornado",
+     "optimiz",
+     "sensitivity",
+     "profit",
+     "allocat"
+    ],
+    "Visualization & design": [
+     "go.",
+     "<div",
+     "add_trace",
+     "t.chart",
+     "<span",
+     "update_xaxes",
+     "update_yaxes",
+     "update_layout"
+    ],
+    "Storytelling": [
+     "st.markdown(\"#",
+     "st.caption",
+     "t.insight",
+     "t.header",
+     "st.markdown(f\"#",
+     "t.footnote"
+    ],
+    "BI engineering": [
+     "kpi"
+    ],
+    "Product engineering": [
+     "",
+     "columns",
+     "selectbox",
+     "dataframe",
+     "select_slider",
+     "button",
+     "multiselect",
+     "slider"
+    ]
+   }
+  },
+  "lending": {
+   "slug": "lending",
+   "lines": 627,
+   "files": [
+    "views/lending.py",
+    "lab/view_product_fit.py",
+    "lab/products.py",
+    "lab/view_pipeline.py",
+    "lab/pipeline_model.py"
+   ],
+   "share": {
+    "Data engineering": 18.7,
+    "Math & statistics": 28.7,
+    "Machine learning": 4.8,
+    "AI & language": 0.0,
+    "Decision science": 0.5,
+    "Visualization & design": 45.8,
+    "Storytelling": 0.0,
+    "BI engineering": 0.0,
+    "Product engineering": 1.6,
+    "MLOps & governance": 0.0
+   },
+   "signals": {
+    "Data engineering": [
+     "rng.",
+     "pipeline",
+     "default_rng"
+    ],
+    "Math & statistics": [
+     "np.cumsum"
+    ],
+    "Machine learning": [
+     "auc",
+     "sklearn",
+     "logisticregression",
+     "roc_auc",
+     ".fit(",
+     "predict_proba"
+    ],
+    "Decision science": [
+     "capacity"
+    ],
+    "Visualization & design": [
+     "<div",
+     "go.",
+     "<span",
+     "update_layout",
+     "t.chart",
+     "marker=",
+     "style=",
+     "line=dict"
+    ],
+    "Product engineering": [
+     ""
+    ]
+   }
+  }
+ }
+}
