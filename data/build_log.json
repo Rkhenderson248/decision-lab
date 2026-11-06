@@ -59,29 +59,29 @@
         {
           "lei": "549300GKFNPRWNS0GF29",
           "name": "CMG MORTGAGE, INC.",
-          "count": 22,
+          "count": 8,
           "period": 2025
         },
         {
           "lei": "2WHM8VNJH63UN14OL754",
           "name": "The Huntington National Bank",
-          "count": 3,
+          "count": 1,
           "period": 2025
         },
         {
           "lei": "5493003GQDUH26DNNH17",
           "name": "Navy Federal Credit Union",
-          "count": 72,
+          "count": 211,
           "period": 2025
         }
       ],
-      "seconds": 391
+      "seconds": 448
     }
   },
   "warnings": [
     "CENSUS_API_KEY not set; ACS income and home-value inputs skipped."
   ],
   "status": "ok",
-  "finished_utc": "2026-10-06T17:18:07Z",
-  "seconds": 396
+  "finished_utc": "2026-11-06T18:05:12Z",
+  "seconds": 452
 }
